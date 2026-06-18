@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sex · Sem 3 — Recuperação Judicial: Crise e Classes de Credores</title>
+<style>
+:root{
+  --bg:#08050f;--card:#100b1e;--border:#2a1a4a;
+  --text:#ede9f8;--muted:#9080b0;--soft:#c4b8e0;
+  --purple:#b06bf2;--purpleb:#432a6e;--purplebg:#190f2c;--purpleglow:rgba(176,107,242,.25);
+  --violet:#c084fc;--violetb:#5b3090;--violetbg:#1a0f30;
+  --cyan:#38bdf8;--cyanb:#155a72;--cyanbg:#06212e;
+  --green:#27c06a;--greenb:#1c5e3a;--greenbg:#0a2016;
+  --amber:#f5a623;--amberb:#6a4a14;--amberbg:#241a08;
+  --red:#e05555;--redb:#7a2020;--redbg:#1a0505;
+  --blue:#4e8ef7;--blueb:#1e3a7a;--bluebg:#070f28;
+  --teal:#2dd4bf;--tealb:#0d5e55;--tealbg:#051a18;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -80px,#120820 0%,var(--bg) 60%);
+  color:var(--text);min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+.header{background:linear-gradient(135deg,#0e0820 0%,#08050f 100%);
+  border-bottom:1px solid var(--border);padding:20px 20px 0;}
+.header-inner{max-width:820px;margin:0 auto}
+.breadcrumb{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
+.breadcrumb span{color:var(--purple);font-weight:700}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.badge-e{background:var(--purplebg);border:1px solid var(--purpleb);color:var(--purple)}
+.badge-s{background:#0a0815;border:1px solid #2a1a4a;color:#b06bf2}
+.badge-t{background:var(--violetbg);border:1px solid var(--violetb);color:var(--violet)}
+.header h1{font-size:20px;font-weight:800;margin-bottom:4px}
+.header h1 em{font-style:normal;color:var(--purple)}
+.header p{font-size:13px;color:var(--muted);margin-bottom:16px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+  font-size:12px;text-decoration:none;margin-bottom:12px;
+  border:1px solid var(--border);border-radius:7px;padding:4px 10px;transition:.14s}
+.back-link:hover{color:var(--purple);border-color:var(--purpleb)}
+.tabs{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:12px 18px;font-size:13px;font-weight:700;border:none;
+  background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;transition:.14s;flex-shrink:0;}
+.tab-btn.active{color:var(--purple);border-bottom-color:var(--purple)}
+.tab-btn:hover:not(.active){color:var(--soft)}
+.content{max-width:820px;margin:0 auto;padding:24px 16px 80px}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.sec-title{font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-purple{background:var(--purple)}.dot-violet{background:var(--violet)}
+.dot-cyan{background:var(--cyan)}.dot-green{background:var(--green)}
+.dot-amber{background:var(--amber)}.dot-red{background:var(--red)}.dot-blue{background:var(--blue)}
+/* Conceitos */
+.conceito{background:#0a0618;border-left:3px solid var(--purple);border-radius:0 10px 10px 0;
+  padding:14px 16px;margin-bottom:12px;}
+.conceito strong{color:var(--text);font-size:13px}
+.conceito p{font-size:13px;color:var(--soft);margin-top:6px;line-height:1.7}
+mark.p{background:rgba(176,107,242,.2);color:var(--purple);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.v{background:rgba(192,132,252,.18);color:var(--violet);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.c{background:rgba(56,189,248,.2);color:var(--cyan);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.g{background:rgba(39,192,106,.18);color:var(--green);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.a{background:rgba(245,166,35,.2);color:var(--amber);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.r{background:rgba(224,85,85,.18);color:var(--red);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.b{background:rgba(78,142,247,.18);color:var(--blue);border-radius:3px;padding:1px 5px;font-weight:700}
+.distincao{background:#09061a;border:1px solid var(--purpleb);border-radius:10px;
+  padding:14px 16px;margin-top:4px;font-size:13px;color:var(--soft);line-height:1.7}
+.distincao strong{color:var(--purple)}
+/* Tabela */
+.comp-table{width:100%;border-collapse:collapse;font-size:13px}
+.comp-table th{background:#0a0618;padding:10px 14px;text-align:left;font-size:10px;
+  font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.comp-table td{padding:11px 14px;border-top:1px solid rgba(255,255,255,.05)}
+.comp-table tr.row-purple  td{background:rgba(176,107,242,.07);border-left:3px solid var(--purple)}
+.comp-table tr.row-violet  td{background:rgba(192,132,252,.07);border-left:3px solid var(--violet)}
+.comp-table tr.row-cyan    td{background:rgba(56,189,248,.07);border-left:3px solid var(--cyan)}
+.comp-table tr.row-amber   td{background:rgba(245,166,35,.07);border-left:3px solid var(--amber)}
+.comp-table tr.row-green   td{background:rgba(39,192,106,.07);border-left:3px solid var(--green)}
+.comp-table tr.row-red     td{background:rgba(224,85,85,.07);border-left:3px solid var(--red)}
+.comp-table tr.row-blue    td{background:rgba(78,142,247,.07);border-left:3px solid var(--blue)}
+.comp-table tr.row-header  td{background:#0a0618;font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:1px;color:var(--muted);border-top:2px solid var(--border)}
+.comp-table td:first-child{font-weight:800;color:var(--text)}
+.comp-table td:nth-child(2){color:var(--soft)}
+.comp-table td:nth-child(3){color:var(--cyan);font-weight:700;font-size:12px}
+/* Lei */
+.lei-box{background:#08041a;border:1px solid #2a1a4a;border-left:4px solid var(--purple);
+  border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px;}
+.lei-box .lei-ref{font-size:11px;font-weight:800;color:var(--purple);letter-spacing:.6px;
+  text-transform:uppercase;margin-bottom:6px}
+.lei-box p{font-size:13px;color:var(--soft);line-height:1.7;font-style:italic}
+.sumula-box{background:#09060e;border:1px solid var(--purpleb);border-left:4px solid var(--violet);
+  border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px;}
+.sumula-box .lei-ref{font-size:11px;font-weight:800;color:var(--violet);letter-spacing:.6px;
+  text-transform:uppercase;margin-bottom:6px}
+.sumula-box p{font-size:13px;color:var(--violet);line-height:1.7;font-weight:600}
+/* Pegadinhas */
+.peg-card{background:var(--redbg);border:1px solid var(--redb);border-radius:14px;padding:20px;
+  background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.012) 0px,rgba(255,255,255,.012) 1px,transparent 1px,transparent 8px);}
+.peg-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.peg-header h3{font-size:13px;font-weight:800;color:var(--red);letter-spacing:.5px}
+.peg-item{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;margin-bottom:6px;
+  background:rgba(224,85,85,.08);border-radius:8px;border:1px solid rgba(224,85,85,.15);}
+.peg-item:last-child{margin-bottom:0}
+.peg-num{width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;
+  font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.peg-item p{font-size:13px;color:var(--soft);line-height:1.6}
+.peg-item strong{color:var(--red)}
+/* Jurisprudência */
+.juri-card{background:var(--purplebg);border:1px solid var(--purpleb);border-radius:14px;padding:20px;}
+.dizer-badge{display:inline-flex;align-items:center;gap:6px;background:#09060e;
+  border:1px solid var(--purpleb);border-radius:6px;padding:4px 12px;
+  font-size:11px;font-weight:800;color:var(--purple);text-transform:uppercase;
+  letter-spacing:.8px;margin-bottom:14px;}
+.juri-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:13px;color:var(--soft);line-height:1.7}
+.juri-item:last-child{border-bottom:none}
+.juri-item strong{color:var(--purple)}
+/* Complemento */
+.excecao{background:#09060e;border-left:3px solid var(--violet);border-radius:0 8px 8px 0;
+  padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--soft)}
+.excecao strong{color:var(--violet)}
+/* Active Recall */
+.ar-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:0;margin-bottom:10px;overflow:hidden;}
+.ar-q{display:flex;gap:12px;align-items:center;padding:15px 18px;cursor:pointer;transition:.14s;user-select:none;}
+.ar-q:hover{background:rgba(255,255,255,.03)}
+.ar-num{width:28px;height:28px;border-radius:8px;background:var(--purplebg);
+  border:1px solid var(--purpleb);color:var(--purple);
+  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ar-num.mic{background:var(--redbg);border-color:var(--redb);color:var(--red)}
+.ar-text{flex:1;font-size:14px;color:var(--soft);font-weight:600}
+.ar-arrow{color:var(--muted);font-size:12px;transition:.2s;flex-shrink:0}
+.ar-item.open .ar-arrow{transform:rotate(90deg)}
+.ar-answer{max-height:0;overflow:hidden;transition:max-height .3s ease;
+  background:#08041a;border-top:1px solid transparent;}
+.ar-item.open .ar-answer{max-height:500px;border-top-color:var(--border)}
+.ar-answer-inner{padding:14px 18px 16px;font-size:13px;color:var(--soft);line-height:1.8}
+.ar-answer-inner strong{color:var(--purple)}
+/* Flashcards */
+.fc-wrap{max-width:480px;margin:0 auto}
+.fc-counter{text-align:center;font-size:12px;color:var(--muted);margin-bottom:16px;font-weight:700}
+.fc-scene{perspective:1000px;height:200px;margin-bottom:20px;cursor:pointer}
+.fc-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:.5s}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;
+  border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;}
+.fc-front{background:var(--card);border:1px solid var(--border);}
+.fc-back{background:#0f0820;border:1px solid var(--purpleb);transform:rotateY(180deg);}
+.fc-hint{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px}
+.fc-front .fc-hint{color:var(--muted)}.fc-back .fc-hint{color:var(--purple)}
+.fc-face p{font-size:16px;font-weight:800;line-height:1.4}
+.fc-front p{color:var(--text)}.fc-back p{color:var(--purple)}
+.fc-tip{font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px}
+.fc-nav{display:flex;align-items:center;justify-content:center;gap:12px}
+.fc-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  color:var(--muted);font-size:13px;font-weight:700;padding:9px 20px;cursor:pointer;transition:.14s;}
+.fc-btn:hover:not(:disabled){border-color:var(--purpleb);color:var(--purple)}
+.fc-btn:disabled{opacity:.3;cursor:not-allowed}
+.fc-dots{display:flex;gap:6px}
+.fc-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:.14s}
+.fc-dot.active{background:var(--purple)}
+.fc-flip-btn{width:100%;padding:11px;border-radius:9px;border:none;cursor:pointer;
+  background:var(--purplebg);border:1px solid var(--purpleb);
+  color:var(--purple);font-size:14px;font-weight:700;margin-bottom:12px;transition:.14s;}
+.fc-flip-btn:hover{background:rgba(176,107,242,.12)}
+/* Questões */
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
+.q-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.q-code{font-size:13px;font-weight:800;color:var(--text)}
+.q-banca{font-size:11px;color:var(--muted)}
+.q-tag{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
+.q-tag-mc{background:var(--cyanbg);border:1px solid var(--cyanb);color:var(--cyan)}
+.q-tag-ce{background:var(--amberbg);border:1px solid var(--amberb);color:var(--amber)}
+.icol-row{display:flex;gap:8px;align-items:flex-start;padding:8px 12px;
+  background:#09060e;border-radius:8px;margin-bottom:6px;font-size:13px}
+.icol-label{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;}
+.icol-I .icol-label{background:var(--purplebg);color:var(--purple)}
+.icol-C .icol-label{background:var(--cyanbg);color:var(--cyan)}
+.icol-O .icol-label{background:var(--greenbg);color:var(--green)}
+.icol-L .icol-label{background:var(--amberbg);color:var(--amber)}
+.icol-row p{color:var(--soft);line-height:1.6}
+.gab-btn{width:100%;margin-top:12px;padding:9px;border-radius:8px;border:none;cursor:pointer;
+  background:#09060e;border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:700;transition:.14s;}
+.gab-btn:hover{border-color:var(--purpleb);color:var(--purple)}
+.gab-reveal{display:none;margin-top:10px;background:var(--purplebg);border:1px solid var(--purpleb);border-radius:8px;padding:12px 14px;}
+/* Checklist */
+.cl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cl-header h2{font-size:16px;font-weight:800}
+.cl-pct{font-size:13px;color:var(--purple);font-weight:800}
+.cl-bar{height:6px;background:rgba(255,255,255,.06);border-radius:6px;margin-bottom:24px;overflow:hidden}
+.cl-fill{height:6px;background:var(--purple);border-radius:6px;transition:.3s}
+.cl-item{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;
+  background:var(--card);border:1px solid var(--border);border-radius:11px;
+  margin-bottom:8px;cursor:pointer;transition:.14s;user-select:none;}
+.cl-item:hover{border-color:var(--purpleb)}
+.cl-item.done{border-color:var(--purpleb);background:var(--purplebg)}
+.cl-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.14s;margin-top:1px;}
+.cl-item.done .cl-check{background:var(--purple);border-color:var(--purple)}
+.cl-check svg{display:none}.cl-item.done .cl-check svg{display:block}
+.cl-item p{font-size:13px;color:var(--soft);line-height:1.5}
+.cl-item.done p{color:var(--purple)}
+.cl-reset{width:100%;margin-top:16px;padding:9px;border-radius:8px;border:none;cursor:pointer;
+  background:transparent;border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:700;transition:.14s;}
+.cl-reset:hover{border-color:var(--redb);color:var(--red)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="back-link" href="index.html">← Voltar ao índice</a>
+    <div class="breadcrumb">
+      Prova Oral · 2ª fase <span>›</span> Cadernos <span>›</span> Bloco E — Satélites · Empresarial
+    </div>
+    <div class="badges">
+      <span class="badge badge-e">🅴 Bloco E</span>
+      <span class="badge badge-s">Semana 3</span>
+      <span class="badge badge-s">Sexta-feira</span>
+      <span class="badge badge-t">TJMT</span>
+    </div>
+    <h1>Recuperação Judicial: Crise <em>+</em> Classes de Credores</h1>
+    <p>Empresarial (Satélite) — Responda em voz alta antes de conferir</p>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('sintese',this)">📖 Síntese</button>
+    <button class="tab-btn" onclick="showTab('recall',this)">🎙️ Active Recall</button>
+    <button class="tab-btn" onclick="showTab('flash',this)">🃏 Flashcards</button>
+    <button class="tab-btn" onclick="showTab('questoes',this)">📝 Questões</button>
+    <button class="tab-btn" onclick="showTab('checklist',this)">✅ Checklist</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- SÍNTESE -->
+<div id="panel-sintese" class="panel active">
+
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-purple"></div> Síntese Conceitual</div>
+
+    <div class="conceito">
+      <strong>1) Espécies de crise — Fábio Ulhoa Coelho</strong>
+      <p>
+        <mark class="p">Econômica</mark>: queda de vendas, retração de receita — empresa perde mercado.<br>
+        <mark class="v">Financeira</mark>: falta de liquidez/caixa para honrar prazos, <mark class="g">ainda que o ativo supere o passivo</mark>.<br>
+        <mark class="r">Patrimonial</mark>: passivo <mark class="r">superior</mark> ao ativo — insolvência contábil.<br><br>
+        <mark class="g">Recuperação judicial</mark> (Lei 11.101/2005, arts. 47–73): crise <mark class="g">econômico-financeira com viabilidade</mark> — princípio da <mark class="g">preservação da empresa</mark> (art. 47).<br>
+        <mark class="r">Falência</mark> (arts. 75+): crise <mark class="r">patrimonial irreversível</mark>.<br><br>
+        <mark class="c">Lei 14.112/2020</mark>: DIP financing · produtor rural · mediação prévia · <em>stay period</em> · insolvência transnacional (UNCITRAL).
+      </p>
+    </div>
+
+    <div class="conceito">
+      <strong>2) Classes de credores (art. 41) e subcategorias</strong>
+      <p>
+        Quatro classes na AGC:<br>
+        <mark class="p">Classe I</mark> — trabalhistas e acidente de trabalho<br>
+        <mark class="v">Classe II</mark> — garantia real<br>
+        <mark class="c">Classe III</mark> — quirografários (+ privilégios especiais e gerais)<br>
+        <mark class="a">Classe IV</mark> — ME/EPP (LC 147/2014)<br><br>
+        Votação por classes; aprovação exige <mark class="g">todas as classes</mark> — salvo <mark class="r">cram down</mark> (art. 58, §1º).<br><br>
+        <mark class="g">STJ admite subdivisão em subcategorias</mark> (REsp 1.700.487) desde que: prevista no plano; critérios <mark class="g">objetivos e razoáveis</mark>; sem desnaturar a classe; respeitada a <em>par conditio creditorum</em>.<br>
+        Controle judicial = <mark class="b">legalidade e razoabilidade</mark> — não substitui a vontade da AGC.
+      </p>
+    </div>
+
+    <div class="distincao">
+      <strong>Distinção-chave:</strong> recuperação judicial ≠ falência pelo <strong>tipo de crise</strong> — econômico-financeira viável × patrimonial irreversível. <strong>Art. 75 LRF</strong> (Lei 14.112/2020): mesmo na falência busca-se preservar e otimizar o uso produtivo dos ativos.
+    </div>
+  </div>
+
+  <!-- TABELA -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-violet"></div> Tabelas Comparativas</div>
+    <div style="overflow-x:auto;margin-bottom:16px">
+      <table class="comp-table" style="border-radius:10px;overflow:hidden">
+        <tr><th>Crise (Ulhoa)</th><th>Característica</th><th>Instituto cabível</th></tr>
+        <tr class="row-purple"><td>Econômica</td><td>Queda de vendas/receita</td><td>Recuperação judicial</td></tr>
+        <tr class="row-violet"><td>Financeira</td><td>Falta de liquidez/caixa</td><td>Recuperação judicial</td></tr>
+        <tr class="row-red"><td>Patrimonial</td><td>Passivo > ativo (insolvência)</td><td>Falência</td></tr>
+      </table>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="comp-table" style="border-radius:10px;overflow:hidden">
+        <tr><th>Classe (art. 41)</th><th>Credores</th><th>Observação</th></tr>
+        <tr class="row-purple"><td>I</td><td>Trabalhistas e acidente de trabalho</td><td>Preferência máxima</td></tr>
+        <tr class="row-violet"><td>II</td><td>Garantia real</td><td>Limitado ao valor do bem</td></tr>
+        <tr class="row-cyan"><td>III</td><td>Quirografários (+ privilégios)</td><td>Subdivisão admitida pelo STJ</td></tr>
+        <tr class="row-amber"><td>IV</td><td>ME/EPP</td><td>LC 147/2014</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- LETRA DA LEI -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-purple"></div> Letra da Lei</div>
+    <div class="lei-box">
+      <div class="lei-ref">Lei 11.101/2005 · Art. 47 — princípio da preservação</div>
+      <p>A recuperação judicial tem por objetivo viabilizar a superação da situação de crise econômico-financeira do devedor, a fim de permitir a manutenção da fonte produtora, do emprego dos trabalhadores e dos interesses dos credores, promovendo a preservação da empresa, sua função social e o estímulo à atividade econômica.</p>
+    </div>
+    <div class="lei-box" style="border-left-color:var(--violet)">
+      <div class="lei-ref" style="color:var(--violet)">Art. 41 — classes da AGC</div>
+      <p>A assembleia-geral será composta pelas seguintes classes de credores: I — titulares de créditos derivados da legislação do trabalho ou decorrentes de acidentes de trabalho; II — titulares de créditos com garantia real; III — titulares de créditos quirografários e com privilégios; IV — titulares de créditos enquadrados como ME ou EPP.</p>
+    </div>
+    <div class="sumula-box">
+      <div class="lei-ref">Art. 58, §1º — cram down</div>
+      <p>O juiz poderá conceder a recuperação judicial com base em plano que não obteve aprovação na forma do art. 45 desta Lei, desde que, na mesma assembleia, tenha obtido, de forma cumulativa: I — o voto favorável de credores que representem mais da metade do valor de todos os créditos presentes; II — a aprovação de 2 (duas) das classes de credores; III — na classe que o houver rejeitado, o voto favorável de mais de 1/3 (um terço) dos credores.</p>
+    </div>
+  </div>
+
+  <!-- PEGADINHAS -->
+  <div class="peg-card">
+    <div class="peg-header">
+      <span style="font-size:22px">⚠️</span>
+      <h3>PEGADINHAS — ZONA DE ATAQUE</h3>
+    </div>
+    <div class="peg-item"><div class="peg-num">1</div><p>Distinga as <strong>3 crises</strong> de Fábio Ulhoa — econômica × financeira × patrimonial.</p></div>
+    <div class="peg-item"><div class="peg-num">2</div><p>Recuperação = crise econômico-financeira <strong>com viabilidade</strong> (art. 47); falência = crise patrimonial <strong>irreversível</strong>.</p></div>
+    <div class="peg-item"><div class="peg-num">3</div><p>São <strong>quatro</strong> classes (art. 41) — ME/EPP é a <strong>classe IV</strong> (LC 147/2014), não confundir com quirografários.</p></div>
+    <div class="peg-item"><div class="peg-num">4</div><p><strong>Cram down</strong> (art. 58, §1º): requisitos são <strong>cumulativos</strong> — maioria dos créditos totais + 2 classes + 1/3 na classe rejeitora.</p></div>
+    <div class="peg-item"><div class="peg-num">5</div><p>STJ admite <strong>subcategorias</strong> na classe III (REsp 1.700.487) — mas precisa de critérios objetivos e razoáveis no plano.</p></div>
+    <div class="peg-item"><div class="peg-num">6</div><p>Controle judicial = <strong>legalidade e razoabilidade</strong> — juiz <strong>não</strong> substitui a vontade da AGC (mérito econômico é da assembleia).</p></div>
+    <div class="peg-item"><div class="peg-num">7</div><p>Art. 75 (Lei 14.112/2020): preservação dos ativos vale também na <strong>falência</strong> — não é exclusivo da recuperação.</p></div>
+  </div>
+
+  <!-- JURISPRUDÊNCIA -->
+  <div class="juri-card">
+    <div class="sec-title" style="margin-bottom:10px"><div class="dot dot-purple"></div> Jurisprudência / Normas</div>
+    <div class="dizer-badge">📘 Dizer o Direito</div>
+    <div class="juri-item"><strong>STJ, REsp 1.700.487</strong> (e correlatos) — admite <strong>subcategorias</strong> de credores na classe III, desde que o plano preveja critérios objetivos e razoáveis, sem desnaturar a classe e respeitando a <em>par conditio creditorum</em>.</div>
+    <div class="juri-item"><strong>STJ — controle judicial do plano</strong>: é de <strong>legalidade e razoabilidade</strong>; o juiz afasta cláusula abusiva mas não ingressa no mérito econômico do plano nem substitui a vontade da AGC.</div>
+    <div class="juri-item"><strong>Súmula 581 STJ</strong> — a recuperação judicial do devedor principal não impede o prosseguimento das ações e execuções em face de coobrigados, fiadores e avalistas.</div>
+    <div class="juri-item"><strong>Princípio da preservação da empresa</strong> (art. 47 LRF) — vetor interpretativo central de toda a LRF, aplicável também à falência (art. 75, Lei 14.112/2020).</div>
+  </div>
+
+</div>
+
+<!-- ACTIVE RECALL -->
+<div id="panel-recall" class="panel"><div id="ar-list"></div></div>
+
+<!-- FLASHCARDS -->
+<div id="panel-flash" class="panel">
+  <div class="fc-wrap">
+    <div class="fc-counter" id="fc-counter">1 / 8</div>
+    <div class="fc-scene" onclick="flipCard()">
+      <div class="fc-card" id="fc-card">
+        <div class="fc-face fc-front">
+          <div class="fc-hint">Frente — toque para virar</div>
+          <p id="fc-front-text"></p>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-hint">Verso</div>
+          <p id="fc-back-text"></p>
+        </div>
+      </div>
+    </div>
+    <div class="fc-tip">Toque no card para ver a resposta</div>
+    <button class="fc-flip-btn" onclick="flipCard()">🔄 Virar card</button>
+    <div class="fc-nav">
+      <button class="fc-btn" id="fc-prev" onclick="fcNav(-1)">← Anterior</button>
+      <div class="fc-dots" id="fc-dots"></div>
+      <button class="fc-btn" id="fc-next" onclick="fcNav(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTÕES -->
+<div id="panel-questoes" class="panel"><div id="q-list"></div></div>
+
+<!-- CHECKLIST -->
+<div id="panel-checklist" class="panel">
+  <div class="cl-header">
+    <h2>✅ Checklist de Domínio</h2>
+    <span class="cl-pct" id="cl-pct">0%</span>
+  </div>
+  <div class="cl-bar"><div class="cl-fill" id="cl-fill" style="width:0%"></div></div>
+  <div id="cl-items"></div>
+  <button class="cl-reset" onclick="clReset()">Reiniciar checklist</button>
+</div>
+
+</div>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='flash') renderFC();
+}
+
+const AR=[
+  {mic:true, q:'🎙️ Diferencie crise econômico-financeira e patrimonial e qual instituto cabe em cada uma.',
+   a:'<strong>Econômica:</strong> queda de vendas/receita. <strong>Financeira:</strong> falta de liquidez, mesmo com ativo > passivo. → Recuperação judicial (art. 47 LRF) — crise viável.<br><br><strong>Patrimonial:</strong> passivo > ativo (insolvência contábil). → Falência (art. 75 LRF) — crise irreversível.<br><br>Referência doutrinária: Fábio Ulhoa Coelho.'},
+  {mic:true, q:'🎙️ Quais as classes do art. 41? É possível criar subcategorias? Em que limites?',
+   a:'<strong>4 classes:</strong> I (trabalhistas/acidente) · II (garantia real) · III (quirografários) · IV (ME/EPP).<br><br><strong>Subcategorias</strong> são admitidas pelo STJ (REsp 1.700.487): devem ser previstas no plano, com critérios objetivos e razoáveis, sem desnaturar a classe, respeitando a <em>par conditio creditorum</em>.'},
+  {mic:false, q:'O que é o princípio da preservação da empresa (art. 47)?',
+   a:'Vetor interpretativo central da LRF: o objetivo da recuperação é <strong>viabilizar a superação da crise econômico-financeira</strong> do devedor para manter a fonte produtora, o emprego e os interesses dos credores. Pela Lei 14.112/2020, aplica-se também à falência (art. 75) — preservar e otimizar o uso produtivo dos ativos.'},
+  {mic:false, q:'O que é cram down (art. 58, §1º) e quais seus requisitos cumulativos?',
+   a:'Concessão judicial <strong>impositiva</strong> do plano quando rejeitado pelas classes, desde que: (1) maioria dos créditos totais presentes; (2) aprovação de 2 das 4 classes; (3) na classe rejeitora, ao menos 1/3 dos credores. Os requisitos são cumulativos.'},
+  {mic:false, q:'Quais as inovações da Lei 14.112/2020 na LRF?',
+   a:'<strong>DIP financing</strong> (financiamento durante a recuperação) · <strong>produtor rural</strong> pode requerer recuperação judicial · <strong>mediação prévia</strong> como alternativa · ajuste do <em>stay period</em> · insolvência transnacional (UNCITRAL Model Law) · maximização dos ativos na falência (art. 75).'},
+  {mic:false, q:'Qual o limite do controle judicial sobre o plano de recuperação?',
+   a:'O juiz exerce controle de <strong>legalidade e razoabilidade</strong>: afasta cláusulas abusivas ou ilegais, mas <strong>não</strong> substitui a vontade da AGC nem examina o mérito econômico do plano. O STJ proíbe revisão do mérito negocial — só legalidade.'}
+];
+
+function buildAR(){
+  document.getElementById('ar-list').innerHTML=AR.map((item,i)=>`
+    <div class="ar-item" id="ar-${i}">
+      <div class="ar-q" onclick="toggleAR(${i})">
+        <div class="ar-num ${item.mic?'mic':''}">${i+1}</div>
+        <div class="ar-text">${item.q}</div>
+        <span class="ar-arrow">›</span>
+      </div>
+      <div class="ar-answer">
+        <div class="ar-answer-inner">${item.a}</div>
+      </div>
+    </div>`).join('');
+}
+function toggleAR(i){document.getElementById('ar-'+i).classList.toggle('open')}
+buildAR();
+
+const FC=[
+  {f:'3 crises (Fábio Ulhoa)',      b:'Econômica · financeira · patrimonial'},
+  {f:'Recuperação judicial',         b:'Crise viável (econômico-financeira) — art. 47 LRF'},
+  {f:'Falência',                     b:'Crise patrimonial irreversível — art. 75 LRF'},
+  {f:'Classes (art. 41)',            b:'I trab. · II garan. real · III quirog. · IV ME/EPP'},
+  {f:'Cram down',                    b:'Art. 58, §1º — aprovação judicial impositiva (requisitos cumulativos)'},
+  {f:'Subcategorias (STJ)',          b:'REsp 1.700.487 — critérios objetivos e razoáveis no plano'},
+  {f:'Controle judicial',            b:'Legalidade e razoabilidade — não substitui AGC'},
+  {f:'Lei 14.112/2020',              b:'DIP financing · produtor rural · stay period · insolvência transnacional'},
+];
+let fcIdx=0,fcFlipped=false;
+function renderFC(){
+  fcFlipped=false;
+  document.getElementById('fc-card').classList.remove('flipped');
+  document.getElementById('fc-front-text').textContent=FC[fcIdx].f;
+  document.getElementById('fc-back-text').textContent=FC[fcIdx].b;
+  document.getElementById('fc-counter').textContent=(fcIdx+1)+' / '+FC.length;
+  document.getElementById('fc-prev').disabled=fcIdx===0;
+  document.getElementById('fc-next').disabled=fcIdx===FC.length-1;
+  document.getElementById('fc-dots').innerHTML=FC.map((_,i)=>`<div class="fc-dot ${i===fcIdx?'active':''}"></div>`).join('');
+}
+function flipCard(){fcFlipped=!fcFlipped;document.getElementById('fc-card').classList.toggle('flipped',fcFlipped)}
+function fcNav(d){fcIdx=Math.max(0,Math.min(FC.length-1,fcIdx+d));renderFC()}
+renderFC();
+
+const QS=[
+  {code:'Q3113962',banca:'FGV 2024',cargo:'Pref. Cuiabá-MT',tag:'mc',
+   I:'Plano rejeitado pelas classes III e IV, aprovado pelos trabalhistas — consequência.',
+   C:'Assinalar a alternativa que indica o que deve ocorrer.',
+   O:'<strong>Gab. E</strong> — o juiz avalia a concessão impositiva do plano (cram down) às classes que o rejeitaram, observados os requisitos cumulativos do art. 58, §1º.',
+   L:'Lei 11.101/2005, art. 58, §1º.'},
+  {code:'Q2328502',banca:'FGV 2023',cargo:'TJ-GO · Juiz de Direito',tag:'mc',
+   I:'Impugnações: novação de avalistas; subclasse na classe III; prazo trabalhista.',
+   C:'Como decide o juiz?',
+   O:'<strong>Gab. A</strong> — homologa, exceto a cláusula que estende a novação aos coobrigados/avalistas (os credores conservam seus direitos contra eles); a criação de subclasse é admitida com critérios objetivos.',
+   L:'Art. 50, §1º LRF; Súmula 581 STJ; jurisprudência do STJ sobre subcategorias.'},
+  {code:'Q1990974',banca:'IESES 2022',cargo:'TJ-TO · Titular de Serventia',tag:'mc',
+   I:'Composição do Comitê de Credores.',
+   C:'Assinalar a alternativa correta.',
+   O:'<strong>Gab. D</strong> — 1 representante por classe, cada um com 2 suplentes (inclui a classe ME/EPP).',
+   L:'Lei 11.101/2005, art. 26.'}
+];
+function buildQ(){
+  document.getElementById('q-list').innerHTML=QS.map((q,i)=>`
+    <div class="q-card">
+      <div class="q-header">
+        <div><div class="q-code">${q.code}</div><div class="q-banca">${q.banca} · ${q.cargo}</div></div>
+        <span class="q-tag ${q.tag==='ce'?'q-tag-ce':'q-tag-mc'}">${q.tag==='ce'?'C / E':'Múltipla Escolha'}</span>
+      </div>
+      <div class="icol-row icol-I"><div class="icol-label">I</div><p>${q.I}</p></div>
+      <div class="icol-row icol-C"><div class="icol-label">C</div><p>${q.C}</p></div>
+      <div class="icol-row icol-L"><div class="icol-label">L</div><p>${q.L}</p></div>
+      <button class="gab-btn" onclick="toggleGab(${i})">Ver gabarito</button>
+      <div class="gab-reveal" id="gab-${i}">
+        <div class="icol-row icol-O" style="background:var(--purplebg);border-radius:8px">
+          <div class="icol-label" style="background:var(--purplebg);color:var(--purple)">O</div>
+          <p style="color:var(--purple);font-weight:700">${q.O}</p>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleGab(i){
+  const el=document.getElementById('gab-'+i),btn=el.previousElementSibling;
+  el.style.display=el.style.display==='block'?'none':'block';
+  btn.textContent=el.style.display==='block'?'Ocultar gabarito':'Ver gabarito';
+}
+buildQ();
+
+const CL_KEY='oral_sex_sem3_recup_jud_cl';
+const CL_ITEMS=[
+  'Distingo as 3 crises (Ulhoa) e cito o instituto cabível em cada.',
+  'Sei as 4 classes do art. 41 e o cram down (art. 58, §1º) com requisitos.',
+  'Sei que o STJ admite subcategorias com critérios objetivos (REsp 1.700.487).',
+  'Sei o limite do controle judicial e as inovações da Lei 14.112/2020.',
+  'Fiz o micro-treino gravado (perguntas 🎙️).'
+];
+function clLoad(){return JSON.parse(localStorage.getItem(CL_KEY)||'[]')}
+function clSave(s){localStorage.setItem(CL_KEY,JSON.stringify(s))}
+function buildCL(){
+  const state=clLoad();
+  document.getElementById('cl-items').innerHTML=CL_ITEMS.map((txt,i)=>`
+    <div class="cl-item ${state.includes(i)?'done':''}" onclick="clToggle(${i})">
+      <div class="cl-check">
+        <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+          <path d="M1 5l3.5 3.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p>${txt}</p>
+    </div>`).join('');
+  const pct=Math.round((state.length/CL_ITEMS.length)*100);
+  document.getElementById('cl-pct').textContent=pct+'%';
+  document.getElementById('cl-fill').style.width=pct+'%';
+}
+function clToggle(i){let s=clLoad();s.includes(i)?s=s.filter(x=>x!==i):s.push(i);clSave(s);buildCL()}
+function clReset(){clSave([]);buildCL()}
+buildCL();
+</script>
+</body>
+</html>
