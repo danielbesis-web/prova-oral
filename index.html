@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prova Oral — 2ª Fase · 16 Semanas</title>
+<style>
+:root{
+  --bg:#050b18;--card:#0b1828;--border:#16365a;--glow:rgba(46,120,200,.25);
+  --text:#e9f0f8;--muted:#90a6c0;--soft:#b9c8dc;
+  --red:#e05555;--redb:#7a2020;--redbg:#1a0505;--redglow:rgba(224,85,85,.25);
+  --green:#27c06a;--greenb:#1c5e3a;--greenbg:#0a2016;--greenglow:rgba(34,197,105,.25);
+  --amber:#f5a623;--amberb:#6a4a14;--amberbg:#241a08;--amberglow:rgba(245,166,35,.25);
+  --cyan:#38bdf8;--cyanb:#155a72;--cyanbg:#06212e;
+  --purple:#b06bf2;--purpleb:#432a6e;--purplebg:#190f2c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -120px,#0c1d33 0%,var(--bg) 60%);
+  color:var(--text);min-height:100vh;padding:28px 16px 80px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto}
+
+.head{text-align:center;margin-bottom:28px}
+.head h1{font-size:22px;font-weight:800;margin-bottom:4px}
+.head p{color:var(--muted);font-size:13px}
+
+.aviso{
+  background:var(--amberbg);border:1px solid var(--amberb);border-radius:13px;
+  padding:12px 16px;margin-bottom:24px;font-size:13px;color:var(--amber);
+}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+.titem{display:flex;gap:0;position:relative}
+.titem::before{
+  content:"";position:absolute;left:19px;top:42px;bottom:-1px;
+  width:2px;background:var(--border);z-index:0;
+}
+.titem:last-child::before{display:none}
+
+.tday{flex:0 0 40px;display:flex;flex-direction:column;align-items:center;
+  padding-top:12px;z-index:1;}
+.tball{
+  width:38px;height:38px;border-radius:50%;border:2px solid var(--border);
+  background:var(--card);display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:var(--muted);flex-shrink:0;
+}
+.tball.active{border-color:var(--red);color:var(--red);box-shadow:0 0 14px -4px var(--red)}
+.tball.done{border-color:var(--green);color:var(--green);box-shadow:0 0 14px -4px var(--greenglow)}
+
+.tcard{
+  flex:1;margin:8px 0 18px 14px;
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:14px 16px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.02),0 12px 32px -20px var(--glow);
+}
+.tcard.active{border-color:var(--redb);box-shadow:0 0 0 1px rgba(224,85,85,.06),0 12px 32px -20px var(--redglow)}
+.tcard.done{border-color:var(--greenb);box-shadow:0 0 0 1px rgba(34,197,105,.06),0 12px 32px -20px var(--greenglow)}
+
+.tsem{font-size:10px;font-weight:800;letter-spacing:1.2px;color:var(--muted);
+  text-transform:uppercase;margin-bottom:4px}
+.ttitle{font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px}
+
+/* DIAS */
+.dias{display:flex;flex-direction:column;gap:6px}
+.dia-link{
+  display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:9px 12px;
+  text-decoration:none;color:var(--soft);font-size:13px;transition:.14s;
+}
+.dia-link:hover{border-color:var(--redb);background:rgba(224,85,85,.07);color:var(--text)}
+.dia-link .dicon{font-size:15px;flex-shrink:0}
+.dia-link .dname{flex:1;font-weight:600}
+.dia-link .dtag{font-size:11px;color:var(--muted)}
+.dia-link .dtag.ok{color:var(--green);font-weight:700}
+.dia-link .dtag.cur{color:var(--red);font-weight:700}
+
+.soon{
+  display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:7px 12px;
+  color:var(--muted);font-size:12px;font-weight:600;
+}
+
+.end{text-align:center;color:var(--muted);font-size:11px;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <h1>🎤 Prova Oral — 2ª Fase</h1>
+    <p>Cadernos de Estudo · 16 Semanas</p>
+  </div>
+
+  <div class="aviso">
+    ⚠️ Abra os cadernos por esta página. Responda em voz alta antes de conferir as respostas.
+  </div>
+
+  <div class="timeline" id="timeline"></div>
+
+  <div class="end">Prova Oral · Concurso Cartório · 2ª Fase</div>
+</div>
+
+<script>
+const SEMANAS = [
+  {
+    sem: 1,
+    titulo: "Semana 1",
+    dias: []
+  },
+  {
+    sem: 2,
+    titulo: "Semana 2",
+    dias: []
+  },
+  {
+    sem: 3,
+    titulo: "Semana 3",
+    dias: [
+      {dia:"Segunda-feira", tema:"Prioridade + Prenotação", bloco:"A · Notarial/Registral", url:"sem3-segunda.html", status:"disponivel"}
+    ]
+  },
+  {sem:4,  titulo:"Semana 4",  dias:[]},
+  {sem:5,  titulo:"Semana 5",  dias:[]},
+  {sem:6,  titulo:"Semana 6",  dias:[]},
+  {sem:7,  titulo:"Semana 7",  dias:[]},
+  {sem:8,  titulo:"Semana 8",  dias:[]},
+  {sem:9,  titulo:"Semana 9",  dias:[]},
+  {sem:10, titulo:"Semana 10", dias:[]},
+  {sem:11, titulo:"Semana 11", dias:[]},
+  {sem:12, titulo:"Semana 12", dias:[]},
+  {sem:13, titulo:"Semana 13", dias:[]},
+  {sem:14, titulo:"Semana 14", dias:[]},
+  {sem:15, titulo:"Semana 15", dias:[]},
+  {sem:16, titulo:"Semana 16", dias:[]}
+];
+
+function render(){
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = SEMANAS.map(s=>{
+    const temDias = s.dias.length > 0;
+    const status = temDias ? 'active' : '';
+    const ballClass = temDias ? 'active' : '';
+
+    let diasHTML = '';
+    if(temDias){
+      diasHTML = `<div class="dias">${s.dias.map(d=>`
+        <a class="dia-link" href="${d.url}">
+          <span class="dicon">📕</span>
+          <span class="dname">${d.dia} — ${d.tema}</span>
+          <span class="dtag cur">${d.bloco}</span>
+        </a>
+      `).join('')}</div>`;
+    } else {
+      diasHTML = `<span class="soon">🔒 Em breve</span>`;
+    }
+
+    return `
+    <div class="titem">
+      <div class="tday"><div class="tball ${ballClass}">${s.sem}</div></div>
+      <div class="tcard ${status}">
+        <div class="tsem">Semana ${s.sem}</div>
+        <div class="ttitle">${s.titulo}</div>
+        ${diasHTML}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>
