@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ter · Sem 3 — Vício Redibitório + Evicção</title>
+<style>
+:root{
+  --bg:#050b18;--card:#0b1828;--border:#16365a;
+  --text:#e9f0f8;--muted:#90a6c0;--soft:#b9c8dc;
+  --green:#27c06a;--greenb:#1c5e3a;--greenbg:#0a2016;--greenglow:rgba(39,192,106,.25);
+  --cyan:#38bdf8;--cyanb:#155a72;--cyanbg:#06212e;
+  --amber:#f5a623;--amberb:#6a4a14;--amberbg:#241a08;
+  --red:#e05555;--redb:#7a2020;--redbg:#1a0505;
+  --blue:#4e8ef7;--blueb:#1e3a7a;--bluebg:#070f28;
+  --purple:#b06bf2;--purpleb:#432a6e;--purplebg:#190f2c;
+  --teal:#2dd4bf;--tealb:#0d5e55;--tealbg:#051a18;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  color:var(--text);min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+.header{background:linear-gradient(135deg,#0a1828 0%,#060f1c 100%);
+  border-bottom:1px solid var(--border);padding:20px 20px 0;}
+.header-inner{max-width:820px;margin:0 auto}
+.breadcrumb{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
+.breadcrumb span{color:var(--green);font-weight:700}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.badge-b{background:var(--greenbg);border:1px solid var(--greenb);color:var(--green)}
+.badge-s{background:var(--amberbg);border:1px solid var(--amberb);color:var(--amber)}
+.badge-t{background:var(--cyanbg);border:1px solid var(--cyanb);color:var(--cyan)}
+.header h1{font-size:20px;font-weight:800;margin-bottom:4px}
+.header h1 em{font-style:normal;color:var(--green)}
+.header p{font-size:13px;color:var(--muted);margin-bottom:16px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+  font-size:12px;text-decoration:none;margin-bottom:12px;
+  border:1px solid var(--border);border-radius:7px;padding:4px 10px;transition:.14s}
+.back-link:hover{color:var(--green);border-color:var(--greenb)}
+.tabs{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:12px 18px;font-size:13px;font-weight:700;border:none;
+  background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;transition:.14s;flex-shrink:0;}
+.tab-btn.active{color:var(--green);border-bottom-color:var(--green)}
+.tab-btn:hover:not(.active){color:var(--soft)}
+.content{max-width:820px;margin:0 auto;padding:24px 16px 80px}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.sec-title{font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-green{background:var(--green)}.dot-cyan{background:var(--cyan)}
+.dot-amber{background:var(--amber)}.dot-blue{background:var(--blue)}
+.dot-red{background:var(--red)}.dot-purple{background:var(--purple)}
+/* Conceitos */
+.conceito{background:#060f1c;border-left:3px solid var(--green);border-radius:0 10px 10px 0;
+  padding:14px 16px;margin-bottom:12px;}
+.conceito strong{color:var(--text);font-size:13px}
+.conceito p{font-size:13px;color:var(--soft);margin-top:6px;line-height:1.7}
+mark.c{background:rgba(56,189,248,.2);color:var(--cyan);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.a{background:rgba(245,166,35,.18);color:var(--amber);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.g{background:rgba(39,192,106,.18);color:var(--green);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.r{background:rgba(224,85,85,.18);color:var(--red);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.p{background:rgba(176,107,242,.18);color:var(--purple);border-radius:3px;padding:1px 5px;font-weight:700}
+.distincao{background:#0a1e12;border:1px solid var(--greenb);border-radius:10px;
+  padding:14px 16px;margin-top:4px;font-size:13px;color:var(--soft);line-height:1.7}
+.distincao strong{color:var(--green)}
+/* Tabela */
+.comp-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;font-size:13px}
+.comp-table th{background:#0a1a2e;padding:10px 14px;text-align:left;font-size:10px;
+  font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.comp-table td{padding:11px 14px;border-top:1px solid rgba(255,255,255,.05)}
+.comp-table tr.row-green td{background:rgba(39,192,106,.07);border-left:3px solid var(--green)}
+.comp-table tr.row-blue  td{background:rgba(78,142,247,.07);border-left:3px solid var(--blue)}
+.comp-table tr.row-amber td{background:rgba(245,166,35,.07);border-left:3px solid var(--amber)}
+.comp-table tr.row-red   td{background:rgba(224,85,85,.07);border-left:3px solid var(--red)}
+.comp-table tr.row-purple td{background:rgba(176,107,242,.07);border-left:3px solid var(--purple)}
+.comp-table td:first-child{font-weight:800;color:var(--text)}
+.comp-table td:nth-child(2){color:var(--soft)}
+.comp-table td:nth-child(3){color:var(--cyan);font-weight:700;font-size:12px}
+/* Lei */
+.lei-box{background:#060e1c;border:1px solid #1e3a6a;border-left:4px solid var(--cyan);
+  border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px;}
+.lei-box .lei-ref{font-size:11px;font-weight:800;color:var(--cyan);letter-spacing:.6px;
+  text-transform:uppercase;margin-bottom:6px}
+.lei-box p{font-size:13px;color:var(--soft);line-height:1.7;font-style:italic}
+.sumula-note{background:#080f1a;border:1px dashed var(--border);border-radius:8px;
+  padding:10px 14px;font-size:12px;color:var(--muted);margin-top:8px}
+/* Pegadinhas */
+.peg-card{background:var(--redbg);border:1px solid var(--redb);border-radius:14px;padding:20px;
+  background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.012) 0px,rgba(255,255,255,.012) 1px,transparent 1px,transparent 8px);}
+.peg-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.peg-header .icon{font-size:22px}
+.peg-header h3{font-size:13px;font-weight:800;color:var(--red);letter-spacing:.5px}
+.peg-item{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;margin-bottom:6px;
+  background:rgba(224,85,85,.08);border-radius:8px;border:1px solid rgba(224,85,85,.15);}
+.peg-item:last-child{margin-bottom:0}
+.peg-num{width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;
+  font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.peg-item p{font-size:13px;color:var(--soft);line-height:1.6}
+.peg-item strong{color:var(--red)}
+/* Jurisprudência */
+.juri-card{background:var(--greenbg);border:1px solid var(--greenb);border-radius:14px;padding:20px;}
+.dizer-badge{display:inline-flex;align-items:center;gap:6px;background:#0d2e18;
+  border:1px solid var(--greenb);border-radius:6px;padding:4px 12px;
+  font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;
+  letter-spacing:.8px;margin-bottom:14px;}
+.juri-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:13px;color:var(--soft);line-height:1.7}
+.juri-item:last-child{border-bottom:none}
+.juri-item strong{color:var(--green)}
+/* Complemento */
+.excecao{background:#070e1d;border-left:3px solid var(--amber);border-radius:0 8px 8px 0;
+  padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--soft)}
+.excecao strong{color:var(--amber)}
+/* Active Recall */
+.ar-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:0;margin-bottom:10px;overflow:hidden;}
+.ar-q{display:flex;gap:12px;align-items:center;padding:15px 18px;cursor:pointer;
+  transition:.14s;user-select:none;}
+.ar-q:hover{background:rgba(255,255,255,.03)}
+.ar-num{width:28px;height:28px;border-radius:8px;background:var(--greenbg);
+  border:1px solid var(--greenb);color:var(--green);
+  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ar-num.mic{background:var(--redbg);border-color:var(--redb);color:var(--red)}
+.ar-text{flex:1;font-size:14px;color:var(--soft);font-weight:600}
+.ar-arrow{color:var(--muted);font-size:12px;transition:.2s;flex-shrink:0}
+.ar-item.open .ar-arrow{transform:rotate(90deg)}
+.ar-answer{max-height:0;overflow:hidden;transition:max-height .3s ease;
+  background:#060f1c;border-top:1px solid transparent;}
+.ar-item.open .ar-answer{max-height:400px;border-top-color:var(--border)}
+.ar-answer-inner{padding:14px 18px 16px;font-size:13px;color:var(--soft);line-height:1.8}
+.ar-answer-inner strong{color:var(--green)}
+/* Flashcards */
+.fc-wrap{max-width:480px;margin:0 auto}
+.fc-counter{text-align:center;font-size:12px;color:var(--muted);margin-bottom:16px;font-weight:700}
+.fc-scene{perspective:1000px;height:200px;margin-bottom:20px;cursor:pointer}
+.fc-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:.5s}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;
+  border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;}
+.fc-front{background:var(--card);border:1px solid var(--border);}
+.fc-back{background:#07201a;border:1px solid var(--greenb);transform:rotateY(180deg);}
+.fc-hint{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px}
+.fc-front .fc-hint{color:var(--muted)}.fc-back .fc-hint{color:var(--green)}
+.fc-face p{font-size:16px;font-weight:800;line-height:1.4}
+.fc-front p{color:var(--text)}.fc-back p{color:var(--green)}
+.fc-tip{font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px}
+.fc-nav{display:flex;align-items:center;justify-content:center;gap:12px}
+.fc-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  color:var(--muted);font-size:13px;font-weight:700;padding:9px 20px;cursor:pointer;transition:.14s;}
+.fc-btn:hover:not(:disabled){border-color:var(--greenb);color:var(--green)}
+.fc-btn:disabled{opacity:.3;cursor:not-allowed}
+.fc-dots{display:flex;gap:6px}
+.fc-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:.14s}
+.fc-dot.active{background:var(--green)}
+.fc-flip-btn{width:100%;padding:11px;border-radius:9px;border:none;cursor:pointer;
+  background:var(--greenbg);border:1px solid var(--greenb);
+  color:var(--green);font-size:14px;font-weight:700;margin-bottom:12px;transition:.14s;}
+.fc-flip-btn:hover{background:rgba(39,192,106,.12)}
+/* Questões */
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;margin-bottom:14px;}
+.q-header{display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.q-code{font-size:13px;font-weight:800;color:var(--text)}
+.q-banca{font-size:11px;color:var(--muted)}
+.q-tag{display:inline-flex;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
+.q-tag-mc{background:var(--cyanbg);border:1px solid var(--cyanb);color:var(--cyan)}
+.q-tag-ce{background:var(--amberbg);border:1px solid var(--amberb);color:var(--amber)}
+.icol-row{display:flex;gap:8px;align-items:flex-start;padding:8px 12px;
+  background:#060f1c;border-radius:8px;margin-bottom:6px;font-size:13px}
+.icol-label{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;}
+.icol-I .icol-label{background:var(--purplebg);color:var(--purple)}
+.icol-C .icol-label{background:var(--cyanbg);color:var(--cyan)}
+.icol-O .icol-label{background:var(--greenbg);color:var(--green)}
+.icol-L .icol-label{background:var(--amberbg);color:var(--amber)}
+.icol-row p{color:var(--soft);line-height:1.6}
+.gab-btn{width:100%;margin-top:12px;padding:9px;border-radius:8px;border:none;cursor:pointer;
+  background:#060f1c;border:1px solid var(--border);
+  color:var(--muted);font-size:12px;font-weight:700;transition:.14s;}
+.gab-btn:hover{border-color:var(--greenb);color:var(--green)}
+.gab-reveal{display:none;margin-top:10px;background:var(--greenbg);border:1px solid var(--greenb);
+  border-radius:8px;padding:12px 14px;font-size:13px;color:var(--green);font-weight:700;}
+/* Checklist */
+.cl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cl-header h2{font-size:16px;font-weight:800}
+.cl-pct{font-size:13px;color:var(--green);font-weight:800}
+.cl-bar{height:6px;background:rgba(255,255,255,.06);border-radius:6px;margin-bottom:24px;overflow:hidden}
+.cl-fill{height:6px;background:var(--green);border-radius:6px;transition:.3s}
+.cl-item{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;
+  background:var(--card);border:1px solid var(--border);border-radius:11px;
+  margin-bottom:8px;cursor:pointer;transition:.14s;user-select:none;}
+.cl-item:hover{border-color:var(--greenb)}
+.cl-item.done{border-color:var(--greenb);background:var(--greenbg)}
+.cl-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.14s;margin-top:1px;}
+.cl-item.done .cl-check{background:var(--green);border-color:var(--green)}
+.cl-check svg{display:none}.cl-item.done .cl-check svg{display:block}
+.cl-item p{font-size:13px;color:var(--soft);line-height:1.5}
+.cl-item.done p{color:var(--green)}
+.cl-reset{width:100%;margin-top:16px;padding:9px;border-radius:8px;border:none;cursor:pointer;
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  font-size:12px;font-weight:700;transition:.14s;}
+.cl-reset:hover{border-color:var(--redb);color:var(--red)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="back-link" href="index.html">← Voltar ao índice</a>
+    <div class="breadcrumb">
+      Prova Oral · 2ª fase <span>›</span> Cadernos <span>›</span> Bloco B — Civil
+    </div>
+    <div class="badges">
+      <span class="badge badge-b">🅱 Bloco B</span>
+      <span class="badge badge-s">Semana 3</span>
+      <span class="badge badge-s">Terça-feira</span>
+      <span class="badge badge-t">TJMT</span>
+    </div>
+    <h1>Vício Redibitório <em>+</em> Evicção</h1>
+    <p>Direito Civil — Responda em voz alta antes de conferir</p>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('sintese',this)">📖 Síntese</button>
+    <button class="tab-btn" onclick="showTab('recall',this)">🎙️ Active Recall</button>
+    <button class="tab-btn" onclick="showTab('flash',this)">🃏 Flashcards</button>
+    <button class="tab-btn" onclick="showTab('questoes',this)">📝 Questões</button>
+    <button class="tab-btn" onclick="showTab('checklist',this)">✅ Checklist</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- SÍNTESE -->
+<div id="panel-sintese" class="panel active">
+
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-green"></div> Síntese Conceitual</div>
+
+    <div class="conceito">
+      <strong>1) Vício redibitório — CC arts. 441–446</strong>
+      <p>Garantia legal contra <mark class="c">defeitos ocultos</mark> da coisa em <mark class="g">contrato comutativo oneroso</mark>, que a tornem imprópria ao uso ou diminuam o valor. Natureza <mark class="g">objetiva</mark>: independe de boa ou má-fé do alienante — isso só muda a <mark class="a">extensão</mark> (art. 443: se <mark class="r">conhecia</mark> → preço + perdas e danos; se <mark class="g">não conhecia</mark> → preço + despesas do contrato).<br><br>
+      Duas ações à escolha: <mark class="c">redibitória</mark> (devolve a coisa, recebe o preço) e <mark class="c">estimatória / quanti minoris</mark> (fica com a coisa, abate o preço).<br><br>
+      Prazos <mark class="a">decadenciais</mark> (art. 445): <mark class="a">30 dias</mark> (móvel) e <mark class="a">1 ano</mark> (imóvel), da entrega. Se já estava na posse, pela metade. Vício que só se revela depois: conta da ciência, com teto de <mark class="a">180 dias</mark> (móvel) / <mark class="a">1 ano</mark> (imóvel) — art. 445, §1º.</p>
+    </div>
+
+    <div class="conceito">
+      <strong>2) Evicção — CC arts. 447–457</strong>
+      <p>Perda da coisa, <mark class="c">total ou parcial</mark>, por <mark class="c">sentença ou ato administrativo</mark> fundado em <mark class="r">causa anterior</mark> à alienação, que reconheça direito de terceiro (evictor).<br><br>
+      <mark class="a">4 pressupostos cumulativos</mark>: (a) aquisição <mark class="g">onerosa</mark>; (b) perda total/parcial; (c) sentença <mark class="g">ou</mark> ato administrativo; (d) <mark class="r">causa anterior</mark> à alienação.<br><br>
+      Natureza <mark class="g">legal</mark> (independe de cláusula), mas art. 448 admite <mark class="c">reforçar, atenuar ou excluir</mark> por convenção — salvo consumo (CDC art. 25 veda).<br><br>
+      Consequências (art. 450): restituição <mark class="g">integral</mark> do preço + frutos + despesas + prejuízos. <mark class="p">Evicção parcial</mark> (art. 455): se considerável → opção entre rescindir ou abater; se não considerável → só indenização proporcional.</p>
+    </div>
+
+    <div class="distincao">
+      <strong>Distinção-chave:</strong> vício redibitório tutela <strong>a coisa</strong> (defeito oculto); evicção tutela <strong>o direito</strong> (perda do bem por terceiro).
+    </div>
+  </div>
+
+  <!-- TABELA -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-blue"></div> Tabela Comparativa</div>
+    <div style="overflow-x:auto">
+      <table class="comp-table">
+        <tr><th>Aspecto</th><th>Vício redibitório</th><th>Evicção</th></tr>
+        <tr class="row-green">
+          <td>Tutela</td>
+          <td>A coisa (defeito oculto)</td>
+          <td>O direito (perda do bem)</td>
+        </tr>
+        <tr class="row-blue">
+          <td>Base legal</td>
+          <td>CC arts. 441–446</td>
+          <td>CC arts. 447–457</td>
+        </tr>
+        <tr class="row-amber">
+          <td>Prazo</td>
+          <td>Decadencial — 30 dias / 1 ano</td>
+          <td>Prescricional geral</td>
+        </tr>
+        <tr class="row-red">
+          <td>Causa</td>
+          <td>Defeito oculto na coisa</td>
+          <td>Causa anterior à alienação</td>
+        </tr>
+        <tr class="row-purple">
+          <td>Opções</td>
+          <td>Redibitória ou quanti minoris</td>
+          <td>Restituição integral (arts. 450/455)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- COMPLEMENTO -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-cyan"></div> Complemento — Material Novo</div>
+    <div class="excecao"><strong>Vício redibitório:</strong> a doutrina majoritária entende que o vício é sempre oculto; recai sobre coisa recebida em contrato comutativo.</div>
+    <div class="excecao"><strong>3 sujeitos da evicção:</strong> <strong>evicto/adquirente</strong> (perde o bem) · <strong>alienante</strong> (transferiu onerosamente) · <strong>evictor/terceiro</strong> (tem a decisão judicial ou apreensão administrativa a seu favor).</div>
+    <div class="excecao"><strong>Hasta pública (CC art. 447):</strong> a garantia subsiste ainda que a aquisição se realize em hasta pública — mas o STJ tempera no caso da arrematação (modo originário).</div>
+    <div class="excecao"><strong>Art. 448:</strong> as partes podem, por cláusula expressa, reforçar, diminuir ou excluir a responsabilidade pela evicção — vedado em consumo (CDC art. 25).</div>
+  </div>
+
+  <!-- LETRA DA LEI -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-cyan"></div> Letra da Lei</div>
+    <div class="lei-box">
+      <div class="lei-ref">CC · Art. 443</div>
+      <p>Se o alienante conhecia o vício ou defeito, restituirá o que recebeu com perdas e danos; se o não conhecia, tão-somente o valor recebido, mais as despesas do contrato.</p>
+    </div>
+    <div class="lei-box" style="border-left-color:var(--amber)">
+      <div class="lei-ref" style="color:var(--amber)">CC · Art. 445 (prazos)</div>
+      <p>O adquirente decai do direito de obter a redibição ou abatimento no preço no prazo de 30 dias se a coisa for móvel, e de um ano se for imóvel, contado da entrega efetiva.</p>
+    </div>
+    <div class="lei-box" style="border-left-color:var(--green)">
+      <div class="lei-ref" style="color:var(--green)">CC · Art. 447</div>
+      <p>Nos contratos onerosos, o alienante responde pela evicção. Subsiste esta garantia ainda que a aquisição se tenha realizado em hasta pública.</p>
+    </div>
+    <div class="lei-box" style="border-left-color:var(--purple)">
+      <div class="lei-ref" style="color:var(--purple)">CC · Art. 455 (evicção parcial)</div>
+      <p>Se parcial, mas considerável, a evicção, poderá o evicto optar entre a rescisão do contrato e a restituição da parte do preço correspondente ao desfalque sofrido.</p>
+    </div>
+    <div class="sumula-note">📌 Sem súmula central — ancorar nos <strong>CC arts. 441–457</strong> e <strong>CDC art. 25</strong>.</div>
+  </div>
+
+  <!-- PEGADINHAS -->
+  <div class="peg-card">
+    <div class="peg-header">
+      <span class="icon">⚠️</span>
+      <h3>PEGADINHAS — ZONA DE ATAQUE</h3>
+    </div>
+    <div class="peg-item"><div class="peg-num">1</div><p>Vício redibitório só protege vício <strong>oculto</strong> — nunca aparente.</p></div>
+    <div class="peg-item"><div class="peg-num">2</div><p>Prazos do <strong>CC (30 dias / 1 ano)</strong> ≠ prazos do <strong>CDC (30 / 90 dias)</strong>.</p></div>
+    <div class="peg-item"><div class="peg-num">3</div><p>Garantia <strong>objetiva</strong>: má-fé do alienante muda só a <strong>extensão</strong> (art. 443), não a responsabilidade.</p></div>
+    <div class="peg-item"><div class="peg-num">4</div><p>Evicção exige <strong>causa anterior</strong> à alienação — requisito mais esquecido.</p></div>
+    <div class="peg-item"><div class="peg-num">5</div><p>Evicção por <strong>sentença OU ato administrativo</strong> — não só judicial.</p></div>
+    <div class="peg-item"><div class="peg-num">6</div><p>Garantia da evicção pode ser <strong>excluída</strong> por cláusula (art. 448) — mas <strong>não em consumo</strong> (CDC art. 25).</p></div>
+    <div class="peg-item"><div class="peg-num">7</div><p>Evicção parcial <strong>considerável</strong>: rescindir ou abater (art. 455). <strong>Não considerável</strong>: só indenização proporcional.</p></div>
+    <div class="peg-item"><div class="peg-num">8</div><p>Nenhuma das garantias se aplica à <strong>doação pura</strong>.</p></div>
+  </div>
+
+  <!-- JURISPRUDÊNCIA -->
+  <div class="juri-card">
+    <div class="sec-title" style="margin-bottom:10px"><div class="dot dot-green"></div> Jurisprudência / Normas</div>
+    <div class="dizer-badge">📗 Dizer o Direito</div>
+    <div class="juri-item"><strong>STJ</strong> — na arrematação judicial (modo originário de aquisição), a evicção em regra <strong>não se aplica</strong>; cabe pleito apenas em caso de vício na hasta pública.</div>
+    <div class="juri-item"><strong>Diálogo das fontes</strong> (Erik Jayme) — integração CC × CDC quando há parte vulnerável; aplica-se o regime mais protetivo ao consumidor.</div>
+    <div class="juri-item">Sem súmula central sobre vício redibitório ou evicção — ancorar nos <strong>arts. 441–457 do CC</strong> e <strong>art. 25 do CDC</strong>.</div>
+  </div>
+
+</div>
+
+<!-- ACTIVE RECALL -->
+<div id="panel-recall" class="panel">
+  <div id="ar-list"></div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="panel-flash" class="panel">
+  <div class="fc-wrap">
+    <div class="fc-counter" id="fc-counter">1 / 8</div>
+    <div class="fc-scene" onclick="flipCard()">
+      <div class="fc-card" id="fc-card">
+        <div class="fc-face fc-front">
+          <div class="fc-hint">Frente — toque para virar</div>
+          <p id="fc-front-text"></p>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-hint">Verso</div>
+          <p id="fc-back-text"></p>
+        </div>
+      </div>
+    </div>
+    <div class="fc-tip">Toque no card para ver a resposta</div>
+    <button class="fc-flip-btn" onclick="flipCard()">🔄 Virar card</button>
+    <div class="fc-nav">
+      <button class="fc-btn" id="fc-prev" onclick="fcNav(-1)">← Anterior</button>
+      <div class="fc-dots" id="fc-dots"></div>
+      <button class="fc-btn" id="fc-next" onclick="fcNav(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTÕES -->
+<div id="panel-questoes" class="panel">
+  <div id="q-list"></div>
+</div>
+
+<!-- CHECKLIST -->
+<div id="panel-checklist" class="panel">
+  <div class="cl-header">
+    <h2>✅ Checklist de Domínio</h2>
+    <span class="cl-pct" id="cl-pct">0%</span>
+  </div>
+  <div class="cl-bar"><div class="cl-fill" id="cl-fill" style="width:0%"></div></div>
+  <div id="cl-items"></div>
+  <button class="cl-reset" onclick="clReset()">Reiniciar checklist</button>
+</div>
+
+</div>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='flash') renderFC();
+}
+
+// ACTIVE RECALL
+const AR=[
+  {mic:true, q:'🎙️ Conceitue vício redibitório, as duas ações e os prazos do art. 445.',
+   a:'<strong>Vício redibitório:</strong> garantia legal contra defeitos ocultos da coisa em contrato comutativo oneroso, que a tornem imprópria ao uso ou diminuam o valor. Natureza objetiva.<br><br><strong>Ações:</strong> redibitória (devolve coisa, recebe preço) e estimatória/quanti minoris (fica com a coisa, abate o preço).<br><br><strong>Prazos (art. 445):</strong> 30 dias (móvel) / 1 ano (imóvel), da entrega efetiva. Se já na posse, pela metade. Vício tardio: conta da ciência, teto de 180 dias/1 ano (§1º).'},
+  {mic:true, q:'🎙️ Distinga vício redibitório e evicção e enuncie os 4 pressupostos da evicção.',
+   a:'<strong>Distinção:</strong> vício redibitório tutela <strong>a coisa</strong> (defeito oculto); evicção tutela <strong>o direito</strong> (perda do bem por causa anterior).<br><br><strong>4 pressupostos da evicção:</strong><br>(a) aquisição onerosa; (b) perda total ou parcial; (c) sentença ou ato administrativo; (d) causa anterior à alienação.'},
+  {mic:false, q:'Vício aparente é protegido? E o que muda se o alienante estava de má-fé?',
+   a:'<strong>Vício aparente não é protegido</strong> — só oculto.<br><br>Má-fé do alienante não afasta a responsabilidade, mas amplia a <strong>extensão</strong>: se conhecia o vício (má-fé) → restitui preço + perdas e danos (art. 443); se não conhecia (boa-fé) → restitui preço + despesas do contrato apenas.'},
+  {mic:false, q:'Diferencie os prazos do CC e do CDC no vício redibitório.',
+   a:'<strong>CC (art. 445):</strong> 30 dias (móvel) / 1 ano (imóvel) — prazos decadenciais.<br><strong>CDC (art. 26):</strong> 30 dias (produto não durável) / 90 dias (produto durável) — com solidariedade de toda a cadeia de fornecimento e prazo de garantia contratual à parte.'},
+  {mic:false, q:'Como funciona a evicção parcial (art. 455)?',
+   a:'Se a evicção for parcial e <strong>considerável</strong>: o evicto pode optar entre <strong>rescindir o contrato</strong> (recebe o preço integral) ou <strong>abater o preço</strong> proporcionalmente.<br>Se a evicção parcial for <strong>não considerável</strong>: só cabe indenização proporcional.'},
+  {mic:false, q:'A garantia da evicção pode ser afastada por cláusula?',
+   a:'<strong>Sim</strong> — art. 448 permite reforçar, diminuir ou excluir por convenção expressa.<br><strong>Exceção:</strong> em relações de consumo, o CDC art. 25 veda cláusula de exoneração da responsabilidade por vícios.'}
+];
+
+function buildAR(){
+  document.getElementById('ar-list').innerHTML=AR.map((item,i)=>`
+    <div class="ar-item" id="ar-${i}">
+      <div class="ar-q" onclick="toggleAR(${i})">
+        <div class="ar-num ${item.mic?'mic':''}">${i+1}</div>
+        <div class="ar-text">${item.q}</div>
+        <span class="ar-arrow">›</span>
+      </div>
+      <div class="ar-answer">
+        <div class="ar-answer-inner">${item.a}</div>
+      </div>
+    </div>`).join('');
+}
+function toggleAR(i){document.getElementById('ar-'+i).classList.toggle('open')}
+buildAR();
+
+// FLASHCARDS
+const FC=[
+  {f:'Vício redibitório',            b:'Defeito oculto · contrato comutativo oneroso (CC 441–446)'},
+  {f:'Ações do adquirente',          b:'Redibitória ou estimatória (quanti minoris)'},
+  {f:'Prazos — art. 445',            b:'30 dias (móvel) · 1 ano (imóvel) · da entrega'},
+  {f:'Má-fé do alienante (art. 443)',b:'Restitui preço + perdas e danos'},
+  {f:'Evicção',                      b:'Perda do bem por causa anterior à alienação'},
+  {f:'4 pressupostos da evicção',    b:'Onerosa · perda · sentença/ato · causa anterior'},
+  {f:'Consequência da evicção',      b:'Restituição integral + frutos + despesas (art. 450)'},
+  {f:'Evicção parcial considerável', b:'Art. 455 — rescindir ou abater o preço'},
+];
+let fcIdx=0,fcFlipped=false;
+function renderFC(){
+  fcFlipped=false;
+  document.getElementById('fc-card').classList.remove('flipped');
+  document.getElementById('fc-front-text').textContent=FC[fcIdx].f;
+  document.getElementById('fc-back-text').textContent=FC[fcIdx].b;
+  document.getElementById('fc-counter').textContent=(fcIdx+1)+' / '+FC.length;
+  document.getElementById('fc-prev').disabled=fcIdx===0;
+  document.getElementById('fc-next').disabled=fcIdx===FC.length-1;
+  document.getElementById('fc-dots').innerHTML=FC.map((_,i)=>`<div class="fc-dot ${i===fcIdx?'active':''}"></div>`).join('');
+}
+function flipCard(){fcFlipped=!fcFlipped;document.getElementById('fc-card').classList.toggle('flipped',fcFlipped)}
+function fcNav(d){fcIdx=Math.max(0,Math.min(FC.length-1,fcIdx+d));renderFC()}
+renderFC();
+
+// QUESTÕES
+const QS=[
+  {code:'Q3811753',banca:'IESES 2026',cargo:'TJ-PA · Titular de Cartório',tag:'mc',
+   I:'Evicção e vício redibitório nas doações.',
+   C:'Assinalar as assertivas corretas.',
+   O:'<strong>Gab. B</strong> (I e II corretas) — assertiva III falsa: o art. 448 permite reforçar/diminuir/excluir a garantia da evicção por cláusula expressa.',
+   L:'CC arts. 441–457, 448, 552.'},
+  {code:'Q954276',banca:'FCC 2018',cargo:'DPE-MA · Defensor Público',tag:'mc',
+   I:'Vício redibitório × erro substancial.',
+   C:'Assinalar a alternativa correta.',
+   O:'<strong>Gab. C</strong> — no vício redibitório o defeito é do objeto (coisa); no erro substancial, há vício da manifestação de vontade.',
+   L:'CC arts. 138 e 441.'},
+  {code:'Q1900379',banca:'MPE-SP 2022',cargo:'Promotor de Justiça',tag:'mc',
+   I:'Extensão da responsabilidade quando o alienante estava de boa-fé.',
+   C:'Assinalar a correta.',
+   O:'<strong>Gab. C</strong> — mesmo de boa-fé há responsabilidade (em extensão menor); alienante de boa-fé é isento apenas das perdas e danos (art. 443).',
+   L:'CC art. 443.'}
+];
+function buildQ(){
+  document.getElementById('q-list').innerHTML=QS.map((q,i)=>`
+    <div class="q-card">
+      <div class="q-header">
+        <div><div class="q-code">${q.code}</div><div class="q-banca">${q.banca} · ${q.cargo}</div></div>
+        <span class="q-tag ${q.tag==='ce'?'q-tag-ce':'q-tag-mc'}">${q.tag==='ce'?'C/E':'Múltipla Escolha'}</span>
+      </div>
+      <div class="icol-row icol-I"><div class="icol-label">I</div><p>${q.I}</p></div>
+      <div class="icol-row icol-C"><div class="icol-label">C</div><p>${q.C}</p></div>
+      <div class="icol-row icol-L"><div class="icol-label">L</div><p>${q.L}</p></div>
+      <button class="gab-btn" onclick="toggleGab(${i})">Ver gabarito</button>
+      <div class="gab-reveal" id="gab-${i}">
+        <div class="icol-row icol-O" style="background:var(--greenbg);border-radius:8px">
+          <div class="icol-label" style="background:var(--greenbg);color:var(--green)">O</div>
+          <p style="color:var(--green)">${q.O}</p>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleGab(i){
+  const el=document.getElementById('gab-'+i),btn=el.previousElementSibling;
+  el.style.display=el.style.display==='block'?'none':'block';
+  btn.textContent=el.style.display==='block'?'Ocultar gabarito':'Ver gabarito';
+}
+buildQ();
+
+// CHECKLIST
+const CL_KEY='oral_ter_sem3_vicio_evic_cl';
+const CL_ITEMS=[
+  'Conceituo vício redibitório, as 2 ações e os prazos (art. 445).',
+  'Sei que só protege vício oculto e o papel da má-fé (art. 443).',
+  'Enuncio os 4 pressupostos da evicção.',
+  'Distingo CC × CDC nos prazos e na solidariedade.',
+  'Sei a evicção parcial (art. 455) e a exclusão por cláusula (art. 448).',
+  'Fiz o micro-treino gravado (perguntas 🎙️).'
+];
+function clLoad(){return JSON.parse(localStorage.getItem(CL_KEY)||'[]')}
+function clSave(s){localStorage.setItem(CL_KEY,JSON.stringify(s))}
+function buildCL(){
+  const state=clLoad();
+  document.getElementById('cl-items').innerHTML=CL_ITEMS.map((txt,i)=>`
+    <div class="cl-item ${state.includes(i)?'done':''}" onclick="clToggle(${i})">
+      <div class="cl-check">
+        <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+          <path d="M1 5l3.5 3.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p>${txt}</p>
+    </div>`).join('');
+  const pct=Math.round((state.length/CL_ITEMS.length)*100);
+  document.getElementById('cl-pct').textContent=pct+'%';
+  document.getElementById('cl-fill').style.width=pct+'%';
+}
+function clToggle(i){let s=clLoad();s.includes(i)?s=s.filter(x=>x!==i):s.push(i);clSave(s);buildCL()}
+function clReset(){clSave([]);buildCL()}
+buildCL();
+</script>
+</body>
+</html>
