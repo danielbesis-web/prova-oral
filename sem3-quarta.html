@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qua · Sem 3 — Concurso de Pessoas + Emendatio × Mutatio</title>
+<style>
+:root{
+  --bg:#050b18;--card:#0b1828;--border:#16365a;
+  --text:#e9f0f8;--muted:#90a6c0;--soft:#b9c8dc;
+  --amber:#f5a623;--amberb:#6a4a14;--amberbg:#241a08;--amberglow:rgba(245,166,35,.25);
+  --cyan:#38bdf8;--cyanb:#155a72;--cyanbg:#06212e;
+  --green:#27c06a;--greenb:#1c5e3a;--greenbg:#0a2016;
+  --red:#e05555;--redb:#7a2020;--redbg:#1a0505;
+  --blue:#4e8ef7;--blueb:#1e3a7a;--bluebg:#070f28;
+  --purple:#b06bf2;--purpleb:#432a6e;--purplebg:#190f2c;
+  --teal:#2dd4bf;--tealb:#0d5e55;--tealbg:#051a18;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  color:var(--text);min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+.header{background:linear-gradient(135deg,#0a1828 0%,#060f1c 100%);
+  border-bottom:1px solid var(--border);padding:20px 20px 0;}
+.header-inner{max-width:820px;margin:0 auto}
+.breadcrumb{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
+.breadcrumb span{color:var(--amber);font-weight:700}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.badge-c{background:var(--amberbg);border:1px solid var(--amberb);color:var(--amber)}
+.badge-s{background:#1a1608;border:1px solid #4a3a10;color:#d4921a}
+.badge-t{background:var(--cyanbg);border:1px solid var(--cyanb);color:var(--cyan)}
+.header h1{font-size:20px;font-weight:800;margin-bottom:4px}
+.header h1 em{font-style:normal;color:var(--amber)}
+.header p{font-size:13px;color:var(--muted);margin-bottom:16px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+  font-size:12px;text-decoration:none;margin-bottom:12px;
+  border:1px solid var(--border);border-radius:7px;padding:4px 10px;transition:.14s}
+.back-link:hover{color:var(--amber);border-color:var(--amberb)}
+.tabs{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:12px 18px;font-size:13px;font-weight:700;border:none;
+  background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;transition:.14s;flex-shrink:0;}
+.tab-btn.active{color:var(--amber);border-bottom-color:var(--amber)}
+.tab-btn:hover:not(.active){color:var(--soft)}
+.content{max-width:820px;margin:0 auto;padding:24px 16px 80px}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.sec-title{font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-amber{background:var(--amber)}.dot-cyan{background:var(--cyan)}
+.dot-green{background:var(--green)}.dot-blue{background:var(--blue)}
+.dot-red{background:var(--red)}.dot-purple{background:var(--purple)}
+.dot-teal{background:var(--teal)}
+/* Conceitos */
+.conceito{background:#060f1c;border-left:3px solid var(--amber);border-radius:0 10px 10px 0;
+  padding:14px 16px;margin-bottom:12px;}
+.conceito strong{color:var(--text);font-size:13px}
+.conceito p{font-size:13px;color:var(--soft);margin-top:6px;line-height:1.7}
+mark.c{background:rgba(56,189,248,.2);color:var(--cyan);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.a{background:rgba(245,166,35,.2);color:var(--amber);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.g{background:rgba(39,192,106,.18);color:var(--green);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.r{background:rgba(224,85,85,.18);color:var(--red);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.p{background:rgba(176,107,242,.18);color:var(--purple);border-radius:3px;padding:1px 5px;font-weight:700}
+.distincao{background:#1a1205;border:1px solid var(--amberb);border-radius:10px;
+  padding:14px 16px;margin-top:4px;font-size:13px;color:var(--soft);line-height:1.7}
+.distincao strong{color:var(--amber)}
+/* Tabela */
+.comp-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;font-size:13px}
+.comp-table th{background:#0a1a2e;padding:10px 14px;text-align:left;font-size:10px;
+  font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.comp-table td{padding:11px 14px;border-top:1px solid rgba(255,255,255,.05)}
+.comp-table tr.row-amber td{background:rgba(245,166,35,.07);border-left:3px solid var(--amber)}
+.comp-table tr.row-cyan  td{background:rgba(56,189,248,.07);border-left:3px solid var(--cyan)}
+.comp-table tr.row-red   td{background:rgba(224,85,85,.07);border-left:3px solid var(--red)}
+.comp-table tr.row-green td{background:rgba(39,192,106,.07);border-left:3px solid var(--green)}
+.comp-table td:first-child{font-weight:800;color:var(--text)}
+.comp-table td:nth-child(2){color:var(--soft)}
+.comp-table td:nth-child(3){color:var(--cyan);font-weight:700;font-size:12px}
+/* Lei */
+.lei-box{background:#060e1c;border:1px solid #1e3a6a;border-left:4px solid var(--amber);
+  border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px;}
+.lei-box .lei-ref{font-size:11px;font-weight:800;color:var(--amber);letter-spacing:.6px;
+  text-transform:uppercase;margin-bottom:6px}
+.lei-box p{font-size:13px;color:var(--soft);line-height:1.7;font-style:italic}
+.sumula-box{background:#1a1205;border:1px solid var(--amberb);border-left:4px solid var(--amber);
+  border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px;}
+.sumula-box .lei-ref{font-size:11px;font-weight:800;color:var(--amber);letter-spacing:.6px;
+  text-transform:uppercase;margin-bottom:6px}
+.sumula-box p{font-size:13px;color:var(--amber);line-height:1.7;font-weight:600}
+/* Pegadinhas */
+.peg-card{background:var(--redbg);border:1px solid var(--redb);border-radius:14px;padding:20px;
+  background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.012) 0px,rgba(255,255,255,.012) 1px,transparent 1px,transparent 8px);}
+.peg-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.peg-header .icon{font-size:22px}
+.peg-header h3{font-size:13px;font-weight:800;color:var(--red);letter-spacing:.5px}
+.peg-item{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;margin-bottom:6px;
+  background:rgba(224,85,85,.08);border-radius:8px;border:1px solid rgba(224,85,85,.15);}
+.peg-item:last-child{margin-bottom:0}
+.peg-num{width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;
+  font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.peg-item p{font-size:13px;color:var(--soft);line-height:1.6}
+.peg-item strong{color:var(--red)}
+/* Jurisprudência */
+.juri-card{background:var(--amberbg);border:1px solid var(--amberb);border-radius:14px;padding:20px;}
+.dizer-badge{display:inline-flex;align-items:center;gap:6px;background:#1a1205;
+  border:1px solid var(--amberb);border-radius:6px;padding:4px 12px;
+  font-size:11px;font-weight:800;color:var(--amber);text-transform:uppercase;
+  letter-spacing:.8px;margin-bottom:14px;}
+.juri-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:13px;color:var(--soft);line-height:1.7}
+.juri-item:last-child{border-bottom:none}
+.juri-item strong{color:var(--amber)}
+/* Complemento */
+.excecao{background:#070e1d;border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;
+  padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--soft)}
+.excecao strong{color:var(--cyan)}
+/* Active Recall */
+.ar-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:0;margin-bottom:10px;overflow:hidden;}
+.ar-q{display:flex;gap:12px;align-items:center;padding:15px 18px;cursor:pointer;
+  transition:.14s;user-select:none;}
+.ar-q:hover{background:rgba(255,255,255,.03)}
+.ar-num{width:28px;height:28px;border-radius:8px;background:var(--amberbg);
+  border:1px solid var(--amberb);color:var(--amber);
+  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ar-num.mic{background:var(--redbg);border-color:var(--redb);color:var(--red)}
+.ar-text{flex:1;font-size:14px;color:var(--soft);font-weight:600}
+.ar-arrow{color:var(--muted);font-size:12px;transition:.2s;flex-shrink:0}
+.ar-item.open .ar-arrow{transform:rotate(90deg)}
+.ar-answer{max-height:0;overflow:hidden;transition:max-height .3s ease;
+  background:#060f1c;border-top:1px solid transparent;}
+.ar-item.open .ar-answer{max-height:400px;border-top-color:var(--border)}
+.ar-answer-inner{padding:14px 18px 16px;font-size:13px;color:var(--soft);line-height:1.8}
+.ar-answer-inner strong{color:var(--amber)}
+/* Flashcards */
+.fc-wrap{max-width:480px;margin:0 auto}
+.fc-counter{text-align:center;font-size:12px;color:var(--muted);margin-bottom:16px;font-weight:700}
+.fc-scene{perspective:1000px;height:200px;margin-bottom:20px;cursor:pointer}
+.fc-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:.5s}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;
+  border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;}
+.fc-front{background:var(--card);border:1px solid var(--border);}
+.fc-back{background:#1a1205;border:1px solid var(--amberb);transform:rotateY(180deg);}
+.fc-hint{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px}
+.fc-front .fc-hint{color:var(--muted)}.fc-back .fc-hint{color:var(--amber)}
+.fc-face p{font-size:16px;font-weight:800;line-height:1.4}
+.fc-front p{color:var(--text)}.fc-back p{color:var(--amber)}
+.fc-tip{font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px}
+.fc-nav{display:flex;align-items:center;justify-content:center;gap:12px}
+.fc-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  color:var(--muted);font-size:13px;font-weight:700;padding:9px 20px;cursor:pointer;transition:.14s;}
+.fc-btn:hover:not(:disabled){border-color:var(--amberb);color:var(--amber)}
+.fc-btn:disabled{opacity:.3;cursor:not-allowed}
+.fc-dots{display:flex;gap:6px}
+.fc-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:.14s}
+.fc-dot.active{background:var(--amber)}
+.fc-flip-btn{width:100%;padding:11px;border-radius:9px;border:none;cursor:pointer;
+  background:var(--amberbg);border:1px solid var(--amberb);
+  color:var(--amber);font-size:14px;font-weight:700;margin-bottom:12px;transition:.14s;}
+.fc-flip-btn:hover{background:rgba(245,166,35,.12)}
+/* Questões */
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;margin-bottom:14px;}
+.q-header{display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.q-code{font-size:13px;font-weight:800;color:var(--text)}
+.q-banca{font-size:11px;color:var(--muted)}
+.q-tag{display:inline-flex;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
+.q-tag-mc{background:var(--cyanbg);border:1px solid var(--cyanb);color:var(--cyan)}
+.icol-row{display:flex;gap:8px;align-items:flex-start;padding:8px 12px;
+  background:#060f1c;border-radius:8px;margin-bottom:6px;font-size:13px}
+.icol-label{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;}
+.icol-I .icol-label{background:var(--purplebg);color:var(--purple)}
+.icol-C .icol-label{background:var(--cyanbg);color:var(--cyan)}
+.icol-O .icol-label{background:var(--greenbg);color:var(--green)}
+.icol-L .icol-label{background:var(--amberbg);color:var(--amber)}
+.icol-row p{color:var(--soft);line-height:1.6}
+.gab-btn{width:100%;margin-top:12px;padding:9px;border-radius:8px;border:none;cursor:pointer;
+  background:#060f1c;border:1px solid var(--border);
+  color:var(--muted);font-size:12px;font-weight:700;transition:.14s;}
+.gab-btn:hover{border-color:var(--amberb);color:var(--amber)}
+.gab-reveal{display:none;margin-top:10px;background:var(--amberbg);border:1px solid var(--amberb);
+  border-radius:8px;padding:12px 14px;}
+/* Checklist */
+.cl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cl-header h2{font-size:16px;font-weight:800}
+.cl-pct{font-size:13px;color:var(--amber);font-weight:800}
+.cl-bar{height:6px;background:rgba(255,255,255,.06);border-radius:6px;margin-bottom:24px;overflow:hidden}
+.cl-fill{height:6px;background:var(--amber);border-radius:6px;transition:.3s}
+.cl-item{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;
+  background:var(--card);border:1px solid var(--border);border-radius:11px;
+  margin-bottom:8px;cursor:pointer;transition:.14s;user-select:none;}
+.cl-item:hover{border-color:var(--amberb)}
+.cl-item.done{border-color:var(--amberb);background:var(--amberbg)}
+.cl-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.14s;margin-top:1px;}
+.cl-item.done .cl-check{background:var(--amber);border-color:var(--amber)}
+.cl-check svg{display:none}.cl-item.done .cl-check svg{display:block}
+.cl-item p{font-size:13px;color:var(--soft);line-height:1.5}
+.cl-item.done p{color:var(--amber)}
+.cl-reset{width:100%;margin-top:16px;padding:9px;border-radius:8px;border:none;cursor:pointer;
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  font-size:12px;font-weight:700;transition:.14s;}
+.cl-reset:hover{border-color:var(--redb);color:var(--red)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="back-link" href="index.html">← Voltar ao índice</a>
+    <div class="breadcrumb">
+      Prova Oral · 2ª fase <span>›</span> Cadernos <span>›</span> Bloco C — Penal
+    </div>
+    <div class="badges">
+      <span class="badge badge-c">🅲 Bloco C</span>
+      <span class="badge badge-s">Semana 3</span>
+      <span class="badge badge-s">Quarta-feira</span>
+      <span class="badge badge-t">TJMT</span>
+    </div>
+    <h1>Concurso de Pessoas <em>+</em> Emendatio × Mutatio</h1>
+    <p>Penal / Proc. Penal — Responda em voz alta antes de conferir</p>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('sintese',this)">📖 Síntese</button>
+    <button class="tab-btn" onclick="showTab('recall',this)">🎙️ Active Recall</button>
+    <button class="tab-btn" onclick="showTab('flash',this)">🃏 Flashcards</button>
+    <button class="tab-btn" onclick="showTab('questoes',this)">📝 Questões</button>
+    <button class="tab-btn" onclick="showTab('checklist',this)">✅ Checklist</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- SÍNTESE -->
+<div id="panel-sintese" class="panel active">
+
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-amber"></div> Síntese Conceitual</div>
+
+    <div class="conceito">
+      <strong>1) Concurso de pessoas — CP art. 29</strong>
+      <p>Confluência de duas ou mais pessoas para um delito. Regra: <mark class="a">teoria monista</mark> — todos respondem pelo mesmo crime, <mark class="g">na medida da culpabilidade</mark>.<br><br>
+      <mark class="c">4 requisitos (Damásio)</mark>: (a) pluralidade de condutas; (b) relevância causal (nexo objetivo); (c) <mark class="a">liame subjetivo</mark> (vontade comum, ainda que tácita); (d) identidade de infração. <mark class="r">Sem liame subjetivo → autoria colateral</mark>, não concurso.<br><br>
+      <mark class="c">Autor × partícipe</mark> — teoria do <mark class="a">domínio do fato</mark> (Roxin/Welzel): autor detém o controle finalístico (direto, mediato, coautor); partícipe contribui <mark class="r">sem domínio</mark> (instiga, induz, auxilia).<br><br>
+      <mark class="p">§1º</mark>: redução de <mark class="a">1/6 a 1/3</mark> ao partícipe de menor importância. <mark class="p">§2º</mark>: <mark class="a">cooperação dolosamente distinta</mark> — cada um responde pelo crime que quis; aumento até metade se o resultado mais grave era previsível.<br><br>
+      <mark class="r">Exceções pluralistas</mark>: aborto (arts. 124–127) e corrupção ativa/passiva (arts. 333/317).</p>
+    </div>
+
+    <div class="conceito">
+      <strong>2) Emendatio × Mutatio Libelli — correlação acusação/sentença</strong>
+      <p><mark class="g">Emendatio libelli</mark> (CPP art. 383): mesmo <mark class="c">fato</mark>, o juiz dá <mark class="g">definição jurídica diversa</mark>, ainda que aplique pena mais grave. <mark class="g">Não exige aditamento</mark>. Cabe em <mark class="g">qualquer fase</mark>, inclusive 2ª instância.<br><br>
+      <mark class="amber" style="background:rgba(245,166,35,.2);color:var(--amber);border-radius:3px;padding:1px 5px;font-weight:700">Mutatio libelli</mark> (CPP art. 384): surge na instrução <mark class="r">prova de elemento não contido na denúncia</mark> — o <mark class="r">fato muda</mark>. O juiz <mark class="r">não pode condenar</mark> sem <mark class="a">aditamento do MP em 5 dias</mark>. Réu pode arrolar até <mark class="a">3 testemunhas</mark>. MP recusa → art. 28 por analogia (remessa ao PGJ/CCR). <mark class="r">Não cabe em 2ª instância</mark> (Súmula 453 STJ).</p>
+    </div>
+
+    <div class="distincao">
+      <strong>Distinção-chave:</strong> emendatio = <strong>mesmo fato, nova tipificação</strong>; mutatio = <strong>fato novo na instrução, exige aditamento</strong>.
+    </div>
+  </div>
+
+  <!-- TABELA -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-blue"></div> Tabela Comparativa — Emendatio × Mutatio</div>
+    <div style="overflow-x:auto">
+      <table class="comp-table">
+        <tr><th>Critério</th><th>Emendatio (art. 383)</th><th>Mutatio (art. 384)</th></tr>
+        <tr class="row-amber">
+          <td>O que muda</td>
+          <td>Só a tipificação (nomen iuris)</td>
+          <td>O fato (novo elemento)</td>
+        </tr>
+        <tr class="row-cyan">
+          <td>Aditamento do MP</td>
+          <td>Não necessário</td>
+          <td>Sim — 5 dias</td>
+        </tr>
+        <tr class="row-red">
+          <td>2ª instância</td>
+          <td>Cabe</td>
+          <td>Não (Súmula 453 STJ)</td>
+        </tr>
+        <tr class="row-green">
+          <td>Pena mais grave</td>
+          <td>Pode (art. 383)</td>
+          <td>Conforme o novo fato</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- COMPLEMENTO -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-cyan"></div> Complemento — Material Novo</div>
+    <div class="excecao"><strong>Três teorias do concurso:</strong> monista (regra — CP 29) · pluralista (exceções legais) · dualista.</div>
+    <div class="excecao"><strong>Autoria — conceito extensivo × restritivo × domínio do fato:</strong> autor direto, mediato, intelectual e autoria de escritório (aparatos organizados de poder — Roxin). Cuidado: domínio do fato não é presunção de autoria pelo cargo (STF — AP 470).</div>
+    <div class="excecao"><strong>Emendatio em grau recursal:</strong> juiz pode reconhecer qualificadoras e causas de aumento já descritas na denúncia, ainda que não na capitulação. Agravantes genéricas: ação pública → reconhecidas mesmo sem pedido (art. 385 CPP); ação privada → só as que constarem.</div>
+    <div class="excecao"><strong>Reformatio in pejus:</strong> na emendatio em 2ª instância, se o recurso for exclusivo da defesa, não se pode agravar a pena mesmo que a nova tipificação seja mais grave.</div>
+  </div>
+
+  <!-- LETRA DA LEI -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-cyan"></div> Letra da Lei &amp; Súmulas</div>
+    <div class="lei-box">
+      <div class="lei-ref">CP · Art. 29</div>
+      <p>Quem, de qualquer modo, concorre para o crime incide nas penas a este cominadas, na medida de sua culpabilidade.</p>
+    </div>
+    <div class="lei-box" style="border-left-color:var(--green)">
+      <div class="lei-ref" style="color:var(--green)">CPP · Art. 383 — Emendatio libelli</div>
+      <p>O juiz poderá atribuir definição jurídica diversa do fato descrito na queixa ou na denúncia, ainda que, em consequência, tenha de aplicar pena mais grave.</p>
+    </div>
+    <div class="lei-box" style="border-left-color:var(--red)">
+      <div class="lei-ref" style="color:var(--red)">CPP · Art. 384 — Mutatio libelli</div>
+      <p>Encerrada a instrução probatória, se houver possibilidade de nova definição jurídica do fato que importe aplicação de pena mais grave, o Ministério Público deverá aditar a denúncia ou queixa, no prazo de 5 (cinco) dias.</p>
+    </div>
+    <div class="sumula-box">
+      <div class="lei-ref">Súmula 453 STJ</div>
+      <p>Não se aplicam à segunda instância o art. 384 e parágrafos do Código de Processo Penal, que possibilitam dar ao fato definição jurídica diversa da constante da queixa ou denúncia.</p>
+    </div>
+  </div>
+
+  <!-- PEGADINHAS -->
+  <div class="peg-card">
+    <div class="peg-header">
+      <span class="icon">⚠️</span>
+      <h3>PEGADINHAS — ZONA DE ATAQUE</h3>
+    </div>
+    <div class="peg-item"><div class="peg-num">1</div><p>Sem <strong>liame subjetivo</strong> → autoria colateral, não concurso de pessoas.</p></div>
+    <div class="peg-item"><div class="peg-num">2</div><p>Regra é <strong>monista</strong>; pluralista é exceção (aborto, corrupção ativa/passiva).</p></div>
+    <div class="peg-item"><div class="peg-num">3</div><p><strong>§2º</strong>: cooperação dolosamente distinta — não há comunicação automática do crime mais grave.</p></div>
+    <div class="peg-item"><div class="peg-num">4</div><p><strong>Emendatio</strong> muda só o nomen iuris; <strong>mutatio</strong> muda o fato.</p></div>
+    <div class="peg-item"><div class="peg-num">5</div><p>Emendatio cabe em 2ª instância; <strong>mutatio não</strong> (Súmula 453 STJ).</p></div>
+    <div class="peg-item"><div class="peg-num">6</div><p>Mutatio: aditamento do MP <strong>não é vinculado</strong> — recusa → art. 28 por analogia.</p></div>
+    <div class="peg-item"><div class="peg-num">7</div><p>Na emendatio o juiz <strong>pode</strong> aplicar pena mais grave (art. 383) — mas respeita reformatio in pejus no recurso exclusivo da defesa.</p></div>
+    <div class="peg-item"><div class="peg-num">8</div><p>Partícipe de menor importância: redução <strong>obrigatória</strong> de 1/6 a 1/3 (§1º).</p></div>
+  </div>
+
+  <!-- JURISPRUDÊNCIA -->
+  <div class="juri-card">
+    <div class="sec-title" style="margin-bottom:10px"><div class="dot dot-amber"></div> Jurisprudência / Normas</div>
+    <div class="dizer-badge">📙 Dizer o Direito</div>
+    <div class="juri-item"><strong>Súmula 453 STJ</strong> — mutatio libelli não se aplica em 2ª instância; veda supressão de instância e reformatio in pejus.</div>
+    <div class="juri-item"><strong>Art. 28 CPP por analogia</strong> — recusa do MP em aditar na mutatio resolve-se com remessa ao PGJ/CCR.</div>
+    <div class="juri-item"><strong>Teoria do domínio do fato (Roxin)</strong> — adotada pelo STF (AP 470 — Mensalão) para distinguir autoria e participação. <strong>Atenção:</strong> não pode ser usada como presunção de autoria pelo simples cargo ou posição hierárquica.</div>
+  </div>
+
+</div>
+
+<!-- ACTIVE RECALL -->
+<div id="panel-recall" class="panel"><div id="ar-list"></div></div>
+
+<!-- FLASHCARDS -->
+<div id="panel-flash" class="panel">
+  <div class="fc-wrap">
+    <div class="fc-counter" id="fc-counter">1 / 8</div>
+    <div class="fc-scene" onclick="flipCard()">
+      <div class="fc-card" id="fc-card">
+        <div class="fc-face fc-front">
+          <div class="fc-hint">Frente — toque para virar</div>
+          <p id="fc-front-text"></p>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-hint">Verso</div>
+          <p id="fc-back-text"></p>
+        </div>
+      </div>
+    </div>
+    <div class="fc-tip">Toque no card para ver a resposta</div>
+    <button class="fc-flip-btn" onclick="flipCard()">🔄 Virar card</button>
+    <div class="fc-nav">
+      <button class="fc-btn" id="fc-prev" onclick="fcNav(-1)">← Anterior</button>
+      <div class="fc-dots" id="fc-dots"></div>
+      <button class="fc-btn" id="fc-next" onclick="fcNav(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTÕES -->
+<div id="panel-questoes" class="panel"><div id="q-list"></div></div>
+
+<!-- CHECKLIST -->
+<div id="panel-checklist" class="panel">
+  <div class="cl-header">
+    <h2>✅ Checklist de Domínio</h2>
+    <span class="cl-pct" id="cl-pct">0%</span>
+  </div>
+  <div class="cl-bar"><div class="cl-fill" id="cl-fill" style="width:0%"></div></div>
+  <div id="cl-items"></div>
+  <button class="cl-reset" onclick="clReset()">Reiniciar checklist</button>
+</div>
+
+</div>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='flash') renderFC();
+}
+
+const AR=[
+  {mic:true, q:'🎙️ Conceitue concurso de pessoas, os 4 requisitos e a distinção autor × partícipe.',
+   a:'<strong>Concurso de pessoas:</strong> confluência de 2+ pessoas para um delito. Regra monista (CP 29): todos respondem pelo mesmo crime na medida da culpabilidade.<br><br><strong>4 requisitos:</strong> (a) pluralidade de condutas; (b) nexo causal; (c) <strong>liame subjetivo</strong> (vontade comum, ainda que tácita); (d) identidade de infração. Sem liame → autoria colateral.<br><br><strong>Autor × partícipe (domínio do fato — Roxin):</strong> autor controla finalisticamente o crime; partícipe contribui sem domínio (instiga, induz, auxilia).'},
+  {mic:true, q:'🎙️ Distinga emendatio e mutatio libelli e as providências do juiz em cada uma.',
+   a:'<strong>Emendatio (art. 383):</strong> mesmo fato, o juiz dá nova tipificação. Não exige aditamento. Pode aplicar pena mais grave. Cabe em 2ª instância.<br><br><strong>Mutatio (art. 384):</strong> surge prova de fato novo na instrução. O fato muda. O juiz não pode condenar sem aditamento do MP (5 dias). Réu pode arrolar 3 testemunhas. MP recusa → art. 28 por analogia. <strong>Não cabe em 2ª instância</strong> (Súmula 453 STJ).'},
+  {mic:false, q:'O que é cooperação dolosamente distinta (CP art. 29, §2º)?',
+   a:'Quando os agentes queriam crimes diferentes. Cada um responde pelo crime que <strong>quis</strong> praticar, não pelo resultado mais grave. Se o resultado mais grave era <strong>previsível</strong> para o outro agente, sua pena pode ser aumentada até <strong>metade</strong>.'},
+  {mic:false, q:'O aditamento na mutatio é vinculado? O que cabe se o MP recusa?',
+   a:'<strong>Não é vinculado</strong> — o MP tem discricionariedade. Se recusa o aditamento, aplica-se o <strong>art. 28 do CPP por analogia</strong>: remessa ao PGJ/CCR para decidir se o aditamento deve ser feito.'},
+  {mic:false, q:'Cabe mutatio em 2ª instância? E emendatio?',
+   a:'<strong>Mutatio: não cabe</strong> (Súmula 453 STJ) — vedação de supressão de instância e reformatio in pejus.<br><strong>Emendatio: cabe</strong> em 2ª instância — mas respeitada a proibição de reformatio in pejus quando o recurso é exclusivo da defesa.'},
+  {mic:false, q:'Cite uma exceção pluralista à teoria monista e explique por que.',
+   a:'<strong>Aborto (CP arts. 124–127):</strong> a gestante responde pelo art. 124 (pena menor) e o médico pelo art. 126 (pena diferente) — tipos distintos para partícipes do mesmo fato.<br><strong>Corrupção:</strong> ativo (art. 333) e passivo (art. 317) são crimes autônomos, embora sejam dois lados do mesmo pacto.'}
+];
+
+function buildAR(){
+  document.getElementById('ar-list').innerHTML=AR.map((item,i)=>`
+    <div class="ar-item" id="ar-${i}">
+      <div class="ar-q" onclick="toggleAR(${i})">
+        <div class="ar-num ${item.mic?'mic':''}">${i+1}</div>
+        <div class="ar-text">${item.q}</div>
+        <span class="ar-arrow">›</span>
+      </div>
+      <div class="ar-answer">
+        <div class="ar-answer-inner">${item.a}</div>
+      </div>
+    </div>`).join('');
+}
+function toggleAR(i){document.getElementById('ar-'+i).classList.toggle('open')}
+buildAR();
+
+const FC=[
+  {f:'Teoria do concurso (regra)',    b:'Monista — CP art. 29 · mesmo crime na medida da culpabilidade'},
+  {f:'4 requisitos do concurso',      b:'Pluralidade · nexo · liame subjetivo · identidade de infração'},
+  {f:'Sem liame subjetivo',           b:'Autoria colateral (não é concurso de pessoas)'},
+  {f:'Autor × partícipe',             b:'Domínio do fato (Roxin/Welzel)'},
+  {f:'CP art. 29 §1º',               b:'Partícipe de menor importância: −1/6 a 1/3'},
+  {f:'CP art. 29 §2º',               b:'Cooperação dolosamente distinta — responde pelo crime que quis'},
+  {f:'Emendatio (CPP 383)',           b:'Mesmo fato, nova tipificação · sem aditamento · cabe em 2ª inst.'},
+  {f:'Mutatio + Súmula 453 STJ',      b:'Fato novo · aditamento em 5 dias · NÃO cabe em 2ª instância'},
+];
+let fcIdx=0,fcFlipped=false;
+function renderFC(){
+  fcFlipped=false;
+  document.getElementById('fc-card').classList.remove('flipped');
+  document.getElementById('fc-front-text').textContent=FC[fcIdx].f;
+  document.getElementById('fc-back-text').textContent=FC[fcIdx].b;
+  document.getElementById('fc-counter').textContent=(fcIdx+1)+' / '+FC.length;
+  document.getElementById('fc-prev').disabled=fcIdx===0;
+  document.getElementById('fc-next').disabled=fcIdx===FC.length-1;
+  document.getElementById('fc-dots').innerHTML=FC.map((_,i)=>`<div class="fc-dot ${i===fcIdx?'active':''}"></div>`).join('');
+}
+function flipCard(){fcFlipped=!fcFlipped;document.getElementById('fc-card').classList.toggle('flipped',fcFlipped)}
+function fcNav(d){fcIdx=Math.max(0,Math.min(FC.length-1,fcIdx+d));renderFC()}
+renderFC();
+
+const QS=[
+  {code:'Q512629',banca:'MPE-SP 2015',cargo:'Promotor de Justiça',tag:'mc',
+   I:'Teoria monista, exceções pluralistas, autoria mediata e requisitos do concurso.',
+   C:'Assinalar as assertivas verdadeiras.',
+   O:'<strong>Gab. A</strong> (I, II, III e V corretas) — IV falsa: admite-se concurso de pessoas em crime culposo.',
+   L:'CP art. 29.'},
+  {code:'Q3781157',banca:'FUNDATEC 2025',cargo:'PC-RS · Delegado de Polícia',tag:'mc',
+   I:'A saca faca desconhecida de B durante furto e mata o segurança. Cooperação dolosamente distinta.',
+   C:'Responsabilização de cada agente.',
+   O:'<strong>Gab. B</strong> — A responde por roubo com resultado morte; B por furto qualificado pelo concurso (não quis e não era previsível o resultado mais grave).',
+   L:'CP art. 29, §2º.'},
+  {code:'Q335894',banca:'VUNESP 2013',cargo:'TJ-SP · Juiz de Direito',tag:'mc',
+   I:'Furto → roubo; MP recusa aditar e o PGJ avaliza a recusa.',
+   C:'O que deve fazer o juiz.',
+   O:'<strong>Gab. A</strong> — julga a lide nos termos originais da denúncia (furto).',
+   L:'CPP art. 384; art. 28 por analogia.'},
+  {code:'Q2215684',banca:'CEBRASPE 2023',cargo:'MPE-BA · Promotor de Justiça',tag:'mc',
+   I:'Definições de emendatio e mutatio libelli.',
+   C:'Itens corretos.',
+   O:'<strong>Gab. A</strong> (I e II certos) — emendatio = mesma descrição fática, nova definição; mutatio = fato novo, aditamento em 5 dias.',
+   L:'CPP arts. 383 e 384.'}
+];
+function buildQ(){
+  document.getElementById('q-list').innerHTML=QS.map((q,i)=>`
+    <div class="q-card">
+      <div class="q-header">
+        <div><div class="q-code">${q.code}</div><div class="q-banca">${q.banca} · ${q.cargo}</div></div>
+        <span class="q-tag q-tag-mc">Múltipla Escolha</span>
+      </div>
+      <div class="icol-row icol-I"><div class="icol-label">I</div><p>${q.I}</p></div>
+      <div class="icol-row icol-C"><div class="icol-label">C</div><p>${q.C}</p></div>
+      <div class="icol-row icol-L"><div class="icol-label">L</div><p>${q.L}</p></div>
+      <button class="gab-btn" onclick="toggleGab(${i})">Ver gabarito</button>
+      <div class="gab-reveal" id="gab-${i}">
+        <div class="icol-row icol-O" style="background:var(--amberbg);border-radius:8px">
+          <div class="icol-label" style="background:var(--amberbg);color:var(--amber)">O</div>
+          <p style="color:var(--amber);font-weight:700">${q.O}</p>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleGab(i){
+  const el=document.getElementById('gab-'+i),btn=el.previousElementSibling;
+  el.style.display=el.style.display==='block'?'none':'block';
+  btn.textContent=el.style.display==='block'?'Ocultar gabarito':'Ver gabarito';
+}
+buildQ();
+
+const CL_KEY='oral_qua_sem3_concurso_emend_cl';
+const CL_ITEMS=[
+  'Enuncio os 4 requisitos do concurso e o liame subjetivo.',
+  'Distingo autor × partícipe (domínio do fato) e os §§ 1º e 2º do CP 29.',
+  'Distingo emendatio × mutatio e as providências do juiz em cada uma.',
+  'Sei a Súmula 453 STJ e o art. 28 por analogia na mutatio.',
+  'Sei as exceções pluralistas (aborto e corrupção).',
+  'Fiz o micro-treino gravado (perguntas 🎙️).'
+];
+function clLoad(){return JSON.parse(localStorage.getItem(CL_KEY)||'[]')}
+function clSave(s){localStorage.setItem(CL_KEY,JSON.stringify(s))}
+function buildCL(){
+  const state=clLoad();
+  document.getElementById('cl-items').innerHTML=CL_ITEMS.map((txt,i)=>`
+    <div class="cl-item ${state.includes(i)?'done':''}" onclick="clToggle(${i})">
+      <div class="cl-check">
+        <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+          <path d="M1 5l3.5 3.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p>${txt}</p>
+    </div>`).join('');
+  const pct=Math.round((state.length/CL_ITEMS.length)*100);
+  document.getElementById('cl-pct').textContent=pct+'%';
+  document.getElementById('cl-fill').style.width=pct+'%';
+}
+function clToggle(i){let s=clLoad();s.includes(i)?s=s.filter(x=>x!==i):s.push(i);clSave(s);buildCL()}
+function clReset(){clSave([]);buildCL()}
+buildCL();
+</script>
+</body>
+</html>
