@@ -559,16 +559,13 @@ buildCL();
       (tabAtiva ? 'Seção aberta: '+tabAtiva+'\n' : '')+
       '\nTenho uma dúvida sobre este tema:\n';
     const toast = document.getElementById('claudeToast');
-    if(navigator.share){
-      navigator.share({title:'Dúvida — Sexta Sem 3',text:ctx})
-        .catch(function(){});
-    } else {
-      navigator.clipboard.writeText(ctx).then(function(){
-        toast.textContent='Copiado! Cole no Claude ✓';
-        toast.classList.add('show');
-        setTimeout(function(){toast.classList.remove('show')},2200);
-      });
-    }
+    navigator.clipboard.writeText(ctx).catch(function(){});
+    toast.textContent='Contexto copiado — cole no chat ✓';
+    toast.classList.add('show');
+    setTimeout(function(){toast.classList.remove('show')},2500);
+    setTimeout(function(){
+      window.open('https://claude.ai/share/335a7657-2c2d-46ea-84f6-8c9e4d01edb5','_blank');
+    },300);
   });
 })();
 </script>
