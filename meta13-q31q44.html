@@ -350,7 +350,7 @@ function importarProgresso(evt){var file=evt.target.files[0];if(!file)return;var
 function dismissIframeBanner(){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';try{sessionStorage.setItem('iframe_banner_dismissed','1');}catch(e){}}
 function checkIframeBanner(){try{if(sessionStorage.getItem('iframe_banner_dismissed')==='1'){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';}}catch(e){}}
 function init(){loadState();checkIframeBanner();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel&&state.modo==='materia')sel.style.display='';lista=buildLista();renderStats();renderCard();startTimers();}
-function claudeBtnHTML(id){return '<button class="claude-qbtn" onclick="askClaude(''+id+'')">🤖</button>';}
+function claudeBtnHTML(id){return '<button class="claude-qbtn" onclick="askClaude(\''+id+'\')">🤖</button>';}
 function askClaude(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var ctx='Meta 13 · Direito Processual Penal · Questão '+id+'\nTema: '+q.materia+'\nBanca: '+(q.banca||'')+'\nConcurso: Cartório TJMT\nLink: '+window.location.href+'\n\nEnunciado:\n'+q.enunciado+'\n\nTenho uma dúvida sobre esta questão:\n';navigator.clipboard.writeText(ctx).catch(function(){});window.open('https://claude.ai/share/335a7657-2c2d-46ea-84f6-8c9e4d01edb5','_blank');}
 init();
 </script>
