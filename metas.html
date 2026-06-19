@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Estudos — Metas · Cartório TJMT</title>
+<style>
+:root{
+  --bg:#050b18;--card:#0b1828;--border:#16365a;
+  --text:#e9f0f8;--muted:#90a6c0;
+  --green:#27c06a;--cyan:#38bdf8;
+  --lock:#2a3a4a;--locktext:#4a6070;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -120px,#0c1d33 0%,var(--bg) 60%);
+  color:var(--text);min-height:100vh;padding:28px 16px 80px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:720px;margin:0 auto}
+
+.head{text-align:center;margin-bottom:36px}
+.head h1{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:6px}
+.head p{color:var(--muted);font-size:13px}
+
+.back{
+  display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+  font-size:12px;text-decoration:none;margin-bottom:24px;
+  padding:6px 10px;border:1px solid var(--border);border-radius:8px;transition:.14s;
+}
+.back:hover{color:var(--text);border-color:var(--cyan)}
+
+.meta-sec{margin-bottom:24px}
+.meta-label{
+  font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px;padding-left:2px;
+}
+
+.meta-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:16px 18px;margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.meta-num{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;
+  background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);color:var(--cyan);
+}
+.meta-num.green{background:rgba(39,192,106,.1);border-color:rgba(39,192,106,.25);color:var(--green)}
+
+.meta-info{flex:1;min-width:0}
+.meta-titulo{font-size:14px;font-weight:700;margin-bottom:2px}
+.meta-sub{font-size:11px;color:var(--muted)}
+.meta-parts{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+
+.meta-part{
+  font-size:11px;padding:3px 10px;border-radius:6px;
+  background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.15);
+  color:var(--cyan);text-decoration:none;transition:.12s;
+  -webkit-tap-highlight-color:transparent;
+}
+.meta-part:hover{background:rgba(56,189,248,.14)}
+.meta-part.green{background:rgba(39,192,106,.07);border-color:rgba(39,192,106,.18);color:var(--green)}
+.meta-part.green:hover{background:rgba(39,192,106,.14)}
+
+.meta-card.locked{
+  opacity:.35;pointer-events:none;
+  border-color:var(--lock);
+}
+.meta-card.locked .meta-num{
+  background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:var(--locktext);
+}
+.meta-badge{
+  font-size:10px;padding:2px 8px;border-radius:20px;
+  background:rgba(255,255,255,.07);color:var(--muted);
+  margin-left:auto;flex-shrink:0;white-space:nowrap;
+}
+.meta-badge.novo{background:rgba(39,192,106,.12);color:var(--green);border:1px solid rgba(39,192,106,.25)}
+.meta-badge.drive{background:rgba(56,189,248,.08);color:var(--cyan);border:1px solid rgba(56,189,248,.2)}
+
+.sep{height:1px;background:rgba(255,255,255,.05);margin:24px 0}
+.foot{text-align:center;color:var(--muted);font-size:11px;margin-top:32px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="index.html">← Voltar para os Cadernos</a>
+
+  <div class="head">
+    <h1>📚 Central de Estudos</h1>
+    <p>Banco de Questões · Metas · Concurso Cartório TJMT — 2ª Fase</p>
+  </div>
+
+  <!-- METAS 1–8 -->
+  <div class="meta-sec">
+    <div class="meta-label">Metas 1 a 8 · Em preparação</div>
+    <div class="meta-card locked"><div class="meta-num">1</div><div class="meta-info"><div class="meta-titulo">Meta 1</div><div class="meta-sub">A incluir</div></div><div class="meta-badge">Em breve</div></div>
+    <div class="meta-card locked"><div class="meta-num">2</div><div class="meta-info"><div class="meta-titulo">Meta 2</div><div class="meta-sub">A incluir</div></div><div class="meta-badge">Em breve</div></div>
+    <div class="meta-card locked"><div class="meta-num">3</div><div class="meta-info"><div class="meta-titulo">Meta 3</div><div class="meta-sub">A incluir</div></div><div class="meta-badge">Em breve</div></div>
+    <div class="meta-card locked"><div class="meta-num">4</div><div class="meta-info"><div class="meta-titulo">Meta 4</div><div class="meta-sub">A incluir</div></div><div class="meta-badge">Em breve</div></div>
+    <div class="meta-card locked"><div class="meta-num">5</div><div class="meta-info"><div class="meta-titulo">Meta 5</div><div class="meta-sub">A incluir</div></div><div class="meta-badge">Em breve</div></div>
+    <div class="meta-card locked"><div class="meta-num">6</div><div class="meta-info"><div class="meta-titulo">Meta 6</div><div class="meta-sub">A incluir</div></div><div class="meta-badge">Em breve</div></div>
+    <div class="meta-card locked"><div class="meta-num">7</div><div class="meta-info"><div class="meta-titulo">Meta 7</div><div class="meta-sub">A incluir</div></div><div class="meta-badge">Em breve</div></div>
+    <div class="meta-card locked"><div class="meta-num">8</div><div class="meta-info"><div class="meta-titulo">Meta 8</div><div class="meta-sub">A incluir</div></div><div class="meta-badge">Em breve</div></div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- META 9 -->
+  <div class="meta-sec">
+    <div class="meta-label">Meta 9 · Drive</div>
+    <div class="meta-card">
+      <div class="meta-num green">9</div>
+      <div class="meta-info">
+        <div class="meta-titulo">Direito Civil</div>
+        <div class="meta-sub">Questões 54 a 98 · 3 partes</div>
+        <div class="meta-parts">
+          <a class="meta-part green" href="https://drive.google.com/file/d/1mI-JYMYt_kAeUVhRu1HNu-Ok_iRrC0Df/view" target="_blank">Q54–Q68</a>
+          <a class="meta-part green" href="https://drive.google.com/file/d/1-2LBX_ogOwNeXioq6ScSNuYytLDnSRiF/view" target="_blank">Q69–Q83</a>
+          <a class="meta-part green" href="https://drive.google.com/file/d/17Bv_gr3_5UYJk1yBnMIoGPdENhCMltyk/view" target="_blank">Q84–Q98</a>
+        </div>
+      </div>
+      <div class="meta-badge drive">Drive</div>
+    </div>
+  </div>
+
+  <!-- META 10 -->
+  <div class="meta-sec">
+    <div class="meta-label">Meta 10 · Drive</div>
+    <div class="meta-card">
+      <div class="meta-num green">10</div>
+      <div class="meta-info">
+        <div class="meta-titulo">Direito Notarial e Registral</div>
+        <div class="meta-sub">3 partes</div>
+        <div class="meta-parts">
+          <a class="meta-part green" href="https://drive.google.com/file/d/1Vlc00Ayea2Pg3YDI-Eo3Oic4VWcijE_s/view" target="_blank">Q130–Q144</a>
+          <a class="meta-part green" href="https://drive.google.com/file/d/1wraREsjSwd7E69V-1bT6VoWX3TJxmxhl/view" target="_blank">Parte 2</a>
+          <a class="meta-part green" href="https://drive.google.com/file/d/1O7LGbLC9ZP2CtaQx32IRKoLRzoIno6pQ/view" target="_blank">Parte 3</a>
+        </div>
+      </div>
+      <div class="meta-badge drive">Drive</div>
+    </div>
+  </div>
+
+  <!-- META 11 -->
+  <div class="meta-sec">
+    <div class="meta-label">Meta 11 · Drive</div>
+    <div class="meta-card">
+      <div class="meta-num green">11</div>
+      <div class="meta-info">
+        <div class="meta-titulo">Direito Processual Civil</div>
+        <div class="meta-sub">3 partes</div>
+        <div class="meta-parts">
+          <a class="meta-part green" href="https://drive.google.com/file/d/1bo-J6651Jas_QEfdH2sIL2SbCf4xW59o/view" target="_blank">Parte 1</a>
+          <a class="meta-part green" href="https://drive.google.com/file/d/1wPqdNHKauYScLFV28XM5E728NLppXn0R/view" target="_blank">Parte 2</a>
+          <a class="meta-part green" href="https://drive.google.com/file/d/1Yz7Rn7puN8kqm5-6l2itKx10Tx5afio2/view" target="_blank">Parte 3</a>
+        </div>
+      </div>
+      <div class="meta-badge drive">Drive</div>
+    </div>
+  </div>
+
+  <!-- META 12 -->
+  <div class="meta-sec">
+    <div class="meta-label">Meta 12 · Drive</div>
+    <div class="meta-card">
+      <div class="meta-num green">12</div>
+      <div class="meta-info">
+        <div class="meta-titulo">Direito Penal</div>
+        <div class="meta-sub">Questões 1 a 51 · 4 partes</div>
+        <div class="meta-parts">
+          <a class="meta-part green" href="https://drive.google.com/file/d/1lDuLGc7Lxpz9P5IQxDHROQjpoIT4w6y4/view" target="_blank">Q1–Q15</a>
+          <a class="meta-part green" href="https://drive.google.com/file/d/1Sjnq6LQ_M9FmbAskX_dmKjFIRiIms7Uo/view" target="_blank">Q16–Q30</a>
+          <a class="meta-part green" href="https://drive.google.com/file/d/1oaFPAPePUGm8z_ycQAe293LUmFg0-ql4/view" target="_blank">Q31–Q45</a>
+          <a class="meta-part green" href="https://drive.google.com/file/d/1tyAmgmnpmhgbbaZz22J1yS6gkNNW5XcK/view" target="_blank">Q46–Q51</a>
+        </div>
+      </div>
+      <div class="meta-badge drive">Drive</div>
+    </div>
+  </div>
+
+  <!-- META 13 -->
+  <div class="meta-sec">
+    <div class="meta-label">Meta 13 · GitHub Pages · Com botão Claude 🤖</div>
+    <div class="meta-card">
+      <div class="meta-num">13</div>
+      <div class="meta-info">
+        <div class="meta-titulo">Direito Processual Penal</div>
+        <div class="meta-sub">Questões 1 a 44 · 3 partes</div>
+        <div class="meta-parts">
+          <a class="meta-part" href="meta13-q1q15.html">Q1–Q15</a>
+          <a class="meta-part" href="meta13-q16q30.html">Q16–Q30</a>
+          <a class="meta-part" href="meta13-q31q44.html">Q31–Q44</a>
+        </div>
+      </div>
+      <div class="meta-badge novo">GitHub</div>
+    </div>
+  </div>
+
+  <div class="foot">Prova Oral · Concurso Cartório · TJMT 2ª Fase</div>
+</div>
+</body>
+</html>
