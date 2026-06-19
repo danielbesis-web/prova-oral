@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta 13 · Direito Processual Penal — Q16–Q30</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050b18;color:#c9d6e8;font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;min-height:100vh}
+a{color:#38bdf8}
+button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;border:none;outline:none;font-family:inherit}
+.banner-save{background:#0d2040;border-bottom:1px solid #16365a;padding:8px 14px;font-size:12px;color:#7aa3cc;text-align:center;position:sticky;top:0;z-index:100}
+.banner-iframe{background:#1a1200;border-bottom:1px solid #4a3200;padding:8px 14px;font-size:12px;color:#d4a84b;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.banner-iframe button{background:none;color:#d4a84b;font-size:16px;line-height:1;padding:0 4px;border:none;cursor:pointer}
+.header{padding:16px 14px 0}
+.header h1{font-size:18px;font-weight:700;color:#e8f0fb;margin-bottom:12px}
+.timer-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#7aa3cc;margin-bottom:12px}
+.timer-bar span.time-val{color:#38bdf8;font-variant-numeric:tabular-nums;font-weight:600}
+.timer-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:3px 10px;border-radius:6px;font-size:12px}
+.timer-btn:hover{border-color:#38bdf8;color:#38bdf8}
+.stats-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.stat-chip{background:#0b1828;border:1px solid #16365a;border-radius:8px;padding:5px 11px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.stat-chip .sv{font-size:18px;font-weight:700;line-height:1.1}
+.stat-chip .sl{font-size:10px;color:#55738e;text-transform:uppercase;letter-spacing:.5px}
+.sv.green{color:#27c06a}.sv.red{color:#f25555}.sv.amber{color:#f5a623}.sv.cyan{color:#38bdf8}
+.progress-wrap{margin-bottom:14px}
+.progress-bar{height:5px;background:#0b1828;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#27c06a,#38bdf8);border-radius:3px;transition:width .4s}
+.progress-label{font-size:11px;color:#55738e;margin-top:3px}
+.mode-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.mode-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:20px;font-size:12px;transition:all .2s}
+.mode-btn.active{background:#16365a;border-color:#38bdf8;color:#38bdf8;font-weight:600}
+.mode-btn:hover:not(.active){border-color:#38bdf8;color:#c9d6e8}
+.materia-select{background:#0b1828;border:1px solid #16365a;color:#c9d6e8;padding:5px 10px;border-radius:20px;font-size:12px;outline:none}
+.materia-select:focus{border-color:#38bdf8}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.btn-sm{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-sm:hover{border-color:#38bdf8;color:#c9d6e8}
+.btn-danger{border-color:#f25555;color:#f25555}
+.btn-danger:hover{background:#2a0808}
+.card{background:#0b1828;border:1px solid #16365a;border-radius:14px;padding:20px;margin:0 0 12px}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.4px}
+.badge-materia{background:#0d2040;color:#7aa3cc;border:1px solid #16365a}
+.badge-banca{background:#1a0d28;color:#c59bf2;border:1px solid #34204e}
+.review-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
+.review-today{background:#2a1e00;color:#f5a623}
+.review-future{background:#0b1828;color:#55738e;border:1px solid #16365a}
+.enunciado{font-size:15px;line-height:1.6;color:#d8e8f8;margin-bottom:16px}
+.nav-counter{text-align:right;font-size:12px;color:#55738e;margin-bottom:8px}
+.alts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.alt-btn{background:#050b18;border:1.5px solid #16365a;color:#b8cce0;padding:11px 14px;border-radius:10px;text-align:left;font-size:14px;line-height:1.4;transition:all .15s;display:flex;gap:10px;align-items:flex-start;width:100%}
+.alt-btn .alt-letra{font-weight:700;min-width:18px;color:#38bdf8;flex-shrink:0}
+.alt-btn:hover:not(:disabled){border-color:#38bdf8;background:#0b1828}
+.alt-btn.selected{border-color:#b06bf2;background:#1a0d28}
+.alt-btn.correct{border-color:#27c06a!important;background:#0a2018!important;color:#7fffa8!important}
+.alt-btn.wrong{border-color:#f25555!important;background:#200a0a!important;color:#ffaaaa!important}
+.alt-btn.reveal-correct{border-color:#27c06a;background:#0a2018;color:#7fffa8}
+.alt-btn:disabled{cursor:default;opacity:.85}
+.alt-letra.correct{color:#27c06a!important}
+.alt-letra.wrong{color:#f25555!important}
+.alt-letra.reveal-correct{color:#27c06a}
+.btn-confirm{width:100%;padding:12px;border-radius:10px;font-size:15px;font-weight:700;background:#16365a;color:#e8f0fb;border:1.5px solid #2a5a8a;transition:all .2s;margin-bottom:10px}
+.btn-confirm:hover:not(:disabled){background:#1e4a7a;border-color:#38bdf8}
+.btn-confirm:disabled{opacity:.4;cursor:default}
+.result-banner{padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;margin-bottom:12px}
+.result-banner.correct{background:#0a2018;border:1.5px solid #27c06a;color:#7fffa8}
+.result-banner.wrong{background:#200a0a;border:1.5px solid #f25555;color:#ffaaaa}
+.comment-wrap{margin-bottom:12px}
+.comment-toggle{background:#0d1e32;border:1px solid #16365a;color:#7aa3cc;padding:8px 14px;border-radius:8px;font-size:13px;width:100%;text-align:left;transition:all .2s}
+.comment-toggle:hover{border-color:#38bdf8;color:#c9d6e8}
+.comment-body{background:#040c1c;border:1px solid #16365a;border-top:none;border-radius:0 0 8px 8px;padding:14px;font-size:13px;line-height:1.7;color:#b8cce0;display:none}
+.comment-body.open{display:block}
+.sched-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.sched-label{font-size:11px;color:#55738e;margin-right:2px}
+.sched-btn{padding:5px 11px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #4a3200;color:#f5a623;background:#1a1200;transition:all .2s}
+.sched-btn:hover{background:#2a1e00;border-color:#f5a623}
+.sched-btn.remove{border-color:#16365a;color:#55738e;background:#050b18}
+.sched-btn.remove:hover{border-color:#f25555;color:#f25555}
+.star-btn{padding:6px 13px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #16365a;color:#55738e;background:#050b18;transition:all .2s}
+.star-btn.active{border-color:#b06bf2;color:#b06bf2;background:#160d24}
+.star-btn:hover{border-color:#b06bf2;color:#b06bf2}
+.nav-row{display:flex;justify-content:space-between;gap:8px;margin-top:4px}
+.nav-btn{flex:1;padding:10px;border-radius:10px;font-size:14px;font-weight:600;background:#0b1828;border:1.5px solid #16365a;color:#7aa3cc;transition:all .2s;max-width:48%}
+.nav-btn:hover:not(:disabled){border-color:#38bdf8;color:#c9d6e8}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.empty-state{text-align:center;padding:48px 20px;color:#55738e;font-size:14px}
+.empty-state .icon{font-size:40px;margin-bottom:12px}
+.io-row{display:flex;gap:6px;flex-wrap:wrap}
+.btn-io{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:6px 13px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-io:hover{border-color:#38bdf8;color:#c9d6e8}
+#fileInput{display:none}
+footer{padding:16px 14px 28px;text-align:center;font-size:11px;color:#2a4060}
+@media(max-width:480px){.stats-bar{gap:6px}.stat-chip{padding:4px 8px}.stat-chip .sv{font-size:16px}}
+.notas-wrap{margin-top:14px;border-top:1px dashed #1b3550;padding-top:12px}
+.notas-label{font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:7px}
+.notas-area{width:100%;min-height:70px;resize:vertical;background:#0b1828;border:1px solid #16365a;border-radius:10px;color:#dbe7f5;font-size:13.5px;font-family:inherit;line-height:1.5;padding:10px 12px;outline:none;transition:border .2s}
+.notas-area:focus{border-color:#fbbf24;box-shadow:0 0 0 2px rgba(251,191,36,.18)}
+.notas-area::placeholder{color:#3a5474}
+.claude-qbtn{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:#38bdf8;border-radius:6px;padding:3px 9px;font-size:13px;opacity:.45;transition:.15s;-webkit-tap-highlight-color:transparent;}
+.claude-qbtn:hover,.claude-qbtn:active{opacity:1;background:rgba(56,189,248,.2)}
+</style>
+</head>
+<body>
+<div class="banner-save">💾 Seu progresso é salvo automaticamente neste aparelho. Cada pessoa tem o seu.</div>
+<div class="banner-iframe" id="bannerIframe">
+  <span>⚠️ Abra sempre por link direto, não embutido em iframe (Notion/etc.), ou o progresso pode não ser salvo.</span>
+  <button onclick="dismissIframeBanner()" title="Fechar">✕</button>
+</div>
+<div class="header">
+  <h1>Meta 13 · Direito Processual Penal — Q16–Q30</h1>
+  <div class="timer-bar">
+    <span>⏱ <span class="time-val" id="timerQ">00:00</span></span><span>|</span>
+    <span>Sessão: <span class="time-val" id="timerS">00:00</span></span>
+    <button class="timer-btn" id="btnPause" onclick="togglePause()">Pausar</button>
+  </div>
+  <div class="stats-bar" id="statsBar"></div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel"></div>
+  </div>
+  <div class="mode-bar">
+    <button class="mode-btn" data-modo="todas" onclick="setModo('todas')">Todas</button>
+    <button class="mode-btn" data-modo="hoje" onclick="setModo('hoje')">Revisar hoje</button>
+    <button class="mode-btn" data-modo="caderno" onclick="setModo('caderno')">Caderno de erros</button>
+    <button class="mode-btn" data-modo="materia" onclick="setModo('materia')">Por tema</button>
+    <button class="mode-btn" data-modo="aleatorio" onclick="setModo('aleatorio')">Aleatório</button>
+    <select class="materia-select" id="materiaSelect" style="display:none" onchange="setMateriaFiltro(this.value)">
+      <option value="">— Escolha —</option>
+    </select>
+  </div>
+  <div class="action-row">
+    <div class="io-row">
+      <button class="btn-io" onclick="exportarProgresso()">⬇ Exportar</button>
+      <button class="btn-io" onclick="document.getElementById('fileInput').click()">⬆ Importar</button>
+      <input type="file" id="fileInput" accept=".json" onchange="importarProgresso(event)">
+      <button class="btn-io" onclick="exportarNotas()">📝 Baixar anotações (.txt)</button>
+    </div>
+    <button class="btn-sm btn-danger" onclick="recomecar()">🔄 Recomeçar</button>
+  </div>
+</div>
+<div style="padding:0 14px" id="mainContent"></div>
+<footer>Meta 13 · Direito Processual Penal · CPP (Decreto-Lei 3.689/1941) · Q16–Q30</footer>
+<script>
+const STORE_KEY = 'concurso_meta13_procpenal_q16q30_v1';
+const QUESTOES = [
+  {id:'pp16', materia:`Condições da ação penal nos delitos patrimoniais`, banca:'IESES · TJ-AM · 2023', tipo:'multipla',
+   enunciado:`Sobre as condições da ação penal nos delitos patrimoniais, é correto afirmar que:`,
+   alternativas:[
+     {letra:'A',texto:`Por ser cometido sem violência ou grave ameaça, o delito de furto se procede mediante ação penal pública condicionada à representação da vítima, o que deve ser feito no prazo prescricional de seis meses.`},
+     {letra:'B',texto:`Em razão de alteração legislativa recente, o delito de estelionato passou a ser processado mediante ação penal pública condicionada à representação da vítima, que deve apresentar a queixa crime em sede policial, sem a qual a Autoridade Policial não pode dar início ao inquérito.`},
+     {letra:'C',texto:`O crime de roubo na sua modalidade imprópria se procede mediante representação do ofendido se este for tio do agente e houver coabitação.`},
+     {letra:'D',texto:`O crime de dano, ainda que cometido por motivo egoístico, se procede mediante queixa crime.`}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> o dano (art. 163 CP) é, em regra, de ação penal <b>privada</b> (art. 167 CP). A modalidade qualificada "por motivo egoístico" (art. 163, p.ú., IV) continua sendo de ação <b>privada</b> — o art. 167 só ressalva o inciso I (violência/grave ameaça) e o dano ao patrimônio público. Motivo egoístico ⇒ queixa-crime.<br><br><b>⚠️ As outras:</b> (a) furto é ação penal <b>pública incondicionada</b> — não exige representação; (b) o estelionato passou a exigir <b>representação</b> (art. 171, §5º CP, Lei 13.964/19), e não "queixa-crime" — confunde ação pública condicionada com privada; (c) no roubo há violência/grave ameaça à pessoa, logo o art. 183, I, CP <b>afasta</b> as imunidades dos arts. 181-182.<br><br><b>📌 Base legal:</b> arts. 163, p.ú., IV; 167; 181-183; 171, §5º CP.<br><br><b>🔁 Revisar:</b> regime de ação penal dos crimes patrimoniais + efeito do art. 183, I (violência afasta imunidades).<br><br><b>🎙️ Da prova oral:</b> <i>«Quando o crime patrimonial entre parentes deixa de ser isento de pena ou de exigir representação?»</i> — As imunidades absolutas (art. 181) e relativas (art. 182) só valem nos crimes patrimoniais <b>sem violência ou grave ameaça à pessoa</b>; havendo violência/ameaça (roubo, extorsão) ou sendo a vítima idosa (≥60), incide o art. 183 e o crime volta a ser de ação penal pública incondicionada. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp17', materia:`Institutos despenalizadores (ANPP, transação, sursis processual)`, banca:'FGV · TJ-SE · 2023', tipo:'multipla',
+   enunciado:`No tocante aos institutos chamados despenalizadores do acordo de não persecução penal, da transação penal e da suspensão condicional do processo poderá:`,
+   alternativas:[
+     {letra:'A',texto:`o juiz homologar proposta de transação penal, em favor do agressor, nos crimes praticados com violência contra a mulher por razões da condição do sexo feminino.`},
+     {letra:'B',texto:`o juiz homologar acordo de não persecução penal se for cabível a transação penal e o agente já tiver sido beneficiado, nos cinco anos anteriores ao cometimento da infração, com a suspensão condicional do processo.`},
+     {letra:'C',texto:`o Ministério Público oferecer transação penal para as infrações penais praticadas sem violência ou grave ameaça, cuja pena mínima seja igual a quatro anos.`},
+     {letra:'D',texto:`o Ministério Público utilizar como justificativa para o não oferecimento de suspensão condicional do processo o descumprimento do acordo de não persecução penal.`},
+     {letra:'E',texto:`o juiz oferecer de ofício a suspensão condicional do processo ao acusado, se não o fizer o promotor de justiça, nos casos de infrações praticadas sem violência ou grave ameaça.`}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> art. 28-A, §11, CPP — o descumprimento do ANPP pode ser usado pelo MP como <b>justificativa para o não oferecimento</b> da suspensão condicional do processo. Texto de lei.<br><br><b>⚠️ As outras:</b> (a) transação é <b>vedada</b> em violência doméstica contra a mulher (Súmula 536/STJ); (b) ANPP é vedado quando cabível transação (§2º, I) e quando já beneficiado nos 5 anos (§2º, III); (c) transação exige pena <b>máxima</b> ≤ 2 anos (menor potencial ofensivo), não "pena mínima de 4 anos" — esse patamar é o do sursis processual; (e) o juiz não concede sursis processual de ofício — depende de proposta do MP (Súmula 696/STF).<br><br><b>📌 Base legal:</b> art. 28-A, §2º, I e III, e §11 CPP; Súmulas 536/STJ e 696/STF.<br><br><b>🔁 Revisar:</b> quadro numérico — transação (máx. 2 anos) × sursis processual (mín. ≤ 1 ano) × ANPP (mín. < 4 anos).<br><br><b>🎙️ Da prova oral:</b> <i>«ANPP é direito subjetivo do investigado ou poder-dever do MP?»</i> — É <b>poder-dever</b> (discricionariedade regrada): o MP não é obrigado a oferecer, mas, preenchidos os requisitos, a recusa deve ser motivada; havendo recusa imotivada, cabe ao investigado provocar a revisão pelo órgão superior do MP (art. 28-A, §14). <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp18', materia:`Crime contra a honra de funcionário público (Súmula 714/STF)`, banca:'Consulplan · TJ-MA · 2023', tipo:'multipla',
+   enunciado:`Juliano, 40 anos, é servidor público do Tribunal de Justiça do Estado do Maranhão há mais de 14 anos. Enquanto exercia sua função e no exercício dela, foi vítima de difamação praticada por Jéssica, uma jurisdicionada. Considerando a situação hipotética, a doutrina, a legislação pátria e o entendimento das cortes superiores, assinale a afirmativa correta:`,
+   alternativas:[
+     {letra:'A',texto:`Juliano somente poderá ajuizar a ação penal mediante queixa-crime.`},
+     {letra:'B',texto:`Juliano não poderá apresentar queixa-crime, já que, necessariamente, quem deve propor é o Ministério Público por meio de ação penal pública incondicionada.`},
+     {letra:'C',texto:`Trata-se de uma ação penal privada e, somente poderá ser ajuizada pelo Ministério Público, uma vez que Juliano é funcionário público e estava no exercício de suas funções.`},
+     {letra:'D',texto:`Tanto Juliano, mediante queixa-crime, quanto o Ministério Público, mediante representação do ofendido, poderão propor a ação, já que possuem legitimidade concorrente.`}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> <b>Súmula 714/STF</b> — é <b>concorrente</b> a legitimidade do ofendido (queixa) e do Ministério Público (mediante representação do ofendido) na ação penal por crime contra a honra de servidor público em razão do exercício de suas funções.<br><br><b>⚠️ As outras:</b> (a), (b) e (c) cravam legitimidade <b>exclusiva</b> — de Juliano, ou do MP — contrariando a concorrência fixada na súmula; (c) ainda mistura "ação penal privada" com legitimidade do MP.<br><br><b>📌 Base legal:</b> Súmula 714/STF; arts. 138-140 c/c 145, p.ú., CP.<br><br><b>🔁 Revisar:</b> honra de funcionário <i>propter officium</i> = legitimidade concorrente (queixa OU representação ao MP); honra de particular = privada.<br><br><b>🎙️ Da prova oral:</b> <i>«Optando o funcionário pela representação ao MP, ele pode depois mudar de ideia e ajuizar queixa-crime?»</i> — Não. Segundo o STJ, escolhida uma das vias da legitimidade concorrente (Súmula 714), a opção pela representação ao MP <b>preclui</b> a via da ação penal privada, ainda que o ofendido discorde do enquadramento dado pelo Parquet. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp19', materia:`Procedimento dos crimes funcionais (arts. 513-518 CPP)`, banca:'Consulplan · TJ-MA · 2023', tipo:'multipla',
+   enunciado:`Thales, Márcio e Gustavo, todos funcionários da prefeitura de São Luís/MA, foram denunciados pelo Ministério Público pela prática de crime de peculato (art. 312 do CP), tendo o processo sido distribuído para a primeira vara criminal da capital. Considerando a situação hipotética, a doutrina, a legislação pátria e o entendimento das cortes superiores, assinale a afirmativa correta:`,
+   alternativas:[
+     {letra:'A',texto:`O juiz deverá dar-se por impedido, nos casos prescritos em lei. Mas, se não o fizer, poderá ser recusado apenas pelo Ministério Público nos crimes praticados por funcionários públicos.`},
+     {letra:'B',texto:`Caso o juiz, na sentença, modifique a descrição do fato contido na denúncia, poderá ter como consequência aplicar pena mais grave.`},
+     {letra:'C',texto:`Por se tratar do processo e julgamento dos crimes de responsabilidade dos funcionários públicos, o juiz, ao verificar que a denúncia está em devida forma, mandará autuá-la e ordenará a notificação dos acusados, Thales, Márcio e Gustavo, para responder por escrito, dentro do prazo de trinta dias.`},
+     {letra:'D',texto:`Caso o juiz, por se tratar de crime de responsabilidade dos funcionários públicos, convencer-se de que houve inexistência do crime ou improcedência da ação, pelas respostas dos denunciados ou de seus defensores, deverá rejeitar a denúncia em despacho fundamentado.`}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> art. 516 CPP — recebida a resposta preliminar (art. 514), o juiz <b>rejeitará</b> a queixa ou denúncia, em <b>despacho fundamentado</b>, se convencido da inexistência do crime ou da improcedência da ação.<br><br><b>⚠️ As outras:</b> (a) o juiz pode ser recusado por <b>qualquer das partes</b>, não só pelo MP; (b) modificar a descrição do fato por prova nova é <i>mutatio libelli</i> (art. 384) e exige <b>aditamento</b>, com vedação à <i>reformatio in pejus</i> nesse rito; (c) o prazo da resposta preliminar é de <b>15 dias</b> (art. 514), não 30.<br><br><b>📌 Base legal:</b> arts. 513-518 CPP; Súmula 330/STJ.<br><br><b>🔁 Revisar:</b> rito dos crimes funcionais afiançáveis — defesa preliminar de 15 dias + possibilidade de rejeição fundamentada (art. 516).<br><br><b>🎙️ Da prova oral:</b> <i>«A falta da notificação para a resposta preliminar dos arts. 513-514 gera nulidade absoluta? Sempre?»</i> — Não. Pela <b>Súmula 330/STJ</b>, é desnecessária a resposta preliminar quando a ação penal é instruída por inquérito policial. Ainda assim, parte da doutrina e o STF a reputam garantia relevante; a nulidade, quando reconhecida, é <b>relativa</b>, exigindo demonstração de prejuízo. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp20', materia:`Estelionato — exigência de representação (art. 171, §5º CP)`, banca:'Consulplan · TJ-MA · 2023', tipo:'multipla',
+   enunciado:`Joana convenceu Maria, sua vizinha de 58 anos, a outorgar-lhe procuração para movimentar sua conta bancária; de posse do mandato, compareceu à agência e sacou cinco mil reais de aplicações de Maria. O convencimento, a posse da procuração e a vantagem ocorreram em 18/11/2019. O fato chegou ao conhecimento da autoridade policial em novembro/2019 (notícia da filha da outorgante). Em 02/03/2020 o MP ofereceu denúncia por estelionato; embora ouvida em sede policial, Maria não manifestou vontade de ver Joana processada. A denúncia foi recebida e a defesa impetrou habeas corpus. Assinale a tese adequada à defesa:`,
+   alternativas:[
+     {letra:'A',texto:`A necessidade de remessa dos autos ao Juizado Especial Criminal, para que haja oferta da transação penal.`},
+     {letra:'B',texto:`A ausência de condição específica de procedibilidade, em razão da exigência de representação da ofendida.`},
+     {letra:'C',texto:`A ausência de condição da ação, pois caberia à vítima o ajuizamento da ação penal privada no caso concreto.`},
+     {letra:'D',texto:`A atipicidade da conduta, em razão do consentimento da vítima, consistente na ausência de manifestação de ver o acusado processado.`}
+   ],
+   correta:'B',
+   comentario:`<b>✅ Gabarito: LETRA B</b> — comando: marcar a tese adequada à defesa.<br><br><b>⚖️ Por quê:</b> fato em 18/11/2019; denúncia em 02/03/2020, já na vigência da Lei 13.964/19 (em vigor desde 23/01/2020), que inseriu o art. 171, §5º CP, tornando o estelionato crime de ação penal pública <b>condicionada à representação</b>. Como a vítima não representou e a denúncia veio após a lei nova, falta <b>condição específica de procedibilidade</b>.<br><br><b>⚠️ As outras:</b> (a) estelionato (1 a 5 anos) não é infração de menor potencial ofensivo; (c) estelionato nunca foi de ação penal privada; (d) não há atipicidade — o fato é típico, falta é a condição de procedibilidade.<br><br><b>📌 Base legal:</b> art. 171, §5º CP (Lei 13.964/19); arts. 24 e 25 CPP.<br><br><b>🔁 Revisar:</b> art. 171, §5º + direito intertemporal da exigência de representação no estelionato.<br><br><b>🎙️ Da prova oral:</b> <i>«A exigência de representação do art. 171, §5º se aplica aos processos já em curso na entrada em vigor do Pacote Anticrime?»</i> — O STJ entende que a norma é processual de conteúdo material; aplica-se às ações ainda <b>não instauradas</b>, mas, nos feitos já em curso com denúncia recebida, há <b>modulação</b>: não retroage para extinguir o processo já deflagrado. Como aqui a denúncia veio <i>depois</i> da lei e sem representação, a falta de condição é flagrante. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp21', materia:`Ação penal privada subsidiária da pública (art. 29 CPP)`, banca:'Consulplan · TJ-AC · 2023', tipo:'multipla',
+   enunciado:`Sobre a ação penal privada subsidiária da pública, assinale a afirmativa correta:`,
+   alternativas:[
+     {letra:'A',texto:`Arquivado o inquérito policial, é cabível a ação penal privada subsidiária da pública.`},
+     {letra:'B',texto:`Não será admitida ação privada nos crimes de ação pública, se esta não for intentada no prazo legal.`},
+     {letra:'C',texto:`O não exercício no prazo de seis meses ensejará a decadência do direito de queixa, com a extinção da punibilidade do agente.`},
+     {letra:'D',texto:`Cabe ao Ministério Público aditar a queixa, repudiá-la e oferecer denúncia substitutiva; intervir em todos os termos do processo; fornecer elementos de prova; interpor recurso; e, a todo tempo, no caso de negligência do querelante, retomar a ação como parte principal.`}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> transcrição literal do art. 29 CPP — o MP nunca sai do processo na subsidiária; é o fiscal que reassume a ação se o querelante for desidioso.<br><br><b>⚠️ As outras:</b> (a) <b>arquivado</b> o IP não cabe subsidiária — ela pressupõe <b>inércia</b> do MP (não oferecer denúncia no prazo), e o arquivamento é ato expresso, não inércia; (b) inverte o art. 29 (<b>será</b> admitida a privada quando a pública não for intentada no prazo legal); (c) o decurso dos 6 meses faz <b>decair a legitimidade subsidiária</b> do ofendido, mas <b>não extingue a punibilidade</b> — o crime continua público e o MP pode denunciar a qualquer tempo (até a prescrição).<br><br><b>📌 Base legal:</b> arts. 29 e 38 CPP; CF art. 5º, LIX.<br><br><b>🔁 Revisar:</b> subsidiária pressupõe inércia (não arquivamento); decadência da subsidiária não extingue punibilidade.<br><br><b>🎙️ Da prova oral:</b> <i>«Qual a diferença entre o arquivamento do IP que impede a subsidiária e a inércia que a autoriza?»</i> — A subsidiária (CF art. 5º, LIX; art. 29 CPP) só nasce da <b>inércia injustificada</b> do MP — deixar escoar o prazo sem oferecer denúncia, requerer diligências ou arquivar. Se o MP <b>arquiva fundamentadamente</b> (ato expresso, hoje submetido à revisão do art. 28 com a redação do Pacote Anticrime), não há inércia e a subsidiária não tem cabimento. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp22', materia:`Ação penal privada — renúncia, perdão, perempção, indivisibilidade`, banca:'Consulplan · TJ-AC · 2023', tipo:'multipla',
+   enunciado:`Sobre a ação penal privada e os institutos que levam à extinção da punibilidade, assinale a afirmativa correta:`,
+   alternativas:[
+     {letra:'A',texto:`A renúncia ao exercício do direito de queixa, em relação a um dos autores do crime, a todos se estenderá.`},
+     {letra:'B',texto:`O perdão do ofendido, concedido a um dos querelados, aproveitará a todos, mesmo em relação ao que o recusar.`},
+     {letra:'C',texto:`A queixa contra qualquer dos autores do crime obrigará ao processo de todos, não cabendo ao Ministério Público velar pela sua indivisibilidade, por se tratar de ação penal privada.`},
+     {letra:'D',texto:`Tendo a queixa crime sido apresentada no prazo, não se considerará perempta a ação penal privada quando o querelante deixar de formular o pedido de condenação nas alegações finais.`}
+   ],
+   correta:'A',
+   comentario:`<b>✅ Gabarito: LETRA A</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> art. 49 CPP — corolário da <b>indivisibilidade</b>: a renúncia a um dos autores estende-se a todos.<br><br><b>⚠️ As outras:</b> (b) o perdão aproveita a todos, mas <b>não produz efeito em relação ao que o recusar</b> (art. 51) — o perdão é bilateral, depende de aceitação; (c) a queixa contra um obriga ao processo de todos <b>e o MP velará pela indivisibilidade</b> (art. 48); (d) deixar de formular o pedido de condenação nas alegações finais <b>gera perempção</b> (art. 60, III).<br><br><b>📌 Base legal:</b> arts. 48, 49, 51 e 60, III CPP.<br><br><b>🔁 Revisar:</b> renúncia (unilateral, estende-se sem ressalva) × perdão (bilateral, não atinge quem recusa) × perempção (art. 60).<br><br><b>🎙️ Da prova oral:</b> <i>«A indivisibilidade vale também para a ação penal pública? E se o ofendido renuncia só contra um dos coautores?»</i> — A indivisibilidade é própria da ação penal <b>privada</b> (arts. 48-49): renúncia/queixa contra um atinge todos; renunciar a apenas um implica renúncia a todos (sob pena de violar a indivisibilidade). Na ação <b>pública</b> vige a <b>divisibilidade</b> mitigada — o MP pode aditar e denunciar coautores posteriormente sem que isso vicie a denúncia original. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp23', materia:`ANPP — hipóteses de cabimento × vedações (art. 28-A, §2º)`, banca:'Consulplan · TJ-AC · 2023', tipo:'multipla',
+   enunciado:`Não sendo caso de arquivamento e tendo o investigado confessado formal e circunstancialmente a prática de infração penal sem violência ou grave ameaça e com pena mínima inferior a quatro anos, o Ministério Público poderá propor acordo de não persecução penal, desde que necessário e suficiente para reprovação e prevenção do crime, mediante condições ajustadas. O disposto anterior se aplica na seguinte hipótese:`,
+   alternativas:[
+     {letra:'A',texto:`Se for cabível transação penal de competência dos Juizados Especiais Criminais, nos termos da Lei.`},
+     {letra:'B',texto:`Se o investigado, apesar de haver elementos probatórios que indiquem conduta criminal habitual, as infrações pretéritas forem insignificantes.`},
+     {letra:'C',texto:`Nos crimes praticados no âmbito de violência doméstica ou familiar, ou praticados contra a mulher por razões da condição de sexo feminino, em favor do agressor.`},
+     {letra:'D',texto:`Ter sido o agente beneficiado nos cinco anos anteriores ao cometimento da infração, em acordo de não persecução penal, transação penal ou suspensão condicional do processo.`}
+   ],
+   correta:'B',
+   comentario:`<b>✅ Gabarito: LETRA B</b> — comando: marcar a hipótese em que o ANPP se aplica.<br><br><b>⚖️ Por quê:</b> art. 28-A, §2º, II CPP — a vedação por conduta criminal habitual/reiterada/profissional tem <b>exceção</b> quando as infrações penais pretéritas forem <b>insignificantes</b>. Única hipótese listada em que o acordo é cabível.<br><br><b>⚠️ As outras (todas vedações):</b> (a) cabível transação ⇒ veda ANPP (§2º, I); (c) violência doméstica/contra a mulher ⇒ veda (§2º, IV); (d) beneficiado nos 5 anos por ANPP/transação/sursis ⇒ veda (§2º, III).<br><br><b>📌 Base legal:</b> art. 28-A, caput e §2º, I-IV CPP.<br><br><b>🔁 Revisar:</b> as 4 vedações do art. 28-A, §2º + exceção da insignificância no inciso II.<br><br><b>🎙️ Da prova oral:</b> <i>«O ANPP pode ser celebrado em crimes raciais? E há prazo para o investigado provocar a revisão da recusa?»</i> — Pela <b>JT 264-04/STJ</b>, o ANPP é <b>inaplicável aos crimes raciais</b>. Quanto à recusa, o investigado pode requerer a remessa dos autos ao órgão superior do MP (art. 28-A, §14), aplicando-se por analogia a lógica do art. 28; o pedido tardio, porém, sofre preclusão (boa-fé objetiva e cooperação processual). <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp24', materia:`Ação civil ex delicto — coisa julgada (arts. 65-67 CPP)`, banca:'CESPE · TJ-SC · 2023', tipo:'multipla',
+   enunciado:`Assinale a opção correta com base no disposto no CPP acerca da propositura da ação civil:`,
+   alternativas:[
+     {letra:'A',texto:`Pode ser ajuizada ação cível em razão de não ter feito coisa julgada a sentença penal que reconhece ter sido o ato praticado em estado de necessidade.`},
+     {letra:'B',texto:`Admite-se o ajuizamento de ação cível em razão de não ter feito coisa julgada a sentença penal que reconhece ter sido o ato praticado em legítima defesa.`},
+     {letra:'C',texto:`Pode ser ajuizada ação cível em razão de não ter feito coisa julgada a sentença penal que reconhece ter sido o ato praticado em estrito cumprimento do dever legal.`},
+     {letra:'D',texto:`A decisão que julgar extinta a punibilidade não impedirá a propositura da ação civil.`},
+     {letra:'E',texto:`É admissível a propositura de ação cível em razão de não ter feito coisa julgada a sentença penal que reconhece ter sido o ato praticado no exercício regular de direito.`}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> art. 67, II CPP — a decisão que julga extinta a punibilidade <b>não impede</b> a ação civil de reparação (tampouco o arquivamento do IP ou a absolvição por insuficiência de prova).<br><br><b>⚠️ As outras (a, b, c, e):</b> afirmam que as excludentes de ilicitude (<b>estado de necessidade, legítima defesa, estrito cumprimento do dever legal e exercício regular de direito</b>) "não fizeram coisa julgada" no cível — mas o art. 65 diz o contrário: <b>fazem coisa julgada</b>, impedindo rediscussão. <i>(Obs.: no estado de necessidade agressivo ainda cabe ação contra o terceiro causador do perigo — arts. 929/930 CC —, mas isso não desmente o art. 65 quanto ao agente.)</i><br><br><b>📌 Base legal:</b> arts. 65, 66 e 67 CPP.<br><br><b>🔁 Revisar:</b> art. 65 (excludentes ⇒ coisa julgada) × art. 67 (arquivamento, extinção da punibilidade, absolvição por falta de prova ⇒ não impedem o cível).<br><br><b>🎙️ Da prova oral:</b> <i>«A sentença penal absolutória sempre impede a ação civil de reparação?»</i> — Não. Só impede quando reconhece <b>categoricamente a inexistência material do fato</b> ou que o réu <b>não foi o autor</b> (art. 935 CC; art. 386, I e IV, CPP), ou ainda excludente de ilicitude (art. 65). Absolvição por <b>falta de provas</b>, atipicidade ou extinção da punibilidade <b>não</b> impede o cível (arts. 66-67 CPP; art. 67, parágrafo do CPP). <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp25', materia:`Sucessão processual na ação penal privada (art. 31 CPP)`, banca:'CESPE · TJ-SC · 2023', tipo:'multipla',
+   enunciado:`Francisco foi vítima de crime contra a honra, de ação penal privada, quatro meses antes de seu falecimento. O cônjuge, o filho e a avó, zelosos pela imagem da vítima, tinham a intenção de propor ação penal, todavia tinham diversos interesses conflitantes entre si. Considerando a situação hipotética, assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:`Não há como ser proposta a ação penal, haja vista a morte da vítima.`},
+     {letra:'B',texto:`O filho de Francisco terá preferência na propositura da ação penal.`},
+     {letra:'C',texto:`A avó de Francisco terá preferência na propositura da ação penal.`},
+     {letra:'D',texto:`O cônjuge de Francisco terá preferência na propositura da ação penal.`},
+     {letra:'E',texto:`Não há qualquer preferência na propositura da ação penal, visto que a atuação se dá em nome de terceiro.`}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> art. 31 CPP — morto o ofendido, o direito de oferecer queixa ou prosseguir passa ao <b>cônjuge, ascendente, descendente ou irmão (CADI)</b>, <b>nessa ordem preferencial</b>. O cônjuge precede o ascendente (avó) e o descendente (filho).<br><br><b>⚠️ As outras:</b> (a) a morte não impede a ação — o direito se transfere ao CADI; (b) o filho (descendente) vem depois do cônjuge; (c) a avó (ascendente) cede ao cônjuge; (e) há ordem de preferência — a enumeração do art. 31 é sucessiva/preferencial.<br><br><b>📌 Base legal:</b> arts. 31, 36 e 38 CPP.<br><br><b>🔁 Revisar:</b> ordem CADI do art. 31 + prazo de 60 dias para habilitação do sucessor (art. 38, p.ú.).<br><br><b>🎙️ Da prova oral:</b> <i>«O prazo para o sucessor do art. 31 ingressar é novo ou aproveita o que já corria contra a vítima?»</i> — Em regra, o sucessor recebe o <b>saldo</b> do prazo decadencial de 6 meses (a contar da ciência da autoria pela vítima). Se a vítima morre <i>antes</i> de saber quem foi o autor, o prazo de 6 meses corre para o sucessor a partir do conhecimento <b>dele</b>; havendo ação em curso, o sucessor tem <b>60 dias</b> para se habilitar e prosseguir (art. 38, p.ú./jurisprudência). <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp26', materia:`Foro por prerrogativa de função — simetria e Constituição estadual`, banca:'FGV · TJ-ES · 2025', tipo:'multipla',
+   enunciado:`No curso de interceptação telefônica autorizada, o delegado Matheus descobriu que Lucas (notário) e João (deputado estadual), ambos no Estado Alfa, integravam organização criminosa voltada a crimes contra a Administração Pública e lavagem de capitais. A Constituição do Estado Alfa prevê, expressamente, que notários e registradores fazem jus a foro por prerrogativa de função junto ao Tribunal de Justiça. As infrações de João relacionam-se ao mandato parlamentar em curso. Considerando a CF e a jurisprudência consolidada do STF, é correto afirmar que:`,
+   alternativas:[
+     {letra:'A',texto:`João tem foro por prerrogativa de função junto ao STJ; por sua vez, Lucas será processado e julgado no âmbito do Tribunal de Justiça do Estado Alfa.`},
+     {letra:'B',texto:`João tem foro por prerrogativa de função junto ao STF; por sua vez, Lucas será processado e julgado no âmbito do Tribunal de Justiça do Estado Alfa.`},
+     {letra:'C',texto:`João tem foro por prerrogativa de função junto ao Tribunal de Justiça do Estado Alfa; por sua vez, Lucas será processado e julgado em primeira instância.`},
+     {letra:'D',texto:`João e Lucas têm foro por prerrogativa de função junto ao Tribunal de Justiça do Estado Alfa.`},
+     {letra:'E',texto:`João e Lucas serão processados e julgados em primeira instância.`}
+   ],
+   correta:'C',
+   comentario:`<b>✅ Gabarito: LETRA C</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> deputado <b>estadual</b> tem foro no <b>TJ</b> do respectivo estado, por <b>simetria</b> com o deputado federal (CF arts. 27, §1º, e 125, §1º). Já o foro que a Constituição estadual deu ao <b>notário</b> é <b>inconstitucional</b>: o STF só admite foro criado por Constituição estadual em <b>simetria</b> com as autoridades previstas na CF, e o delegatário particular (notário/registrador) não tem paralelo constitucional — logo, Lucas vai à <b>1ª instância</b>.<br><br><b>⚠️ As outras:</b> (a) STJ é foro de governador; (b) STF é foro de deputado <b>federal</b>; (d) dá foro a Lucas (nulo); (e) ignora o foro legítimo de João.<br><br><b>📌 Base legal:</b> CF arts. 27, §1º; 96, III; 125, §1º; jurisprudência do STF sobre simetria.<br><br><b>🔁 Revisar:</b> Constituição estadual só cria foro por simetria; deputado estadual → TJ.<br><br><b>🎙️ Da prova oral:</b> <i>«O foro por prerrogativa subsiste após o agente deixar o cargo? E vale para crimes não ligados à função?»</i> — Pela tese do STF (AP 937-QO e Inf. 1168), o foro <b>restringe-se</b> aos crimes praticados <b>no cargo e em razão das funções</b>, e <b>subsiste</b> mesmo após a cessação do exercício quando o fato é funcional, com a competência fixada ao fim da instrução (publicada a intimação para alegações finais). A Súmula 451/STF complementa: não se estende a crime cometido após a cessação definitiva da função. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp27', materia:`Jurisdição e competência — disposições gerais (arts. 69-74 CPP)`, banca:'CESPE · TJ-RR · 2025', tipo:'multipla',
+   enunciado:`No que se refere à jurisdição e à competência no processo penal brasileiro, assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:`A competência pela natureza da infração será regulada pelas leis de organização judiciária, mas a competência privativa do tribunal do júri, não.`},
+     {letra:'B',texto:`A jurisdição penal exercida pelo Poder Judiciário compreende tanto a jurisdição contenciosa quanto a voluntária, sendo esta última aplicável nos casos de homologação de delações premiadas e acordos de não persecução penal.`},
+     {letra:'C',texto:`A competência penal é absoluta em todos os seus critérios, não podendo ser modificada por convenção das partes ou por conexão ou continência.`},
+     {letra:'D',texto:`A competência territorial no processo penal é regra de ordem pública e, por isso, sempre absoluta, não podendo ser modificada por conexão.`},
+     {letra:'E',texto:`A competência será determinada pelo domicílio do réu ou, subsidiariamente, pelo local da infração.`}
+   ],
+   correta:'A',
+   comentario:`<b>✅ Gabarito: LETRA A</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> art. 74 CPP — a competência pela natureza da infração é regulada pelas leis de organização judiciária, <b>salvo a do Tribunal do Júri</b>, fixada diretamente pela CF (art. 5º, XXXVIII, d). Logo, o júri "não" se submete às leis de organização judiciária.<br><br><b>⚠️ As outras:</b> (b) jurisdição penal é <b>contenciosa</b>; homologar delação/ANPP não a torna "voluntária"; (c) a competência <b>territorial</b> (ratione loci) é <b>relativa</b>; (d) competência territorial é relativa e <b>pode</b> ser modificada por conexão/continência (arts. 76-82); (e) inverte o art. 70 — a competência é, em regra, pelo <b>lugar da infração</b> (art. 70) e subsidiariamente pelo domicílio do réu (art. 72).<br><br><b>📌 Base legal:</b> arts. 70, 72, 74, 76-82 CPP; CF art. 5º, XXXVIII.<br><br><b>🔁 Revisar:</b> art. 74 (júri fora das leis de org. judiciária) + relatividade da competência territorial.<br><br><b>🎙️ Da prova oral:</b> <i>«Competência absoluta x relativa: como reconhecer e qual o regime de cada uma?»</i> — Absoluta (matéria, função/prerrogativa, jurisdição) é <b>improrrogável</b>, alegável a qualquer tempo e reconhecível de ofício, gerando nulidade <b>absoluta</b>. Relativa (territorial/foro) é <b>prorrogável</b>, deve ser arguida por <b>exceção</b> no momento oportuno sob pena de preclusão (Súmula 33/STJ: a incompetência relativa não pode ser declarada de ofício). <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp28', materia:`Competência — uso de documento falso + conexão (Súmulas 546 e 122/STJ)`, banca:'FGV/Enac · Cartórios · 2025', tipo:'multipla',
+   enunciado:`Antônio Silva conduzia veículo e, ao ser abordado pela Polícia Rodoviária Federal, apresentou aos agentes documento de identidade falso expedido pela Secretaria de Estado de Segurança Pública. No porta-malas, foram apreendidos objetos destinados à falsificação de documentos. A respeito da competência para processar e julgar os crimes de uso de documento falso e petrechos de falsificação, é correto afirmar que:`,
+   alternativas:[
+     {letra:'A',texto:`a competência será da Justiça Estadual, porque nenhum dos crimes praticados afeta o interesse da União.`},
+     {letra:'B',texto:`apresentado um documento falso ao órgão da União, fixar-se-á a competência da Justiça Federal, a qual atrairá o julgamento do outro crime.`},
+     {letra:'C',texto:`haverá a cisão, e caberá à Justiça Federal julgar o crime de uso de documento falso e à Justiça Estadual julgar o crime de petrechos de falsificação.`},
+     {letra:'D',texto:`nas hipóteses de conexão entre crimes de competência federal e estadual, prevalecerá a competência para julgar o crime a que se comina pena mais grave.`},
+     {letra:'E',texto:`segundo a jurisprudência do STJ, a qualificação do órgão expedidor do documento é o critério definidor da competência para julgar o crime de uso de documento falso.`}
+   ],
+   correta:'B',
+   comentario:`<b>✅ Gabarito: LETRA B</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> <b>Súmula 546/STJ</b> — a competência no uso de documento falso firma-se pela <b>entidade/órgão a que apresentado</b> o documento; apresentado à <b>PRF</b> (órgão federal), a competência é da <b>Justiça Federal</b>. Havendo conexão com os petrechos de falsificação, a <b>Súmula 122/STJ</b> atrai o julgamento unificado para a Justiça Federal.<br><br><b>⚠️ As outras:</b> (a) há interesse da União (documento apresentado à PRF); (c) não há cisão — Súmula 122 mantém tudo na Federal; (d) em conexão federal×estadual prevalece a <b>Justiça Federal</b> (Súmula 122), não o critério "pena mais grave"; (e) contraria a Súmula 546 (o órgão <b>expedidor</b> não é o critério).<br><br><b>📌 Base legal:</b> Súmulas 546 e 122/STJ; art. 76 CPP.<br><br><b>🔁 Revisar:</b> Súmula 546 (órgão destinatário) + Súmula 122 (conexão federal×estadual → Federal).<br><br><b>🎙️ Da prova oral:</b> <i>«Por que a conexão entre crime federal e estadual atrai tudo para a Justiça Federal, e não o inverso?»</i> — Porque a competência da Justiça Federal é <b>absoluta e de matriz constitucional</b> (CF art. 109): não pode ser ampliada nem reduzida por conexão para favorecer a estadual. A Súmula 122/STJ consolida que o processo unificado dos crimes conexos federal e estadual corre na Justiça Federal, afastando a regra do art. 78, II, "a", do CPP nesse ponto. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp29', materia:`Competência por conexão — foro da pena mais grave (art. 78, II, CPP)`, banca:'CESPE · TJ-PE · 2024', tipo:'multipla',
+   enunciado:`Alberto praticou estelionato no município de Caruaru/PE e, para aumentar a efetividade do crime, falsificou no município de Salgueiro/PE parte de documento público (falsificação de documento público). A pena da falsificação é mais grave que a do estelionato, a falsidade não se exauriu no estelionato e a prova de uma infração influi na prova da outra. Nesse caso, a competência para julgar os fatos é:`,
+   alternativas:[
+     {letra:'A',texto:`do juízo da comarca de Recife/PE, por ser a capital do estado, haja vista a pluralidade de locais e de delitos praticados pelo agente.`},
+     {letra:'B',texto:`definida de acordo com o local onde seja instaurado o inquérito policial para a apuração de ambos os crimes.`},
+     {letra:'C',texto:`do juízo da comarca do município de Salgueiro/PE, em razão de a pena prevista para o crime de falsificação de documento público ser mais grave que a prevista para o crime de estelionato.`},
+     {letra:'D',texto:`do juízo da comarca do município de Caruaru/PE, visto que o crime de estelionato foi praticado primeiro.`},
+     {letra:'E',texto:`dividida, sendo da competência do juízo de Salgueiro/PE o julgamento da falsificação e da competência do juízo de Caruaru/PE o julgamento do estelionato.`}
+   ],
+   correta:'C',
+   comentario:`<b>✅ Gabarito: LETRA C</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> a narrativa afasta a absorção (Súmula 17/STJ) ao afirmar que a falsidade <b>não se exauriu</b> no estelionato e que <b>a prova de uma influi na prova da outra</b> (<b>conexão probatória</b>, art. 76, III). Concurso de jurisdições da mesma categoria (ambas estaduais, comarcas distintas): prevalece o <b>lugar da infração com pena mais grave</b> (art. 78, II, a). Falsificação de documento público (art. 297 CP, 2-6 anos) > estelionato (art. 171, 1-5 anos) ⇒ foro de <b>Salgueiro</b>.<br><br><b>⚠️ As outras:</b> (a) ser capital é irrelevante; (b) competência não se fixa pelo local do IP; (d) "praticado primeiro" não é critério do art. 78, II; (e) não há cisão — a conexão reúne os processos.<br><br><b>📌 Base legal:</b> arts. 76, III, e 78, II, a, CPP; Súmula 17/STJ (afastada); arts. 171 e 297 CP.<br><br><b>🔁 Revisar:</b> art. 78, II (pena mais grave fixa o foro na conexão) × Súmula 17/STJ (quando o falso é absorvido).<br><br><b>🎙️ Da prova oral:</b> <i>«Quando o estelionato absorve a falsificação (Súmula 17) e quando os dois subsistem em concurso?»</i> — Pela <b>Súmula 17/STJ</b>, o falso é absorvido (princípio da consunção) quando <b>se exaure no estelionato</b>, sem outra potencialidade lesiva. Se o documento falso mantém <b>potencial lesivo autônomo</b> (pode ser reutilizado, atinge fé pública para além daquele golpe), os crimes <b>subsistem em concurso</b> — e, em comarcas diversas, aplica-se o art. 78, II, "a". <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'pp30', materia:`Competência — uso de documento falso perante órgão estadual (Súmula 546/STJ)`, banca:'FGV · TJ-SE · 2023', tipo:'multipla',
+   enunciado:`João, residente e domiciliado no Município de Aracaju, é parado em blitz da Polícia Militar do Estado de Sergipe enquanto trafegava pelo Município de Barra dos Coqueiros. João, então, faz uso de documento falso, mas o crime é descoberto pelos policiais militares. Na atividade investigativa subsequente, verifica-se que o documento falso buscava imitar uma Carteira de Trabalho, emitida pela União Federal. Nesse cenário, considerando as disposições do CPP e o entendimento dominante do STJ, a competência para o processo e julgamento do crime é da Justiça:`,
+   alternativas:[
+     {letra:'A',texto:`Estadual no âmbito da Comarca de Barra dos Coqueiros ou da Comarca de Aracaju, por prevenção.`},
+     {letra:'B',texto:`Federal, no âmbito da subseção judiciária que englobe o Município de Barra dos Coqueiros.`},
+     {letra:'C',texto:`Federal, no âmbito da subseção judiciária que englobe o Município de Aracaju.`},
+     {letra:'D',texto:`Estadual, no âmbito da Comarca de Barra dos Coqueiros.`},
+     {letra:'E',texto:`Estadual, no âmbito da Comarca de Aracaju.`}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> — comando: marcar a correta.<br><br><b>⚖️ Por quê:</b> o documento falso (CTPS, emitida pela União) foi <b>apresentado à Polícia Militar</b> (órgão <b>estadual</b>). Pela <b>Súmula 546/STJ</b>, a competência se firma pelo órgão <b>a quem apresentado</b> o documento — não importa que o expedidor seja a União. Órgão estadual ⇒ <b>Justiça Estadual</b>. O uso consuma-se no <b>local do uso</b> (art. 70) = Barra dos Coqueiros.<br><br><b>⚠️ As outras:</b> (a) o local do uso é certo (Barra dos Coqueiros), não há "prevenção"; (b) e (c) Justiça Federal exigiria apresentação a órgão federal; (e) Aracaju é só o domicílio de João — a competência é pelo lugar da infração, não pelo domicílio.<br><br><b>📌 Base legal:</b> Súmula 546/STJ; art. 70 CPP.<br><br><b>🔁 Revisar:</b> uso de documento falso → órgão destinatário define a Justiça (Súmula 546); consumação no local do uso.<br><br><b>🎙️ Da prova oral:</b> <i>«Falsificar a CTPS e usá-la perante a polícia: muda a competência conforme o órgão expedidor ou o destinatário?»</i> — O critério é o <b>destinatário</b> (Súmula 546/STJ). Cuidado com a Súmula 62/STJ, que trata de <b>falsa anotação</b> em CTPS atribuída a empresa privada (Justiça Estadual). Aqui, o uso perante a PM estadual basta para fixar a Justiça Estadual, ainda que a carteira seja documento da União. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+];
+function defaultState(){return{respostas:{},revisao:{},caderno:{},revisarDepois:{},posicao:0,modo:'todas',materiaFiltro:'',notas:{}};}
+let state=defaultState(),lista=[],paused=false,qSecs=0,sSecs=0,timerInterval=null,commentOpen={};
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}catch(e){}}
+function loadState(){try{var raw=localStorage.getItem(STORE_KEY);if(raw){state=Object.assign(defaultState(),JSON.parse(raw));}}catch(e){state=defaultState();}}
+function today(){return new Date().toISOString().split('T')[0];}
+function addDays(d,n){var dt=new Date(d+'T12:00:00');dt.setDate(dt.getDate()+n);return dt.toISOString().split('T')[0];}
+function fmtDate(iso){if(!iso)return'';var p=iso.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function buildLista(){var t=today(),ids;if(state.modo==='todas'){ids=QUESTOES.map(function(q){return q.id;});}else if(state.modo==='hoje'){ids=QUESTOES.filter(function(q){var r=state.revisao[q.id];return r&&r.nextDate&&r.nextDate<=t;}).map(function(q){return q.id;});}else if(state.modo==='caderno'){ids=QUESTOES.filter(function(q){return state.caderno[q.id]||state.revisarDepois[q.id];}).map(function(q){return q.id;});}else if(state.modo==='materia'){var m=state.materiaFiltro;ids=QUESTOES.filter(function(q){return !m||q.materia===m;}).map(function(q){return q.id;});}else if(state.modo==='aleatorio'){ids=shuffle(QUESTOES.map(function(q){return q.id;}));}else{ids=QUESTOES.map(function(q){return q.id;});}return ids;}
+function computeStats(){var total=QUESTOES.length,acertos=0,erros=0,t=today(),revisadasHoje=0;QUESTOES.forEach(function(q){var r=state.respostas[q.id];if(r){if(r===q.correta)acertos++;else erros++;}var rev=state.revisao[q.id];if(rev&&rev.lastAnswered===t)revisadasHoje++;});var respondidas=acertos+erros,pendentes=total-respondidas,pct=total>0?Math.round(respondidas/total*100):0;return{total:total,acertos:acertos,erros:erros,pendentes:pendentes,revisadasHoje:revisadasHoje,respondidas:respondidas,pct:pct};}
+function renderStats(){var s=computeStats();document.getElementById('statsBar').innerHTML='<div class="stat-chip"><span class="sv green">'+s.acertos+'</span><span class="sl">Acertos</span></div><div class="stat-chip"><span class="sv red">'+s.erros+'</span><span class="sl">Erros</span></div><div class="stat-chip"><span class="sv amber">'+s.pendentes+'</span><span class="sl">Pendentes</span></div><div class="stat-chip"><span class="sv cyan">'+s.revisadasHoje+'</span><span class="sl">Revisadas hoje</span></div>';var fill=document.getElementById('progressFill'),lbl=document.getElementById('progressLabel');if(fill)fill.style.width=s.pct+'%';if(lbl)lbl.textContent=s.respondidas+'/'+s.total+' respondidas ('+s.pct+'%)';}
+function fmtTime(secs){return String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function startTimers(){if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(function(){if(!paused){qSecs++;sSecs++;}var q=document.getElementById('timerQ'),s=document.getElementById('timerS');if(q)q.textContent=fmtTime(qSecs);if(s)s.textContent=fmtTime(sSecs);},1000);}
+function resetQTimer(){qSecs=0;var q=document.getElementById('timerQ');if(q)q.textContent='00:00';}
+function togglePause(){paused=!paused;var b=document.getElementById('btnPause');if(b)b.textContent=paused?'Retomar':'Pausar';}
+function scheduleNext(id,acertou){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:1,acertos:0,lastAnswered:null};rv.lastAnswered=t;if(acertou){rv.acertos=(rv.acertos||0)+1;rv.interval=rv.acertos===1?1:rv.acertos===2?7:30;}else{rv.acertos=0;rv.interval=1;}rv.nextDate=addDays(t,rv.interval);state.revisao[id]=rv;}
+function scheduleManual(id,days){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:days,acertos:0,lastAnswered:t};rv.nextDate=days===0?null:addDays(t,days);rv.interval=days;state.revisao[id]=rv;saveState();renderCard();}
+function reviewBadgeHTML(id){var rv=state.revisao[id];if(!rv||!rv.nextDate)return'';if(rv.nextDate<=today())return'<span class="review-badge review-today">revisar hoje ⏰</span>';return'<span class="review-badge review-future">📅 '+fmtDate(rv.nextDate)+'</span>';}
+function schedRowHTML(id){return'<div class="sched-row"><span class="sched-label">Agendar:</span><button class="sched-btn" onclick="scheduleManual(\''+id+'\',1)">1 dia</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',7)">7 dias</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',30)">30 dias</button><button class="sched-btn remove" onclick="scheduleManual(\''+id+'\',0)">remover</button></div>';}
+function starBtnHTML(id){var active=state.revisarDepois[id]?' active':'',label=state.revisarDepois[id]?'⭐ No caderno':'☆ Revisar depois';return'<button class="star-btn'+active+'" onclick="toggleStar(\''+id+'\')">'+label+'</button>';}
+function toggleStar(id){if(state.revisarDepois[id])delete state.revisarDepois[id];else state.revisarDepois[id]=true;saveState();renderCard();renderStats();}
+function selecionarAlternativa(id,letra){if(state.respostas[id])return;document.querySelectorAll('.alt-btn[data-id="'+id+'"]').forEach(function(b){b.classList.remove('selected');});var btn=document.querySelector('.alt-btn[data-id="'+id+'"][data-letra="'+letra+'"]');if(btn)btn.classList.add('selected');var c=document.getElementById('confirm-'+id);if(c)c.disabled=false;}
+function confirmar(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var sel=document.querySelector('.alt-btn[data-id="'+id+'"].selected');if(!sel)return;var letra=sel.dataset.letra;state.respostas[id]=letra;var acertou=letra===q.correta;scheduleNext(id,acertou);if(!acertou)state.caderno[id]=true;saveState();renderCard();renderStats();}
+function toggleComment(id){commentOpen[id]=!commentOpen[id];var body=document.getElementById('comment-body-'+id),tog=document.getElementById('comment-toggle-'+id);if(body)body.classList.toggle('open',!!commentOpen[id]);if(tog)tog.textContent=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';}
+function salvarNota(id,txt){if(!state.notas)state.notas={};state.notas[id]=txt;saveState();}
+function renderCard(){var cont=document.getElementById('mainContent');if(!lista.length){cont.innerHTML='<div class="empty-state"><div class="icon">📭</div><div>Nenhuma questão neste filtro.</div></div>';return;}var pos=Math.min(Math.max(state.posicao,0),lista.length-1);state.posicao=pos;var id=lista[pos],q=QUESTOES.find(function(x){return x.id===id;});if(!q){cont.innerHTML='';return;}var resposta=state.respostas[id],respondida=!!resposta,acertou=respondida&&resposta===q.correta;var resultHTML='';if(respondida){resultHTML=acertou?'<div class="result-banner correct">✅ Correto! Resposta: '+resposta+'</div>':'<div class="result-banner wrong">❌ Incorreto. Sua resposta: '+resposta+' | Gabarito: '+q.correta+'</div>';}var altsHTML='<div class="alts">';q.alternativas.forEach(function(alt){var btnCls='alt-btn',letraCls='alt-letra',disabled=respondida?'disabled':'';if(respondida){if(alt.letra===q.correta&&alt.letra===resposta){btnCls='alt-btn correct';letraCls='alt-letra correct';}else if(alt.letra===q.correta){btnCls='alt-btn reveal-correct';letraCls='alt-letra reveal-correct';}else if(alt.letra===resposta){btnCls='alt-btn wrong';letraCls='alt-letra wrong';}}altsHTML+='<button class="'+btnCls+'" data-id="'+id+'" data-letra="'+alt.letra+'" '+disabled+' onclick="selecionarAlternativa(\''+id+'\',\''+alt.letra+'\')"><span class="'+letraCls+'">'+alt.letra+'</span><span>'+alt.texto+'</span></button>';});altsHTML+='</div>';var confirmHTML=respondida?'':'<button class="btn-confirm" id="confirm-'+id+'" onclick="confirmar(\''+id+'\')" disabled>Confirmar</button>';var cOpen=commentOpen[id]?' open':'',cLabel=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';var commentHTML=respondida?'<div class="comment-wrap"><button class="comment-toggle" id="comment-toggle-'+id+'" onclick="toggleComment(\''+id+'\')">'+cLabel+'</button><div class="comment-body'+cOpen+'" id="comment-body-'+id+'">'+q.comentario+'</div></div>':'';var schedHTML=respondida?schedRowHTML(id):'';var notaVal=(state.notas&&state.notas[id])?state.notas[id]:'';var notasHTML='<div class="notas-wrap"><div class="notas-label">📝 Minhas anotações</div><textarea class="notas-area" placeholder="Escreva aqui suas anotações sobre esta questão…" oninput="salvarNota(\''+id+'\', this.value)">'+notaVal.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</textarea></div>';cont.innerHTML='<div class="nav-counter">Questão '+(pos+1)+' de '+lista.length+'</div><div class="card"><div class="card-meta"><span class="badge badge-banca">'+q.banca+'</span><span class="badge badge-materia">'+q.materia+'</span>'+reviewBadgeHTML(id)+starBtnHTML(id)+claudeBtnHTML(id)+'</div><div class="enunciado">'+q.enunciado+'</div>'+altsHTML+confirmHTML+resultHTML+commentHTML+schedHTML+notasHTML+'</div><div class="nav-row"><button class="nav-btn" onclick="navPrev()" '+(pos===0?'disabled':'')+'>← Anterior</button><button class="nav-btn" onclick="navNext()" '+(pos>=lista.length-1?'disabled':'')+'>Próxima →</button></div>';}
+function navPrev(){if(state.posicao>0){state.posicao--;saveState();resetQTimer();renderCard();}}
+function navNext(){if(state.posicao<lista.length-1){state.posicao++;saveState();resetQTimer();renderCard();}}
+function setModo(modo){state.modo=modo;state.posicao=0;var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=modo==='materia'?'':'none';document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===modo);});lista=buildLista();saveState();resetQTimer();renderCard();renderStats();}
+function setMateriaFiltro(val){state.materiaFiltro=val;state.posicao=0;lista=buildLista();saveState();resetQTimer();renderCard();}
+function populateMateriaSelect(){var materias=[];QUESTOES.forEach(function(q){if(materias.indexOf(q.materia)===-1)materias.push(q.materia);});materias.sort();var sel=document.getElementById('materiaSelect');if(!sel)return;sel.innerHTML='<option value="">— Escolha —</option>';materias.forEach(function(m){var o=document.createElement('option');o.value=m;o.textContent=m;if(m===state.materiaFiltro)o.selected=true;sel.appendChild(o);});}
+function recomecar(){if(confirm('Tem certeza? Todo o progresso será apagado permanentemente.')){localStorage.removeItem(STORE_KEY);location.reload();}}
+function exportarProgresso(){var blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='progresso_meta13_procpenal_q16q30_'+today()+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function exportarNotas(){var txt='ANOTAÇÕES — Direito Processual Penal · Meta 13 (Q16–Q30)\n'+today()+'\n\n',n=0;QUESTOES.forEach(function(q){var nota=state.notas&&state.notas[q.id];if(nota&&nota.trim()){n++;txt+='【'+q.banca+' · '+q.materia+'】\n'+nota.trim()+'\n\n';}});if(!n){alert('Você ainda não tem anotações registradas.');return;}var blob=new Blob([txt],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='anotacoes_meta13_procpenal_q16q30_'+today()+'.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function importarProgresso(evt){var file=evt.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{state=Object.assign(defaultState(),JSON.parse(e.target.result));saveState();lista=buildLista();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=state.modo==='materia'?'':'none';renderStats();renderCard();alert('Progresso importado com sucesso!');}catch(err){alert('Arquivo inválido ou corrompido.');}};reader.readAsText(file);evt.target.value='';}
+function dismissIframeBanner(){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';try{sessionStorage.setItem('iframe_banner_dismissed','1');}catch(e){}}
+function checkIframeBanner(){try{if(sessionStorage.getItem('iframe_banner_dismissed')==='1'){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';}}catch(e){}}
+function init(){loadState();checkIframeBanner();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel&&state.modo==='materia')sel.style.display='';lista=buildLista();renderStats();renderCard();startTimers();}
+function claudeBtnHTML(id){return '<button class="claude-qbtn" onclick="askClaude(''+id+'')">🤖</button>';}
+function askClaude(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var ctx='Meta 13 · Direito Processual Penal · Questão '+id+'
+Tema: '+q.materia+'
+Banca: '+(q.banca||'')+'
+Concurso: Cartório TJMT
+
+Enunciado:
+'+q.enunciado+'
+
+Tenho uma dúvida sobre esta questão:
+';navigator.clipboard.writeText(ctx).catch(function(){});window.open('https://claude.ai/share/335a7657-2c2d-46ea-84f6-8c9e4d01edb5','_blank');}
+init();
+</script>
+</body>
+</html>
