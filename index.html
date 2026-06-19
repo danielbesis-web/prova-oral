@@ -84,6 +84,26 @@ body{
   color:var(--muted);font-size:12px;font-weight:600;
 }
 
+/* PROGRESSO */
+.wprog{margin:8px 0 10px;display:flex;flex-direction:column;gap:4px}
+.wprog-bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.wprog-fill{height:100%;border-radius:4px;background:var(--green);transition:width .4s}
+.wprog-label{font-size:10px;color:var(--muted)}
+.dprog{font-size:11px;font-weight:700;min-width:36px;text-align:right}
+.dprog.pend{color:var(--muted)}
+.dprog.prog{color:var(--amber)}
+.dprog.done{color:var(--green)}
+
+.diario-btn{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);
+  border-radius:12px;padding:12px 16px;text-decoration:none;margin-bottom:20px;
+  transition:.14s;
+}
+.diario-btn:hover{background:rgba(56,189,248,.12)}
+.diario-btn span{font-size:13px;font-weight:700;color:var(--cyan)}
+.diario-btn small{font-size:11px;color:#5a8aaa;display:block;margin-top:2px}
+
 .end{text-align:center;color:var(--muted);font-size:11px;margin-top:28px}
 </style>
 </head>
@@ -98,6 +118,15 @@ body{
   <div class="aviso">
     ⚠️ Abra os cadernos por esta página. Responda em voz alta antes de conferir as respostas.
   </div>
+
+  <a class="diario-btn" href="diario.html">
+    <span style="font-size:22px">📓</span>
+    <div>
+      <span>Diário Semanal</span>
+      <small>Anotações + progresso por caderno</small>
+    </div>
+    <span style="margin-left:auto;font-size:12px;color:var(--cyan);font-weight:700">Abrir →</span>
+  </a>
 
   <a href="sem3-simulado.html" style="display:flex;align-items:center;gap:10px;background:rgba(110,126,242,.08);border:1px solid rgba(110,126,242,.25);border-radius:12px;padding:14px 16px;text-decoration:none;margin-bottom:20px;transition:.14s" onmouseover="this.style.background='rgba(110,126,242,.14)'" onmouseout="this.style.background='rgba(110,126,242,.08)'">
     <span style="font-size:22px">🎯</span>
@@ -129,11 +158,11 @@ const SEMANAS = [
     sem: 3,
     titulo: "Semana 3",
     dias: [
-      {dia:"Segunda-feira", tema:"Prioridade + Prenotação",      bloco:"A · Notarial/Registral", url:"sem3-segunda.html"},
-      {dia:"Terça-feira",   tema:"Vício Redibitório + Evicção",            bloco:"B · Civil",  url:"sem3-terca.html"},
-      {dia:"Quarta-feira",  tema:"Concurso de Pessoas + Emendatio × Mutatio", bloco:"C · Penal", url:"sem3-quarta.html"},
-      {dia:"Quinta-feira",  tema:"Eficácia das Normas + Atos Administrativos", bloco:"D · Const/Adm", url:"sem3-quinta.html"},
-      {dia:"Sexta-feira",   tema:"Recuperação Judicial: Crise + Classes de Credores", bloco:"E · Empresarial", url:"sem3-sexta.html"}
+      {dia:"Segunda-feira", tema:"Prioridade + Prenotação",                        bloco:"A · Notarial/Registral", url:"sem3-segunda.html", clKey:"oral_seg_sem3_prioridade_cl",   clTotal:6},
+      {dia:"Terça-feira",   tema:"Vício Redibitório + Evicção",                   bloco:"B · Civil",              url:"sem3-terca.html",   clKey:"oral_ter_sem3_vicio_evic_cl",   clTotal:6},
+      {dia:"Quarta-feira",  tema:"Concurso de Pessoas + Emendatio × Mutatio",     bloco:"C · Penal",              url:"sem3-quarta.html",  clKey:"oral_qua_sem3_concurso_emend_cl",clTotal:6},
+      {dia:"Quinta-feira",  tema:"Eficácia das Normas + Atos Administrativos",    bloco:"D · Const/Adm",          url:"sem3-quinta.html",  clKey:"oral_qui_sem3_eficacia_atos_cl", clTotal:6},
+      {dia:"Sexta-feira",   tema:"Recuperação Judicial: Crise + Classes de Credores", bloco:"E · Empresarial",   url:"sem3-sexta.html",   clKey:"oral_sex_sem3_recup_jud_cl",    clTotal:6}
     ]
   },
   {sem:4,  titulo:"Semana 4",  dias:[]},
@@ -151,22 +180,44 @@ const SEMANAS = [
   {sem:16, titulo:"Semana 16", dias:[]}
 ];
 
+function getPct(clKey, clTotal){
+  if(!clKey) return -1;
+  const done = JSON.parse(localStorage.getItem(clKey)||'[]');
+  return Math.round((done.length / clTotal) * 100);
+}
+
+function weekPct(dias){
+  let tot=0, done=0;
+  dias.forEach(d=>{ if(d.clKey){ tot+=d.clTotal; done+=JSON.parse(localStorage.getItem(d.clKey)||'[]').length; } });
+  return tot>0 ? Math.round((done/tot)*100) : 0;
+}
+
 function render(){
   const tl = document.getElementById('timeline');
   tl.innerHTML = SEMANAS.map(s=>{
     const temDias = s.dias.length > 0;
-    const status = temDias ? 'active' : '';
-    const ballClass = temDias ? 'active' : '';
+    const wp = temDias ? weekPct(s.dias) : 0;
+    const ballClass = wp===100 ? 'done' : temDias ? 'active' : '';
+    const cardClass = wp===100 ? 'done' : temDias ? 'active' : '';
 
     let diasHTML = '';
     if(temDias){
-      diasHTML = `<div class="dias">${s.dias.map(d=>`
-        <a class="dia-link" href="${d.url}">
-          <span class="dicon">📕</span>
+      const progBar = `<div class="wprog">
+        <div class="wprog-bar"><div class="wprog-fill" style="width:${wp}%"></div></div>
+        <div class="wprog-label">${wp}% da semana concluído</div>
+      </div>`;
+      diasHTML = progBar + `<div class="dias">${s.dias.map(d=>{
+        const pct = getPct(d.clKey, d.clTotal);
+        const pc = pct===100?'done':pct>0?'prog':'pend';
+        const label = pct<0?d.bloco:pct===100?'✓ 100%':pct>0?pct+'%':'0%';
+        const tagCls = pct===100?'ok':pct>0?'':'';
+        return `<a class="dia-link" href="${d.url}">
+          <span class="dicon">${pct===100?'✅':'📕'}</span>
           <span class="dname">${d.dia} — ${d.tema}</span>
-          <span class="dtag cur">${d.bloco}</span>
-        </a>
-      `).join('')}</div>`;
+          <span class="dtag ${tagCls}">${d.bloco}</span>
+          <span class="dprog ${pc}">${label}</span>
+        </a>`;
+      }).join('')}</div>`;
     } else {
       diasHTML = `<span class="soon">🔒 Em breve</span>`;
     }
@@ -174,7 +225,7 @@ function render(){
     return `
     <div class="titem">
       <div class="tday"><div class="tball ${ballClass}">${s.sem}</div></div>
-      <div class="tcard ${status}">
+      <div class="tcard ${cardClass}">
         <div class="tsem">Semana ${s.sem}</div>
         <div class="ttitle">${s.titulo}</div>
         ${diasHTML}

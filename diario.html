@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diário Semanal — Prova Oral</title>
+<style>
+:root{
+  --bg:#050b18;--card:#0b1828;--border:#16365a;--glow:rgba(46,120,200,.25);
+  --text:#e9f0f8;--muted:#90a6c0;--soft:#b9c8dc;
+  --green:#27c06a;--greenb:#1c5e3a;--greenbg:#0a2016;--greenglow:rgba(34,197,105,.25);
+  --amber:#f5a623;--amberb:#6a4a14;--amberbg:#241a08;
+  --cyan:#38bdf8;--cyanb:#155a72;--cyanbg:#06212e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -120px,#0c1d33 0%,var(--bg) 60%);
+  color:var(--text);min-height:100vh;padding:28px 16px 80px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto}
+
+.head{text-align:center;margin-bottom:28px}
+.head h1{font-size:22px;font-weight:800;margin-bottom:4px}
+.head p{color:var(--muted);font-size:13px}
+
+.back{
+  display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+  font-size:12px;text-decoration:none;margin-bottom:20px;
+  padding:6px 10px;border:1px solid var(--border);border-radius:8px;
+  transition:.14s;
+}
+.back:hover{color:var(--text);border-color:var(--cyan)}
+
+/* SEMANA CARD */
+.sem-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:18px;margin-bottom:24px;
+}
+.sem-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sem-titulo{font-size:15px;font-weight:800}
+.sem-pct{font-size:13px;font-weight:700;color:var(--green)}
+
+.prog-wrap{margin-bottom:16px}
+.prog-bar{height:6px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;margin-bottom:4px}
+.prog-fill{height:100%;border-radius:4px;background:var(--green);transition:width .4s}
+.prog-label{font-size:10px;color:var(--muted)}
+
+/* DIA ROW */
+.dia-row{
+  border:1px solid rgba(255,255,255,.07);border-radius:11px;
+  padding:12px 14px;margin-bottom:10px;background:rgba(255,255,255,.02);
+}
+.dia-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dia-icon{font-size:16px}
+.dia-info{flex:1}
+.dia-nome{font-size:13px;font-weight:700}
+.dia-tema{font-size:11px;color:var(--muted);margin-top:1px}
+.dia-pct{font-size:12px;font-weight:700;min-width:40px;text-align:right}
+.dia-pct.pend{color:var(--muted)}
+.dia-pct.prog{color:var(--amber)}
+.dia-pct.done{color:var(--green)}
+
+.dia-prog{height:3px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-bottom:10px}
+.dia-prog-fill{height:100%;border-radius:3px;background:var(--green);transition:width .4s}
+.dia-prog-fill.prog{background:var(--amber)}
+
+textarea{
+  width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;color:var(--text);font-size:12px;font-family:inherit;
+  padding:10px 12px;resize:vertical;min-height:72px;outline:none;
+  transition:.14s;line-height:1.5;
+}
+textarea:focus{border-color:var(--cyan);background:rgba(56,189,248,.04)}
+textarea::placeholder{color:var(--muted)}
+
+.nota-label{font-size:10px;font-weight:700;letter-spacing:.8px;color:var(--muted);
+  text-transform:uppercase;margin-bottom:5px}
+
+/* REFLEXAO */
+.reflexao{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)}
+.reflexao .nota-label{color:var(--cyan)}
+.reflexao textarea{min-height:96px;border-color:rgba(56,189,248,.15)}
+.reflexao textarea:focus{border-color:var(--cyan)}
+
+.saved-msg{
+  font-size:10px;color:var(--green);margin-top:4px;
+  opacity:0;transition:opacity .3s;
+}
+.saved-msg.show{opacity:1}
+
+.end{text-align:center;color:var(--muted);font-size:11px;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="index.html">← Voltar para os Cadernos</a>
+
+  <div class="head">
+    <h1>📓 Diário Semanal</h1>
+    <p>Anotações e progresso por caderno</p>
+  </div>
+
+  <div id="diario"></div>
+
+  <div class="end">Prova Oral · Concurso Cartório · 2ª Fase</div>
+</div>
+
+<script>
+const SEMANAS = [
+  {
+    sem: 3,
+    titulo: "Semana 3",
+    dias: [
+      {dia:"Segunda-feira", tema:"Prioridade + Prenotação",                          bloco:"A · Notarial/Registral", slug:"segunda", clKey:"oral_seg_sem3_prioridade_cl",    clTotal:6},
+      {dia:"Terça-feira",   tema:"Vício Redibitório + Evicção",                     bloco:"B · Civil",              slug:"terca",   clKey:"oral_ter_sem3_vicio_evic_cl",    clTotal:6},
+      {dia:"Quarta-feira",  tema:"Concurso de Pessoas + Emendatio × Mutatio",       bloco:"C · Penal",              slug:"quarta",  clKey:"oral_qua_sem3_concurso_emend_cl",clTotal:6},
+      {dia:"Quinta-feira",  tema:"Eficácia das Normas + Atos Administrativos",      bloco:"D · Const/Adm",          slug:"quinta",  clKey:"oral_qui_sem3_eficacia_atos_cl", clTotal:6},
+      {dia:"Sexta-feira",   tema:"Recuperação Judicial: Crise + Classes de Credores",bloco:"E · Empresarial",       slug:"sexta",   clKey:"oral_sex_sem3_recup_jud_cl",     clTotal:6}
+    ]
+  }
+];
+
+function getPct(clKey, clTotal){
+  const done = JSON.parse(localStorage.getItem(clKey)||'[]');
+  return Math.round((done.length / clTotal) * 100);
+}
+
+function weekPct(dias){
+  let tot=0, done=0;
+  dias.forEach(d=>{ tot+=d.clTotal; done+=JSON.parse(localStorage.getItem(d.clKey)||'[]').length; });
+  return Math.round((done/tot)*100);
+}
+
+function notaKey(sem, slug){ return `diario_sem${sem}_${slug}`; }
+function reflexaoKey(sem){ return `diario_sem${sem}_reflexao`; }
+
+function loadNota(sem, slug){ return localStorage.getItem(notaKey(sem,slug))||''; }
+function loadReflexao(sem){ return localStorage.getItem(reflexaoKey(sem))||''; }
+
+function saveNota(sem, slug, val){ localStorage.setItem(notaKey(sem,slug), val); }
+function saveReflexao(sem, val){ localStorage.setItem(reflexaoKey(sem), val); }
+
+function flash(el){
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 1800);
+}
+
+function render(){
+  const container = document.getElementById('diario');
+  container.innerHTML = SEMANAS.map(s=>{
+    const wp = weekPct(s.dias);
+    const diasHTML = s.dias.map(d=>{
+      const pct = getPct(d.clKey, d.clTotal);
+      const pc = pct===100?'done':pct>0?'prog':'pend';
+      const label = pct===100?'✓ 100%':pct>0?pct+'%':'0%';
+      const icon = pct===100?'✅':'📕';
+      const nota = loadNota(s.sem, d.slug);
+      return `<div class="dia-row">
+        <div class="dia-top">
+          <span class="dia-icon">${icon}</span>
+          <div class="dia-info">
+            <div class="dia-nome">${d.dia}</div>
+            <div class="dia-tema">${d.tema} · <span style="opacity:.7">${d.bloco}</span></div>
+          </div>
+          <span class="dia-pct ${pc}">${label}</span>
+        </div>
+        <div class="dia-prog">
+          <div class="dia-prog-fill ${pct>0&&pct<100?'prog':''}" style="width:${pct}%"></div>
+        </div>
+        <div class="nota-label">Anotações</div>
+        <textarea
+          placeholder="O que estudou? Dúvidas, insights, pontos para revisar..."
+          data-sem="${s.sem}" data-slug="${d.slug}"
+        >${nota}</textarea>
+        <div class="saved-msg" id="msg-${s.sem}-${d.slug}">Salvo</div>
+      </div>`;
+    }).join('');
+
+    const reflexao = loadReflexao(s.sem);
+
+    return `<div class="sem-card">
+      <div class="sem-header">
+        <div class="sem-titulo">Semana ${s.sem} — ${s.titulo}</div>
+        <div class="sem-pct">${wp}%</div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-bar"><div class="prog-fill" style="width:${wp}%"></div></div>
+        <div class="prog-label">${wp}% dos checklists concluídos esta semana</div>
+      </div>
+      ${diasHTML}
+      <div class="reflexao">
+        <div class="nota-label">Reflexão da Semana</div>
+        <textarea
+          placeholder="Como foi a semana? Pontos fortes, o que precisa melhorar, metas para a próxima semana..."
+          data-sem="${s.sem}" data-slug="reflexao"
+        >${reflexao}</textarea>
+        <div class="saved-msg" id="msg-${s.sem}-reflexao">Salvo</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('textarea').forEach(ta=>{
+    ta.addEventListener('input', ()=>{
+      const {sem, slug} = ta.dataset;
+      if(slug==='reflexao') saveReflexao(sem, ta.value);
+      else saveNota(sem, slug, ta.value);
+      const msg = document.getElementById(`msg-${sem}-${slug}`);
+      if(msg) flash(msg);
+    });
+  });
+}
+
+render();
+</script>
+</body>
+</html>
