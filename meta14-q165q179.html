@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protesto e Direito Notarial — Q165–Q179</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050b18;color:#c9d6e8;font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;min-height:100vh}
+a{color:#38bdf8}
+button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;border:none;outline:none;font-family:inherit}
+.banner-save{background:#0d2040;border-bottom:1px solid #16365a;padding:8px 14px;font-size:12px;color:#7aa3cc;text-align:center;position:sticky;top:0;z-index:100}
+.banner-iframe{background:#1a1200;border-bottom:1px solid #4a3200;padding:8px 14px;font-size:12px;color:#d4a84b;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.banner-iframe button{background:none;color:#d4a84b;font-size:16px;line-height:1;padding:0 4px;border:none;cursor:pointer}
+.header{padding:16px 14px 0}
+.header h1{font-size:18px;font-weight:700;color:#e8f0fb;margin-bottom:12px}
+.timer-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#7aa3cc;margin-bottom:12px}
+.timer-bar span.time-val{color:#38bdf8;font-variant-numeric:tabular-nums;font-weight:600}
+.timer-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:3px 10px;border-radius:6px;font-size:12px}
+.timer-btn:hover{border-color:#38bdf8;color:#38bdf8}
+.stats-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.stat-chip{background:#0b1828;border:1px solid #16365a;border-radius:8px;padding:5px 11px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.stat-chip .sv{font-size:18px;font-weight:700;line-height:1.1}
+.stat-chip .sl{font-size:10px;color:#55738e;text-transform:uppercase;letter-spacing:.5px}
+.sv.green{color:#27c06a}.sv.red{color:#f25555}.sv.amber{color:#f5a623}.sv.cyan{color:#38bdf8}
+.progress-wrap{margin-bottom:14px}
+.progress-bar{height:5px;background:#0b1828;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#27c06a,#38bdf8);border-radius:3px;transition:width .4s}
+.progress-label{font-size:11px;color:#55738e;margin-top:3px}
+.mode-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.mode-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:20px;font-size:12px;transition:all .2s}
+.mode-btn.active{background:#16365a;border-color:#38bdf8;color:#38bdf8;font-weight:600}
+.mode-btn:hover:not(.active){border-color:#38bdf8;color:#c9d6e8}
+.materia-select{background:#0b1828;border:1px solid #16365a;color:#c9d6e8;padding:5px 10px;border-radius:20px;font-size:12px;outline:none}
+.materia-select:focus{border-color:#38bdf8}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.btn-sm{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-sm:hover{border-color:#38bdf8;color:#c9d6e8}
+.btn-danger{border-color:#f25555;color:#f25555}
+.btn-danger:hover{background:#2a0808}
+.card{background:#0b1828;border:1px solid #16365a;border-radius:14px;padding:20px;margin:0 0 12px}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.4px}
+.badge-materia{background:#0d2040;color:#7aa3cc;border:1px solid #16365a}
+.badge-banca{background:#1a0d28;color:#c59bf2;border:1px solid #34204e}
+.review-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
+.review-today{background:#2a1e00;color:#f5a623}
+.review-future{background:#0b1828;color:#55738e;border:1px solid #16365a}
+.enunciado{font-size:15px;line-height:1.6;color:#d8e8f8;margin-bottom:16px}
+.nav-counter{text-align:right;font-size:12px;color:#55738e;margin-bottom:8px}
+.alts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.alt-btn{background:#050b18;border:1.5px solid #16365a;color:#b8cce0;padding:11px 14px;border-radius:10px;text-align:left;font-size:14px;line-height:1.4;transition:all .15s;display:flex;gap:10px;align-items:flex-start;width:100%}
+.alt-btn .alt-letra{font-weight:700;min-width:18px;color:#38bdf8;flex-shrink:0}
+.alt-btn:hover:not(:disabled){border-color:#38bdf8;background:#0b1828}
+.alt-btn.selected{border-color:#b06bf2;background:#1a0d28}
+.alt-btn.correct{border-color:#27c06a!important;background:#0a2018!important;color:#7fffa8!important}
+.alt-btn.wrong{border-color:#f25555!important;background:#200a0a!important;color:#ffaaaa!important}
+.alt-btn.reveal-correct{border-color:#27c06a;background:#0a2018;color:#7fffa8}
+.alt-btn:disabled{cursor:default;opacity:.85}
+.alt-letra.correct{color:#27c06a!important}
+.alt-letra.wrong{color:#f25555!important}
+.alt-letra.reveal-correct{color:#27c06a}
+.btn-confirm{width:100%;padding:12px;border-radius:10px;font-size:15px;font-weight:700;background:#16365a;color:#e8f0fb;border:1.5px solid #2a5a8a;transition:all .2s;margin-bottom:10px}
+.btn-confirm:hover:not(:disabled){background:#1e4a7a;border-color:#38bdf8}
+.btn-confirm:disabled{opacity:.4;cursor:default}
+.result-banner{padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;margin-bottom:12px}
+.result-banner.correct{background:#0a2018;border:1.5px solid #27c06a;color:#7fffa8}
+.result-banner.wrong{background:#200a0a;border:1.5px solid #f25555;color:#ffaaaa}
+.comment-wrap{margin-bottom:12px}
+.comment-toggle{background:#0d1e32;border:1px solid #16365a;color:#7aa3cc;padding:8px 14px;border-radius:8px;font-size:13px;width:100%;text-align:left;transition:all .2s}
+.comment-toggle:hover{border-color:#38bdf8;color:#c9d6e8}
+.comment-body{background:#040c1c;border:1px solid #16365a;border-top:none;border-radius:0 0 8px 8px;padding:14px;font-size:13px;line-height:1.7;color:#b8cce0;display:none}
+.comment-body.open{display:block}
+.sched-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.sched-label{font-size:11px;color:#55738e;margin-right:2px}
+.sched-btn{padding:5px 11px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #4a3200;color:#f5a623;background:#1a1200;transition:all .2s}
+.sched-btn:hover{background:#2a1e00;border-color:#f5a623}
+.sched-btn.remove{border-color:#16365a;color:#55738e;background:#050b18}
+.sched-btn.remove:hover{border-color:#f25555;color:#f25555}
+.star-btn{padding:6px 13px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #16365a;color:#55738e;background:#050b18;transition:all .2s}
+.star-btn.active{border-color:#b06bf2;color:#b06bf2;background:#160d24}
+.star-btn:hover{border-color:#b06bf2;color:#b06bf2}
+.nav-row{display:flex;justify-content:space-between;gap:8px;margin-top:4px}
+.nav-btn{flex:1;padding:10px;border-radius:10px;font-size:14px;font-weight:600;background:#0b1828;border:1.5px solid #16365a;color:#7aa3cc;transition:all .2s;max-width:48%}
+.nav-btn:hover:not(:disabled){border-color:#38bdf8;color:#c9d6e8}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.empty-state{text-align:center;padding:48px 20px;color:#55738e;font-size:14px}
+.empty-state .icon{font-size:40px;margin-bottom:12px}
+.io-row{display:flex;gap:6px;flex-wrap:wrap}
+.btn-io{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:6px 13px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-io:hover{border-color:#38bdf8;color:#c9d6e8}
+#fileInput{display:none}
+footer{padding:16px 14px 28px;text-align:center;font-size:11px;color:#2a4060}
+@media(max-width:480px){.stats-bar{gap:6px}.stat-chip{padding:4px 8px}.stat-chip .sv{font-size:16px}}
+.notas-wrap{margin-top:14px;border-top:1px dashed #1b3550;padding-top:12px}
+.notas-label{font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:7px}
+.notas-area{width:100%;min-height:70px;resize:vertical;background:#0b1828;border:1px solid #16365a;border-radius:10px;color:#dbe7f5;font-size:13.5px;font-family:inherit;line-height:1.5;padding:10px 12px;outline:none;transition:border .2s}
+.notas-area:focus{border-color:#fbbf24;box-shadow:0 0 0 2px rgba(251,191,36,.18)}
+.notas-area::placeholder{color:#3a5474}
+.claude-qbtn{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:#38bdf8;border-radius:6px;padding:3px 9px;font-size:13px;opacity:.45;transition:.15s;-webkit-tap-highlight-color:transparent;}
+.claude-qbtn:hover,.claude-qbtn:active{opacity:1;background:rgba(56,189,248,.2)}
+</style>
+</head>
+<body>
+<div class="banner-save">💾 Seu progresso é salvo automaticamente neste aparelho. Cada pessoa tem o seu.</div>
+<div class="banner-iframe" id="bannerIframe">
+  <span>⚠️ Abra sempre por link direto, não embutido em iframe (Notion/etc.), ou o progresso pode não ser salvo.</span>
+  <button onclick="dismissIframeBanner()" title="Fechar">✕</button>
+</div>
+<div class="header">
+  <h1>Protesto e Direito Notarial — Q165–Q179</h1>
+  <div class="timer-bar">
+    <span>⏱ <span class="time-val" id="timerQ">00:00</span></span><span>|</span>
+    <span>Sessão: <span class="time-val" id="timerS">00:00</span></span>
+    <button class="timer-btn" id="btnPause" onclick="togglePause()">Pausar</button>
+  </div>
+  <div class="stats-bar" id="statsBar"></div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel"></div>
+  </div>
+  <div class="mode-bar">
+    <button class="mode-btn" data-modo="todas" onclick="setModo('todas')">Todas</button>
+    <button class="mode-btn" data-modo="hoje" onclick="setModo('hoje')">Revisar hoje</button>
+    <button class="mode-btn" data-modo="caderno" onclick="setModo('caderno')">Caderno de erros</button>
+    <button class="mode-btn" data-modo="materia" onclick="setModo('materia')">Por tema</button>
+    <button class="mode-btn" data-modo="aleatorio" onclick="setModo('aleatorio')">Aleatório</button>
+    <select class="materia-select" id="materiaSelect" style="display:none" onchange="setMateriaFiltro(this.value)">
+      <option value="">— Escolha —</option>
+    </select>
+  </div>
+  <div class="action-row">
+    <div class="io-row">
+      <button class="btn-io" onclick="exportarProgresso()">⬇ Exportar</button>
+      <button class="btn-io" onclick="document.getElementById('fileInput').click()">⬆ Importar</button>
+      <input type="file" id="fileInput" accept=".json" onchange="importarProgresso(event)">
+      <button class="btn-io" onclick="exportarNotas()">📝 Baixar anotações (.txt)</button>
+    </div>
+    <button class="btn-sm btn-danger" onclick="recomecar()">🔄 Recomeçar</button>
+  </div>
+</div>
+<div style="padding:0 14px" id="mainContent"></div>
+<footer>Direito Notarial e Registral · Lei de Protesto (9.492/97) e Lei 8.935/94 · Q165–Q179</footer>
+<script>
+const STORE_KEY = 'concurso_notarial_protesto_q165q179_v1';
+const QUESTOES = [
+  {id:'q165', materia:'Sustação, desistência e retirada do protesto', banca:'Consulplan · TJ-AC · 2023', tipo:'multipla',
+   enunciado:`Sobre a sustação, a desistência e a retirada do título apresentado a protesto (Lei 9.492/97, arts. 16 e 17), analise os itens a seguir:<br><br><b>I.</b> Os títulos cujo protesto tiver sido sustado judicialmente permanecerão no Tabelionato à disposição do juízo, salvo se a lei dispuser em contrário.<br><b>II.</b> Antes da lavratura do protesto, poderá o apresentante retirar o título, pagos os emolumentos e demais despesas.<br><b>III.</b> Revogada a ordem judicial de sustação, há necessidade de nova intimação do devedor para a lavratura e o registro do protesto.<br><br>Está(ão) correto(s) APENAS o(s) item(ns):`,
+   alternativas:[
+     {letra:'A',texto:'I. [reconstruída]'},
+     {letra:'B',texto:'I e II. [reconstruída]'},
+     {letra:'C',texto:'II e III. [reconstruída]'},
+     {letra:'D',texto:'I e III. [reconstruída]'},
+     {letra:'E',texto:'I, II e III. [reconstruída]'}
+   ],
+   correta:'B',
+   comentario:`<b>✅ Gabarito: LETRA B</b> — itens I e II, apenas.<br><br><b>⚖️ Por quê:</b> <b>I ✔</b> art. 17 — os títulos sustados judicialmente permanecem no Tabelionato à disposição do juízo. <b>II ✔</b> art. 16 — antes da lavratura do protesto o apresentante pode retirar o título, pagos os emolumentos e demais despesas. <b>III ✗</b> — revogada a sustação, <b>não há necessidade de nova intimação</b> do devedor.<br><br><b>⚠️ As outras:</b> qualquer alternativa que inclua o item III está errada — o item III planta o erro logo na 1ª oração (“há necessidade de nova intimação”); o correto é que se procede à lavratura e ao registro <i>independentemente de nova intimação</i>.<br><br><b>📌 Base legal:</b> Lei 9.492/97, arts. 16 e 17.<br><br><b>🔁 Revisar:</b> separe <b>sustação</b> (judicial, antes da lavratura) de <b>desistência/retirada</b> (ato do apresentante). Revogada a sustação, lavra-se sem reintimar.<br><br><b>🎙️ Da prova oral:</b> <i>«A banca separa sustação de desistência/retirada — quem faz cada uma e quais os efeitos?»</i> — A sustação é judicial (antes da lavratura), e o título sustado por ordem do juízo só se paga ou se retira com autorização judicial; a desistência/retirada é ato do próprio apresentante. <span style="color:#7aa3cc">[Banco Prova Oral · PO-778]</span>`},
+
+  {id:'q166', materia:'Sustação do protesto', banca:'CESPE · TJ-SC · 2023', tipo:'multipla',
+   enunciado:`Acerca da sustação do protesto e de seus efeitos (Lei 9.492/97, art. 17), assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:'A sustação do protesto pode decorrer de simples manifestação de vontade do apresentante, independentemente de ordem judicial. [reconstruída]'},
+     {letra:'B',texto:'Sustado judicialmente o protesto, o pagamento do título pode ser feito diretamente no Tabelionato, sem autorização do juízo. [reconstruída]'},
+     {letra:'C',texto:'Os títulos cujo protesto tiver sido sustado judicialmente devem ser remetidos ao juízo, não permanecendo no Tabelionato. [reconstruída]'},
+     {letra:'D',texto:'Sustado judicialmente o protesto, a retirada do título independe de autorização judicial. [reconstruída]'},
+     {letra:'E',texto:'Revogada a ordem judicial de sustação, não é necessária nova intimação do devedor para a lavratura e o registro do protesto. [reconstruída]'}
+   ],
+   correta:'E',
+   comentario:`<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> art. 17 — revogada a ordem judicial de sustação, <b>não é necessária nova intimação</b> do devedor; procede-se à lavratura e ao registro do protesto.<br><br><b>⚠️ As outras:</b> (a) a sustação decorre de <b>ordem judicial</b> — manifestação do apresentante é desistência, não sustação; (b) e (d) título sustado judicialmente só se paga/retira com <b>autorização do juízo</b>; (c) o título <b>permanece no Tabelionato</b> à disposição do juízo, não é remetido.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 17 e parágrafo único.<br><br><b>🔁 Revisar:</b> revogada a sustação, lavra-se até o 1º dia útil seguinte, <b>sem reintimar</b>.<br><br><b>🎙️ Da prova oral:</b> <i>«Qual o gatilho para distinguir sustação de desistência?»</i> — Quem susta é o juiz, quem desiste é o apresentante; revogada a sustação, lavra-se até o 1º dia útil subsequente sem nova intimação. <span style="color:#7aa3cc">[Banco Prova Oral · PO-778]</span>`},
+
+  {id:'q167', materia:'Revogação da sustação do protesto', banca:'VUNESP · TJ-GO · 2021', tipo:'multipla',
+   enunciado:`Recebido pelo tabelião o mandado judicial de revogação da ordem de sustação do protesto, qual a providência correta (Lei 9.492/97, art. 17)?`,
+   alternativas:[
+     {letra:'A',texto:'Procede-se à lavratura e ao registro do protesto no prazo de três dias úteis. [reconstruída]'},
+     {letra:'B',texto:'Procede-se à lavratura e ao registro do protesto até o primeiro dia útil subsequente, independentemente de nova intimação. [reconstruída]'},
+     {letra:'C',texto:'Procede-se à averbação da revogação à margem do registro, sem lavratura do protesto. [reconstruída]'},
+     {letra:'D',texto:'Procede-se à lavratura do protesto após nova intimação do devedor. [reconstruída]'},
+     {letra:'E',texto:'O título deve ser devolvido ao apresentante para nova apresentação. [reconstruída]'}
+   ],
+   correta:'B',
+   comentario:`<b>✅ Gabarito: LETRA B</b><br><br><b>⚖️ Por quê:</b> art. 17 — recebido o mandado de revogação da sustação, faz-se a <b>lavratura e o registro do protesto até o primeiro dia útil subsequente</b>, <b>independentemente de nova intimação</b>.<br><br><b>⚠️ As outras:</b> (a) “três dias úteis” → prazo errado; (c) não é averbação, é <b>lavratura/registro</b>; (d) exige “nova intimação”, justamente dispensada porque o devedor já tinha ciência da intimação original; (e) não há devolução para nova apresentação.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 17.<br><br><b>🔁 Revisar:</b> o eixo é <b>prazo (1º dia útil seguinte à revogação)</b> + <b>dispensa de reintimação</b>.<br><br><b>🎙️ Da prova oral:</b> <i>«Revogada a sustação, há novo prazo e nova intimação?»</i> — Lavra-se até o 1º dia útil subsequente à revogação, sem nova intimação, pois o devedor já fora intimado originalmente. <span style="color:#7aa3cc">[Banco Prova Oral · PO-778]</span>`},
+
+  {id:'q168', materia:'Lavratura, prazos e cancelamento do protesto', banca:'CESPE · TJ-RR · 2025', tipo:'multipla',
+   enunciado:`Sobre a lavratura do protesto, os prazos e o cancelamento do registro (Lei 9.492/97), assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:'Não cabe protesto de título antes do vencimento, ainda que por falta de aceite. [reconstruída]'},
+     {letra:'B',texto:'O dia em que houver expediente bancário em horário reduzido é considerado dia útil para a contagem dos prazos do protesto. [reconstruída]'},
+     {letra:'C',texto:'Os títulos cujo protesto tiver sido sustado judicialmente somente serão pagos, protestados ou retirados com autorização judicial. [reconstruída]'},
+     {letra:'D',texto:'O cancelamento do registro do protesto exige sempre a apresentação do título original, não se admitindo declaração de anuência. [reconstruída]'},
+     {letra:'E',texto:'O cancelamento do protesto por determinação judicial dispensa o pagamento de emolumentos. [reconstruída]'}
+   ],
+   correta:'C',
+   comentario:`<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> art. 17, parágrafo único — os títulos cujo protesto foi sustado judicialmente <b>somente serão pagos, protestados ou retirados com autorização judicial</b>.<br><br><b>⚠️ As outras:</b> (a) cabe protesto <b>antes do vencimento</b> por falta de aceite (art. 21, §1º); (b) dia com expediente bancário em <b>horário reduzido = não útil</b> para a fluência dos prazos (art. 12, §2º); (d) o cancelamento <b>admite</b> declaração de anuência do credor, dispensando o original; (e) cancelamento por ordem judicial <b>não dispensa</b> emolumentos.<br><br><b>📌 Base legal:</b> Lei 9.492/97, arts. 12, §2º, 17, p.ú., 21, §1º e 26.<br><br><b>🔁 Revisar:</b> dois ganchos — <i>sustado judicialmente = autorização do juízo</i> e <i>dia de horário bancário reduzido conta como não útil</i>.<br><br><b>🎙️ Da prova oral:</b> <i>«Dia de expediente bancário reduzido conta como dia útil para o protesto?»</i> — Não; considera-se não útil para a fluência dos prazos (art. 12, §2º). E título sustado judicialmente só se paga/retira/protesta com autorização do juízo. <span style="color:#7aa3cc">[Banco Prova Oral · PO-778]</span>`},
+
+  {id:'q169', materia:'Renegociação e Marco Legal das Garantias (Lei 14.711/23)', banca:'FGV · Enac · 2025', tipo:'multipla',
+   enunciado:`À luz das alterações trazidas pela Lei 14.711/23 (Marco Legal das Garantias) à atuação do tabelião de protesto na renegociação da dívida, assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:'A negociação da dívida preclui com o registro do protesto, não podendo ser intermediada após a lavratura. [reconstruída]'},
+     {letra:'B',texto:'É vedado ao credor transferir ao tabelião a incumbência de receber o pagamento com desconto ou parcelamento. [reconstruída]'},
+     {letra:'C',texto:'Os emolumentos da renegociação, a cargo do devedor, somente são devidos se exitosa a solução negocial. [reconstruída]'},
+     {letra:'D',texto:'A análise da proposta de renegociação pelo tabelião constitui direito subjetivo do devedor. [reconstruída]'},
+     {letra:'E',texto:'O tabelião não participa da solução negocial, limitando-se a registrar o protesto. [reconstruída]'}
+   ],
+   correta:'C',
+   comentario:`<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> Marco Legal das Garantias (Lei 14.711/23) — os <b>emolumentos da renegociação, a cargo do devedor, só são devidos se exitosa</b> a solução negocial (havendo desconto, calculam-se sobre o efetivamente pago).<br><br><b>⚠️ As outras:</b> (a) não há preclusão “até o registro” — a negociação se abre <b>após</b> o protesto; (b) o credor <b>pode</b> transferir ao tabelião a incumbência de receber com desconto/parcelamento; (d) e (e) o tabelião participa da solução negocial, mas a análise da proposta <b>não é direito subjetivo</b> do devedor.<br><br><b>📌 Base legal:</b> Lei 9.492/97 c/c Lei 14.711/23.<br><br><b>🔁 Revisar:</b> novidade — o <b>tabelião de protesto como agente da renegociação</b>; emolumento condicionado ao êxito.<br><br><b>🎙️ Da prova oral:</b> <i>«O que a Lei 14.711/23 inovou na atuação do tabelião de protesto?»</i> — Tornou-o agente da renegociação da dívida, podendo receber com desconto/parcelamento; os emolumentos só são devidos se a solução negocial for exitosa. Tema novíssimo, alta chance de cair. <span style="color:#7aa3cc">[Banco Prova Oral · Marco das Garantias]</span>`},
+
+  {id:'q170', materia:'Pagamento do título apresentado a protesto', banca:'Consulplan · TJ-AC · 2023', tipo:'multipla',
+   enunciado:`Sobre o pagamento do título ou documento de dívida apresentado a protesto (Lei 9.492/97, art. 19), analise os itens:<br><br><b>I.</b> Não pode o Tabelião recusar o recebimento do pagamento feito no prazo e horário de funcionamento dos serviços.<br><b>II.</b> O valor pago fica à disposição do apresentante a partir do trigésimo dia útil seguinte ao pagamento.<br><b>III.</b> Tratando-se de pagamento por cheque, ainda que de emissão de estabelecimento bancário, a quitação fica condicionada à efetiva liquidação.<br><b>IV.</b> Quando o pagamento se referir a parcela de título em que subsistam parcelas vincendas, a quitação é dada em apartado, devolvendo-se o original ao apresentante.<br><br>Estão corretos APENAS os itens:`,
+   alternativas:[
+     {letra:'A',texto:'I e II. [reconstruída]'},
+     {letra:'B',texto:'II e III. [reconstruída]'},
+     {letra:'C',texto:'I, II e IV. [reconstruída]'},
+     {letra:'D',texto:'I, III e IV. [reconstruída]'},
+     {letra:'E',texto:'I, II, III e IV. [reconstruída]'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> — itens I, III e IV.<br><br><b>⚖️ Por quê:</b> <b>I ✔</b> art. 19, §1º — não recusar o pagamento feito no prazo/horário; <b>III ✔</b> art. 19, §3º — pagamento por cheque tem a quitação condicionada à efetiva liquidação, ainda que de banco; <b>IV ✔</b> art. 19, §4º — subsistindo parcelas vincendas, a quitação é dada em apartado, devolvendo o original ao apresentante. <b>II ✗</b> — o valor fica à disposição do apresentante no <b>primeiro dia útil</b> seguinte, não no “trigésimo”.<br><br><b>⚠️ As outras:</b> qualquer alternativa que inclua o item II está errada — o item troca “1º dia útil” por “trigésimo dia útil”.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 19, §§1º, 3º e 4º.<br><br><b>🔁 Revisar:</b> o pagamento é feito <b>no próprio tabelionato</b> (título + emolumentos + despesas), o tabelião dá quitação e repassa ao credor no 1º dia útil seguinte.<br><br><b>🎙️ Da prova oral:</b> <i>«Onde e como se paga o título apresentado a protesto, e quem dá a quitação?»</i> — Paga-se no próprio tabelionato (valor do título + emolumentos + despesas); o tabelião dá a quitação (função privativa, art. 11, III, Lei 8.935/94) e o valor fica à disposição do apresentante no 1º dia útil seguinte. <span style="color:#7aa3cc">[Banco Prova Oral · PO-779]</span>`},
+
+  {id:'q171', materia:'Pagamento de título com parcelas vincendas', banca:'VUNESP · TJ-GO · 2021', tipo:'multipla',
+   enunciado:`Sobre o pagamento de título com parcelas vincendas e as regras do art. 19 da Lei 9.492/97, assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:'O tabelião pode recusar o pagamento em espécie feito no prazo e horário de funcionamento. [reconstruída]'},
+     {letra:'B',texto:'O valor pago fica à disposição do apresentante a partir do quinto dia útil seguinte ao pagamento. [reconstruída]'},
+     {letra:'C',texto:'Quando o pagamento se referir a parcela de título em que subsistam parcelas vincendas, a quitação é dada em apartado, devolvendo-se o original ao apresentante. [reconstruída]'},
+     {letra:'D',texto:'O pagamento por cheque de emissão de estabelecimento bancário gera quitação imediata, independentemente de liquidação. [reconstruída]'},
+     {letra:'E',texto:'A posse do título pelo devedor, por si só, não faz presumir o pagamento. [reconstruída]'}
+   ],
+   correta:'C',
+   comentario:`<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> art. 19, §4º — subsistindo parcelas vincendas, a quitação da parcela paga é dada <b>em apartado</b>, devolvendo-se o original ao apresentante.<br><br><b>⚠️ As outras:</b> (a) o tabelião <b>não</b> pode recusar o pagamento em espécie no prazo/horário (§1º); (b) a redação não corresponde ao parágrafo legal; (d) o pagamento por cheque tem a quitação <b>condicionada à efetiva liquidação</b>, ainda que de banco (§3º); (e) inverte — a posse do título pelo devedor <b>presume</b> o pagamento.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 19, §4º.<br><br><b>🔁 Revisar:</b> pagamento parcial com vincendas → quitação em apartado + devolução do original.<br><br><b>🎙️ Da prova oral:</b> <i>«A posse do título pelo devedor gera alguma presunção?»</i> — Sim, a posse do título pelo devedor presume o pagamento e o legitima a pedir o cancelamento — pegadinha clássica ligada ao art. 19. <span style="color:#7aa3cc">[Banco Prova Oral · PO-779]</span>`},
+
+  {id:'q172', materia:'Cabimento do protesto (art. 1º)', banca:'IESES · TJ-PA · 2026', tipo:'multipla',
+   enunciado:`Nos termos do art. 1º da Lei 9.492/97, o protesto é o ato formal e solene pelo qual se prova a inadimplência e o descumprimento de obrigação originada em títulos e outros documentos de dívida. Diante disso, assinale a hipótese em que o protesto é cabível:`,
+   alternativas:[
+     {letra:'A',texto:'Protesto de crédito decorrente de dívida trabalhista reconhecida em sentença. [reconstruída]'},
+     {letra:'B',texto:'Protesto fundado em excesso de formalidades do título. [reconstruída]'},
+     {letra:'C',texto:'Protesto de dívida ativa da Fazenda Pública sem certidão regularmente inscrita. [reconstruída]'},
+     {letra:'D',texto:'Protesto destinado a homologar partilha em inventário. [reconstruída]'},
+     {letra:'E',texto:'Protesto por falta de pagamento de título de dívida regularmente apresentado. [reconstruída]'}
+   ],
+   correta:'E',
+   comentario:`<b>✅ Gabarito: LETRA E</b> — por falta de pagamento.<br><br><b>⚖️ Por quê:</b> art. 1º — o protesto prova a inadimplência/descumprimento de obrigação constante de títulos e documentos de dívida (por falta de <b>pagamento</b>, de <b>aceite</b> ou de <b>devolução</b>). O protesto por falta de pagamento de título regularmente apresentado é hipótese típica.<br><br><b>⚠️ As outras:</b> (a) dívida trabalhista, (c) dívida ativa sem certidão regular e (d) homologação de partilha <b>não</b> são hipóteses de protesto; (b) “excesso de formalidades” é não-sentido jurídico.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 1º.<br><br><b>🔁 Revisar:</b> as espécies de protesto — falta de pagamento, de aceite, de devolução (e falta de data do aceite na letra a certo termo de vista, art. 25 LUG).<br><br><b>🎙️ Da prova oral:</b> <i>«Quais são as espécies de protesto?»</i> — Falta de pagamento, falta de aceite, falta de devolução e, na letra a certo termo de vista, falta de data do aceite (art. 21, §1º; art. 25 LUG). <span style="color:#7aa3cc">[Banco Prova Oral · PO-758]</span>`},
+
+  {id:'q173', materia:'Registro do protesto e espécies (art. 21)', banca:'CESPE · TJ-RO · 2025', tipo:'multipla',
+   enunciado:`Sobre o registro do protesto e suas espécies (Lei 9.492/97, art. 21), assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:'Retido o título pelo sacado, não cabe protesto, pois é vedado o protesto por indicações. [reconstruída]'},
+     {letra:'B',texto:'No protesto de duplicata, apenas o sacado pode figurar como devedor. [reconstruída]'},
+     {letra:'C',texto:'Contra o sacado não aceitante de letra de câmbio é cabível a retirada do título mediante protesto. [reconstruída]'},
+     {letra:'D',texto:'O protesto por falta de aceite somente pode ser efetuado antes do vencimento do título e após o prazo de aceite ou devolução. [reconstruída]'},
+     {letra:'E',texto:'O protesto por falta de devolução pressupõe título já vencido. [reconstruída]'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> art. 21, §1º — o protesto por falta de <b>aceite</b> somente pode ser efetuado <b>antes do vencimento</b> do título e após o transcurso do prazo legal para o aceite ou a devolução.<br><br><b>⚠️ As outras:</b> (a) retido o título, cabe protesto por <b>indicações</b>; (b) não é “apenas o sacado” que pode figurar como devedor; (c) é descabida a “retirada” contra o sacado não aceitante de letra; (e) a falta de devolução pressupõe título <b>não devolvido</b>, não “vencido”.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 21 e §1º.<br><br><b>🔁 Revisar:</b> o eixo é <b>falta de aceite (antes do vencimento) × falta de pagamento (após o vencimento)</b> — só letra de câmbio e duplicata admitem protesto por falta de aceite.<br><br><b>🎙️ Da prova oral:</b> <i>«Qual o marco temporal do protesto por falta de aceite?»</i> — Só antes do vencimento e após o prazo de aceite/devolução; depois do vencimento, protesta-se por falta de pagamento. <span style="color:#7aa3cc">[Banco Prova Oral · PO-758]</span>`},
+
+  {id:'q174', materia:'Protesto de letra de câmbio não aceita', banca:'FGV · TJ-SE · 2023', tipo:'multipla',
+   enunciado:`Apresentada a protesto letra de câmbio cujo sacado recusou o aceite, assinale a opção correta sobre a atuação do tabelião:`,
+   alternativas:[
+     {letra:'A',texto:'É defeso protestar por falta de pagamento contra o sacado que recusou o aceite, pois este não se obriga cambiariamente. [reconstruída]'},
+     {letra:'B',texto:'É vedada a protocolização da letra quando há recusa de aceite. [reconstruída]'},
+     {letra:'C',texto:'A recusa do aceite acarreta a caducidade da ação cambial contra o sacador. [reconstruída]'},
+     {letra:'D',texto:'O vício consiste na apresentação intempestiva ao aceite, e não na ausência de obrigação do sacado. [reconstruída]'},
+     {letra:'E',texto:'Pelo princípio da abstração, o sacado que recusou o aceite obriga-se ao pagamento da letra. [reconstruída]'}
+   ],
+   correta:'A',
+   comentario:`<b>✅ Gabarito: LETRA A</b><br><br><b>⚖️ Por quê:</b> o sacado que <b>recusa o aceite não se obriga</b> cambiariamente; logo, é <b>defeso protestar por falta de pagamento contra o sacado não aceitante</b> (cabível seria o protesto por falta de aceite).<br><br><b>⚠️ As outras:</b> (b) a protocolização não é vedada nesses termos; (c) inverte a lógica (caducidade da ação); (d) o vício não é “apresentação intempestiva ao aceite”; (e) a abstração não obriga quem recusou o aceite.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 21; LUG (Lei Uniforme de Genebra), art. 25.<br><br><b>🔁 Revisar:</b> sem aceite não há obrigação cambial do sacado — o não aceitante não é devedor da letra.<br><br><b>🎙️ Da prova oral:</b> <i>«Antes de protestar avalista ou fiador, o que o tabelião exige?»</i> — Prova do protesto do devedor principal; e o sacado não aceitante não é devedor da letra, por isso não cabe protesto por falta de pagamento contra ele (art. 25 LUG). <span style="color:#7aa3cc">[Banco Prova Oral · PO-758]</span>`},
+
+  {id:'q175', materia:'Registro e requisitos do protesto', banca:'Lei 9.492/97', tipo:'multipla',
+   enunciado:`Sobre o registro do protesto e suas espécies (Lei 9.492/97, arts. 21 e 22), assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:'O registro do protesto é lavrado e assinado pelo tabelião, por seus substitutos ou por escrevente autorizado, comportando o protesto três espécies: falta de pagamento, falta de aceite e falta de devolução. [reconstruída]'},
+     {letra:'B',texto:'O protesto comporta apenas duas espécies: falta de pagamento e falta de aceite. [reconstruída]'},
+     {letra:'C',texto:'O registro do protesto somente pode ser lavrado e assinado pelo próprio tabelião, sendo vedada a atuação de escrevente autorizado. [reconstruída]'},
+     {letra:'D',texto:'O protesto por falta de aceite pode ser efetuado a qualquer tempo, antes ou depois do vencimento do título. [reconstruída]'},
+     {letra:'E',texto:'A falta de devolução não constitui espécie autônoma de protesto. [reconstruída]'}
+   ],
+   correta:'A',
+   comentario:`<b>✅ Gabarito: LETRA A</b><br><br><b>⚖️ Por quê:</b> o registro do protesto é <b>lavrado e assinado pelo tabelião, por seus substitutos ou por escrevente autorizado</b>, contendo os requisitos do art. 22. O protesto comporta <b>três espécies</b> — falta de pagamento, falta de aceite e falta de devolução (art. 21).<br><br><b>⚠️ As outras / Pegadinha:</b> as demais embaralham as espécies ou atribuem efeito que a lei não prevê. Cuidado com a confusão clássica: a <b>falta de aceite só pode ser protestada antes do vencimento</b> (art. 21, §1º); depois do vencimento, protesta-se por <b>falta de pagamento</b>.<br><br><b>📌 Base legal:</b> Lei 9.492/97, arts. 21 e 22.<br><br><b>🔁 Revisar:</b> as três espécies de protesto e o marco temporal do aceite (antes/depois do vencimento).<br><br><b>🎙️ Da prova oral:</b> <i>«Quais são as espécies de protesto e em que momento cada uma cabe?»</i> — Falta de pagamento, falta de aceite (só antes do vencimento) e falta de devolução; após o vencimento, a letra não aceita protesta-se por falta de pagamento. <span style="color:#7aa3cc">[Banco Prova Oral · PO-758]</span>`},
+
+  {id:'q176', materia:'Registro e requisitos do protesto', banca:'Lei 9.492/97', tipo:'multipla',
+   enunciado:`Sobre os requisitos do registro do protesto (Lei 9.492/97, art. 22), assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:'O registro do protesto deve reproduzir o juízo de mérito do tabelião sobre a existência e a validade da dívida. [reconstruída]'},
+     {letra:'B',texto:'O registro deve conter a investigação, pelo tabelião, sobre eventual prescrição ou caducidade do título. [reconstruída]'},
+     {letra:'C',texto:'O registro exige, em todos os casos, a intimação pessoal do devedor, sob pena de nulidade. [reconstruída]'},
+     {letra:'D',texto:'O registro encerra-se com a data e a assinatura do tabelião, de seus substitutos ou de escrevente autorizado (art. 22, VIII). [reconstruída]'},
+     {letra:'E',texto:'O registro dispensa a transcrição ou reprodução do título e a certidão das intimações. [reconstruída]'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> o art. 22 lista o conteúdo obrigatório do registro; o <b>inciso VIII exige a data e a assinatura</b> do tabelião, de seus substitutos ou de escrevente autorizado — encerrando o ato.<br><br><b>⚠️ As outras / Pegadinha:</b> as erradas inventam requisito (ex.: exigir intimação pessoal sempre) ou suprimem elemento essencial. O registro <b>não reproduz juízo de mérito</b> sobre a dívida — o tabelião examina apenas os <b>caracteres formais</b> do título (art. 9º); não investiga prescrição nem caducidade.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 22, esp. inciso VIII; art. 9º.<br><br><b>🔁 Revisar:</b> os incisos do art. 22 (transcrição/reprodução do título, certidão das intimações, eventuais respostas, data e assinatura).<br><br><b>🎙️ Da prova oral:</b> <i>«O tabelião de protesto examina o mérito da dívida?»</i> — Não: limita-se aos caracteres formais (art. 9º); não investiga prescrição nem caducidade. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q177', materia:'Protesto especial falimentar', banca:'Lei 9.492/97', tipo:'multipla',
+   enunciado:`Diante de pedido de protesto especial para fins falimentares aparelhado contra fundação de direito privado, qual a providência correta do tabelião (Lei 9.492/97, art. 9º; Lei 11.101/05, art. 94)?`,
+   alternativas:[
+     {letra:'A',texto:'Lavrar o protesto especial, pois toda pessoa jurídica se sujeita à legislação falimentar. [reconstruída]'},
+     {letra:'B',texto:'Lavrar o protesto especial desde que o título seja superior a 40 salários mínimos, independentemente da natureza do devedor. [reconstruída]'},
+     {letra:'C',texto:'Recusar o protesto na qualidade falimentar, pois a fundação de direito privado não é empresária e não se sujeita à falência. [reconstruída]'},
+     {letra:'D',texto:'Lavrar o protesto, pois o tabelião não investiga a condição do devedor, limitando-se a formalizar o ato (art. 9º). [reconstruída]'},
+     {letra:'E',texto:'Remeter o pedido ao juízo falimentar para deliberação prévia. [reconstruída]'}
+   ],
+   correta:'C',
+   comentario:`<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> o protesto especial para fins falimentares pressupõe <b>devedor sujeito à legislação falimentar</b> (empresário/sociedade empresária), com título de valor superior a 40 salários mínimos (Lei 11.101/05, art. 94, I e §3º). A <b>fundação de direito privado não é empresária</b> e, portanto, <b>não se sujeita à falência</b> — logo, o tabelião deve <b>recusar</b> o protesto na qualidade falimentar.<br><br><b>⚠️ As outras / Pegadinha:</b> a alternativa D é a armadilha: invoca o art. 9º (“o tabelião não investiga, apenas formaliza”) para sustentar que ele deveria lavrar. Isso vale para o <b>protesto comum</b>; no protesto <b>especial falimentar</b> há requisito de qualificação do devedor que o tabelião deve verificar.<br><br><b>📌 Base legal:</b> Lei 11.101/05, art. 94, I e §3º; Lei 9.492/97, art. 9º (por contraste).<br><br><b>🔁 Revisar:</b> diferença entre protesto comum e protesto especial falimentar (quem pode figurar como devedor + valor mínimo de 40 SM).<br><br><b>🎙️ Da prova oral:</b> <i>«Cabe protesto especial falimentar contra quem não é empresário?»</i> — Não; a falência só atinge quem se sujeita à legislação falimentar, então o tabelião recusa o protesto na modalidade especial. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q178', materia:'Cancelamento do protesto', banca:'Lei 9.492/97', tipo:'multipla',
+   enunciado:`Sobre o cancelamento do registro do protesto (Lei 9.492/97, art. 26), assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:'O cancelamento depende sempre de ordem judicial, ainda que haja documento de quitação. [reconstruída]'},
+     {letra:'B',texto:'Após o pagamento, o ônus de providenciar o cancelamento é do credor, e não do devedor. [reconstruída]'},
+     {letra:'C',texto:'O cancelamento prescinde de firma reconhecida do credor no documento de quitação. [reconstruída]'},
+     {letra:'D',texto:'O cancelamento faz-se à vista do documento de quitação com firma reconhecida do credor; tratando-se de título com endosso-mandato, basta a anuência do credor endossante. [reconstruída]'},
+     {letra:'E',texto:'Os emolumentos do cancelamento correm por conta do credor endossante. [reconstruída]'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> o cancelamento, em regra, faz-se à vista do <b>documento de quitação com firma reconhecida do credor</b> (art. 26, §1º). Tratando-se de título com <b>endosso-mandato</b>, basta a <b>anuência do credor endossante</b> (art. 26, §2º) — o endossatário-mandatário age em nome do mandante.<br><br><b>⚠️ As outras / Pegadinha:</b> as erradas exigem ordem judicial onde basta a quitação, ou transferem ao credor o ônus do cancelamento. Fixe: após o pagamento, <b>o ônus de providenciar o cancelamento é do DEVEDOR</b>, não do credor (STJ), e os emolumentos correm por conta do devedor.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 26, §§1º e 2º.<br><br><b>🔁 Revisar:</b> modalidades de cancelamento (pagamento com firma reconhecida × endosso-mandato × determinação judicial).<br><br><b>🎙️ Da prova oral:</b> <i>«Quem suporta o ônus do cancelamento do protesto após o pagamento?»</i> — O devedor; o credor não é obrigado a providenciar a baixa, e os emolumentos correm por conta do devedor. <span style="color:#7aa3cc">[Banco Prova Oral · PO-786]</span>`},
+
+  {id:'q179', materia:'Cancelamento do protesto', banca:'Lei 9.492/97', tipo:'multipla',
+   enunciado:`Sobre cancelamento do protesto, títulos em moeda estrangeira e protesto de letra de câmbio (Lei 9.492/97, arts. 10, 21, §5º e 26, §2º; LUG), assinale a opção correta:`,
+   alternativas:[
+     {letra:'A',texto:'Títulos emitidos em moeda estrangeira fora do Brasil não podem ser protestados no país. [reconstruída]'},
+     {letra:'B',texto:'É cabível o protesto por falta de pagamento de letra de câmbio contra o sacado que não a aceitou. [reconstruída]'},
+     {letra:'C',texto:'No título com endosso-mandato, o cancelamento depende de ordem judicial, não bastando a anuência do credor endossante. [reconstruída]'},
+     {letra:'D',texto:'No endosso-mandato, o cancelamento depende da anuência do credor endossante; títulos em moeda estrangeira emitidos fora do Brasil podem ser protestados, mediante tradução; é vedado o protesto por falta de pagamento de letra de câmbio contra o sacado não aceitante. [reconstruída]'},
+     {letra:'E',texto:'O protesto de título em moeda estrangeira dispensa tradução. [reconstruída]'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> a alternativa correta combina três pontos consagrados: <b>(i)</b> no endosso-mandato, o cancelamento depende da <b>anuência do credor endossante</b> (art. 26, §2º); <b>(ii)</b> títulos em <b>moeda estrangeira</b> emitidos fora do Brasil <b>podem</b> ser protestados, mediante <b>tradução</b> (art. 10); e <b>(iii)</b> é <b>vedado</b> o protesto por falta de pagamento de <b>letra de câmbio contra sacado não aceitante</b> (art. 21, §5º) — pela LUG, quem não aceita não se obriga.<br><br><b>⚠️ As outras / Pegadinha:</b> as erradas afirmam que título em moeda estrangeira não pode ser protestado, ou admitem protesto por falta de pagamento contra o sacado que não aceitou — exatamente o que o art. 21, §5º proíbe.<br><br><b>📌 Base legal:</b> Lei 9.492/97, arts. 10, 21, §5º e 26, §2º; LUG.<br><br><b>🔁 Revisar:</b> a vedação do art. 21, §5º (sacado não aceitante) e a admissão de protesto de título em moeda estrangeira com tradução.<br><br><b>🎙️ Da prova oral:</b> <i>«Cabe protesto por falta de pagamento de letra de câmbio contra o sacado que não a aceitou?»</i> — Não; sem aceite não há obrigação cambial do sacado (art. 21, §5º; LUG). <span style="color:#7aa3cc">[Banco Prova Oral · PO-786]</span>`}
+];
+function defaultState(){return{respostas:{},revisao:{},caderno:{},revisarDepois:{},posicao:0,modo:'todas',materiaFiltro:'',notas:{}};}
+let state=defaultState(),lista=[],paused=false,qSecs=0,sSecs=0,timerInterval=null,commentOpen={};
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}catch(e){}}
+function loadState(){try{var raw=localStorage.getItem(STORE_KEY);if(raw){state=Object.assign(defaultState(),JSON.parse(raw));}}catch(e){state=defaultState();}}
+function today(){return new Date().toISOString().split('T')[0];}
+function addDays(d,n){var dt=new Date(d+'T12:00:00');dt.setDate(dt.getDate()+n);return dt.toISOString().split('T')[0];}
+function fmtDate(iso){if(!iso)return'';var p=iso.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function buildLista(){var t=today(),ids;if(state.modo==='todas'){ids=QUESTOES.map(function(q){return q.id;});}else if(state.modo==='hoje'){ids=QUESTOES.filter(function(q){var r=state.revisao[q.id];return r&&r.nextDate&&r.nextDate<=t;}).map(function(q){return q.id;});}else if(state.modo==='caderno'){ids=QUESTOES.filter(function(q){return state.caderno[q.id]||state.revisarDepois[q.id];}).map(function(q){return q.id;});}else if(state.modo==='materia'){var m=state.materiaFiltro;ids=QUESTOES.filter(function(q){return !m||q.materia===m;}).map(function(q){return q.id;});}else if(state.modo==='aleatorio'){ids=shuffle(QUESTOES.map(function(q){return q.id;}));}else{ids=QUESTOES.map(function(q){return q.id;});}return ids;}
+function computeStats(){var total=QUESTOES.length,acertos=0,erros=0,t=today(),revisadasHoje=0;QUESTOES.forEach(function(q){var r=state.respostas[q.id];if(r){if(r===q.correta)acertos++;else erros++;}var rev=state.revisao[q.id];if(rev&&rev.lastAnswered===t)revisadasHoje++;});var respondidas=acertos+erros,pendentes=total-respondidas,pct=total>0?Math.round(respondidas/total*100):0;return{total:total,acertos:acertos,erros:erros,pendentes:pendentes,revisadasHoje:revisadasHoje,respondidas:respondidas,pct:pct};}
+function renderStats(){var s=computeStats();document.getElementById('statsBar').innerHTML='<div class="stat-chip"><span class="sv green">'+s.acertos+'</span><span class="sl">Acertos</span></div><div class="stat-chip"><span class="sv red">'+s.erros+'</span><span class="sl">Erros</span></div><div class="stat-chip"><span class="sv amber">'+s.pendentes+'</span><span class="sl">Pendentes</span></div><div class="stat-chip"><span class="sv cyan">'+s.revisadasHoje+'</span><span class="sl">Revisadas hoje</span></div>';var fill=document.getElementById('progressFill'),lbl=document.getElementById('progressLabel');if(fill)fill.style.width=s.pct+'%';if(lbl)lbl.textContent=s.respondidas+'/'+s.total+' respondidas ('+s.pct+'%)';}
+function fmtTime(secs){return String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function startTimers(){if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(function(){if(!paused){qSecs++;sSecs++;}var q=document.getElementById('timerQ'),s=document.getElementById('timerS');if(q)q.textContent=fmtTime(qSecs);if(s)s.textContent=fmtTime(sSecs);},1000);}
+function resetQTimer(){qSecs=0;var q=document.getElementById('timerQ');if(q)q.textContent='00:00';}
+function togglePause(){paused=!paused;var b=document.getElementById('btnPause');if(b)b.textContent=paused?'Retomar':'Pausar';}
+function scheduleNext(id,acertou){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:1,acertos:0,lastAnswered:null};rv.lastAnswered=t;if(acertou){rv.acertos=(rv.acertos||0)+1;rv.interval=rv.acertos===1?1:rv.acertos===2?7:30;}else{rv.acertos=0;rv.interval=1;}rv.nextDate=addDays(t,rv.interval);state.revisao[id]=rv;}
+function scheduleManual(id,days){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:days,acertos:0,lastAnswered:t};rv.nextDate=days===0?null:addDays(t,days);rv.interval=days;state.revisao[id]=rv;saveState();renderCard();}
+function reviewBadgeHTML(id){var rv=state.revisao[id];if(!rv||!rv.nextDate)return'';if(rv.nextDate<=today())return'<span class="review-badge review-today">revisar hoje ⏰</span>';return'<span class="review-badge review-future">📅 '+fmtDate(rv.nextDate)+'</span>';}
+function schedRowHTML(id){return'<div class="sched-row"><span class="sched-label">Agendar:</span><button class="sched-btn" onclick="scheduleManual(\''+id+'\',1)">1 dia</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',7)">7 dias</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',30)">30 dias</button><button class="sched-btn remove" onclick="scheduleManual(\''+id+'\',0)">remover</button></div>';}
+function starBtnHTML(id){var active=state.revisarDepois[id]?' active':'',label=state.revisarDepois[id]?'⭐ No caderno':'☆ Revisar depois';return'<button class="star-btn'+active+'" onclick="toggleStar(\''+id+'\')">'+label+'</button>';}
+function toggleStar(id){if(state.revisarDepois[id])delete state.revisarDepois[id];else state.revisarDepois[id]=true;saveState();renderCard();renderStats();}
+function selecionarAlternativa(id,letra){if(state.respostas[id])return;document.querySelectorAll('.alt-btn[data-id="'+id+'"]').forEach(function(b){b.classList.remove('selected');});var btn=document.querySelector('.alt-btn[data-id="'+id+'"][data-letra="'+letra+'"]');if(btn)btn.classList.add('selected');var c=document.getElementById('confirm-'+id);if(c)c.disabled=false;}
+function confirmar(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var sel=document.querySelector('.alt-btn[data-id="'+id+'"].selected');if(!sel)return;var letra=sel.dataset.letra;state.respostas[id]=letra;var acertou=letra===q.correta;scheduleNext(id,acertou);if(!acertou)state.caderno[id]=true;saveState();renderCard();renderStats();}
+function toggleComment(id){commentOpen[id]=!commentOpen[id];var body=document.getElementById('comment-body-'+id),tog=document.getElementById('comment-toggle-'+id);if(body)body.classList.toggle('open',!!commentOpen[id]);if(tog)tog.textContent=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';}
+function salvarNota(id,txt){if(!state.notas)state.notas={};state.notas[id]=txt;saveState();}
+function renderCard(){var cont=document.getElementById('mainContent');if(!lista.length){cont.innerHTML='<div class="empty-state"><div class="icon">📭</div><div>Nenhuma questão neste filtro.</div></div>';return;}var pos=Math.min(Math.max(state.posicao,0),lista.length-1);state.posicao=pos;var id=lista[pos],q=QUESTOES.find(function(x){return x.id===id;});if(!q){cont.innerHTML='';return;}var resposta=state.respostas[id],respondida=!!resposta,acertou=respondida&&resposta===q.correta;var resultHTML='';if(respondida){resultHTML=acertou?'<div class="result-banner correct">✅ Correto! Resposta: '+resposta+'</div>':'<div class="result-banner wrong">❌ Incorreto. Sua resposta: '+resposta+' | Gabarito: '+q.correta+'</div>';}var altsHTML='<div class="alts">';q.alternativas.forEach(function(alt){var btnCls='alt-btn',letraCls='alt-letra',disabled=respondida?'disabled':'';if(respondida){if(alt.letra===q.correta&&alt.letra===resposta){btnCls='alt-btn correct';letraCls='alt-letra correct';}else if(alt.letra===q.correta){btnCls='alt-btn reveal-correct';letraCls='alt-letra reveal-correct';}else if(alt.letra===resposta){btnCls='alt-btn wrong';letraCls='alt-letra wrong';}}altsHTML+='<button class="'+btnCls+'" data-id="'+id+'" data-letra="'+alt.letra+'" '+disabled+' onclick="selecionarAlternativa(\''+id+'\',\''+alt.letra+'\')"><span class="'+letraCls+'">'+alt.letra+'</span><span>'+alt.texto+'</span></button>';});altsHTML+='</div>';var confirmHTML=respondida?'':'<button class="btn-confirm" id="confirm-'+id+'" onclick="confirmar(\''+id+'\')" disabled>Confirmar</button>';var cOpen=commentOpen[id]?' open':'',cLabel=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';var commentHTML=respondida?'<div class="comment-wrap"><button class="comment-toggle" id="comment-toggle-'+id+'" onclick="toggleComment(\''+id+'\')">'+cLabel+'</button><div class="comment-body'+cOpen+'" id="comment-body-'+id+'">'+q.comentario+'</div></div>':'';var schedHTML=respondida?schedRowHTML(id):'';var notaVal=(state.notas&&state.notas[id])?state.notas[id]:'';var notasHTML='<div class="notas-wrap"><div class="notas-label">📝 Minhas anotações</div><textarea class="notas-area" placeholder="Escreva aqui suas anotações sobre esta questão…" oninput="salvarNota(\''+id+'\', this.value)">'+notaVal.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</textarea></div>';cont.innerHTML='<div class="nav-counter">Questão '+(pos+1)+' de '+lista.length+'</div><div class="card"><div class="card-meta"><span class="badge badge-banca">'+q.banca+'</span><span class="badge badge-materia">'+q.materia+'</span>'+reviewBadgeHTML(id)+starBtnHTML(id)+claudeBtnHTML(id)+'</div><div class="enunciado">'+q.enunciado+'</div>'+altsHTML+confirmHTML+resultHTML+commentHTML+schedHTML+notasHTML+'</div><div class="nav-row"><button class="nav-btn" onclick="navPrev()" '+(pos===0?'disabled':'')+'>← Anterior</button><button class="nav-btn" onclick="navNext()" '+(pos>=lista.length-1?'disabled':'')+'>Próxima →</button></div>';}
+function navPrev(){if(state.posicao>0){state.posicao--;saveState();resetQTimer();renderCard();}}
+function navNext(){if(state.posicao<lista.length-1){state.posicao++;saveState();resetQTimer();renderCard();}}
+function setModo(modo){state.modo=modo;state.posicao=0;var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=modo==='materia'?'':'none';document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===modo);});lista=buildLista();saveState();resetQTimer();renderCard();renderStats();}
+function setMateriaFiltro(val){state.materiaFiltro=val;state.posicao=0;lista=buildLista();saveState();resetQTimer();renderCard();}
+function populateMateriaSelect(){var materias=[];QUESTOES.forEach(function(q){if(materias.indexOf(q.materia)===-1)materias.push(q.materia);});materias.sort();var sel=document.getElementById('materiaSelect');if(!sel)return;sel.innerHTML='<option value="">— Escolha —</option>';materias.forEach(function(m){var o=document.createElement('option');o.value=m;o.textContent=m;if(m===state.materiaFiltro)o.selected=true;sel.appendChild(o);});}
+function recomecar(){if(confirm('Tem certeza? Todo o progresso será apagado permanentemente.')){localStorage.removeItem(STORE_KEY);location.reload();}}
+function exportarProgresso(){var blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='progresso_notarial_protesto_q165q179_'+today()+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function exportarNotas(){var txt='ANOTAÇÕES — Direito Notarial e Registral · Protesto (Q165–Q179)\n'+today()+'\n\n',n=0;QUESTOES.forEach(function(q){var nota=state.notas&&state.notas[q.id];if(nota&&nota.trim()){n++;txt+='【'+q.banca+' · '+q.materia+'】\n'+nota.trim()+'\n\n';}});if(!n){alert('Você ainda não tem anotações registradas.');return;}var blob=new Blob([txt],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='anotacoes_notarial_protesto_q165q179_'+today()+'.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function importarProgresso(evt){var file=evt.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{state=Object.assign(defaultState(),JSON.parse(e.target.result));saveState();lista=buildLista();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=state.modo==='materia'?'':'none';renderStats();renderCard();alert('Progresso importado com sucesso!');}catch(err){alert('Arquivo inválido ou corrompido.');}};reader.readAsText(file);evt.target.value='';}
+function dismissIframeBanner(){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';try{sessionStorage.setItem('iframe_banner_dismissed','1');}catch(e){}}
+function checkIframeBanner(){try{if(sessionStorage.getItem('iframe_banner_dismissed')==='1'){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';}}catch(e){}}
+function init(){loadState();checkIframeBanner();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel&&state.modo==='materia')sel.style.display='';lista=buildLista();renderStats();renderCard();startTimers();}
+function claudeBtnHTML(id){return '<button class="claude-qbtn" onclick="askClaude(\''+id+'\')">🤖</button>';}
+function askClaude(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var ctx='Direito Notarial e Registral · Protesto · Questão '+id+'\nTema: '+q.materia+'\nBanca: '+(q.banca||'')+'\nConcurso: Cartório TJMT\n\nEnunciado:\n'+q.enunciado+'\n\nTenho uma dúvida sobre esta questão:\n';navigator.clipboard.writeText(ctx).catch(function(){});window.open('https://claude.ai/share/335a7657-2c2d-46ea-84f6-8c9e4d01edb5','_blank');}
+init();
+</script>
+</body>
+</html>

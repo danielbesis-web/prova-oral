@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta 15 · Direito Notarial e Registral — Q195–Q208</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050b18;color:#c9d6e8;font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;min-height:100vh}
+a{color:#38bdf8}
+button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;border:none;outline:none;font-family:inherit}
+.banner-save{background:#0d2040;border-bottom:1px solid #16365a;padding:8px 14px;font-size:12px;color:#7aa3cc;text-align:center;position:sticky;top:0;z-index:100}
+.banner-iframe{background:#1a1200;border-bottom:1px solid #4a3200;padding:8px 14px;font-size:12px;color:#d4a84b;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.banner-iframe button{background:none;color:#d4a84b;font-size:16px;line-height:1;padding:0 4px;border:none;cursor:pointer}
+.header{padding:16px 14px 0}
+.header h1{font-size:18px;font-weight:700;color:#e8f0fb;margin-bottom:12px}
+.timer-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#7aa3cc;margin-bottom:12px}
+.timer-bar span.time-val{color:#38bdf8;font-variant-numeric:tabular-nums;font-weight:600}
+.timer-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:3px 10px;border-radius:6px;font-size:12px}
+.timer-btn:hover{border-color:#38bdf8;color:#38bdf8}
+.stats-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.stat-chip{background:#0b1828;border:1px solid #16365a;border-radius:8px;padding:5px 11px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.stat-chip .sv{font-size:18px;font-weight:700;line-height:1.1}
+.stat-chip .sl{font-size:10px;color:#55738e;text-transform:uppercase;letter-spacing:.5px}
+.sv.green{color:#27c06a}.sv.red{color:#f25555}.sv.amber{color:#f5a623}.sv.cyan{color:#38bdf8}
+.progress-wrap{margin-bottom:14px}
+.progress-bar{height:5px;background:#0b1828;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#27c06a,#38bdf8);border-radius:3px;transition:width .4s}
+.progress-label{font-size:11px;color:#55738e;margin-top:3px}
+.mode-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.mode-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:20px;font-size:12px;transition:all .2s}
+.mode-btn.active{background:#16365a;border-color:#38bdf8;color:#38bdf8;font-weight:600}
+.mode-btn:hover:not(.active){border-color:#38bdf8;color:#c9d6e8}
+.materia-select{background:#0b1828;border:1px solid #16365a;color:#c9d6e8;padding:5px 10px;border-radius:20px;font-size:12px;outline:none}
+.materia-select:focus{border-color:#38bdf8}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.btn-sm{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-sm:hover{border-color:#38bdf8;color:#c9d6e8}
+.btn-danger{border-color:#f25555;color:#f25555}
+.btn-danger:hover{background:#2a0808}
+.card{background:#0b1828;border:1px solid #16365a;border-radius:14px;padding:20px;margin:0 0 12px}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.4px}
+.badge-materia{background:#0d2040;color:#7aa3cc;border:1px solid #16365a}
+.badge-banca{background:#1a0d28;color:#c59bf2;border:1px solid #34204e}
+.review-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
+.review-today{background:#2a1e00;color:#f5a623}
+.review-future{background:#0b1828;color:#55738e;border:1px solid #16365a}
+.enunciado{font-size:15px;line-height:1.6;color:#d8e8f8;margin-bottom:16px}
+.nav-counter{text-align:right;font-size:12px;color:#55738e;margin-bottom:8px}
+.alts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.alt-btn{background:#050b18;border:1.5px solid #16365a;color:#b8cce0;padding:11px 14px;border-radius:10px;text-align:left;font-size:14px;line-height:1.4;transition:all .15s;display:flex;gap:10px;align-items:flex-start;width:100%}
+.alt-btn .alt-letra{font-weight:700;min-width:18px;color:#38bdf8;flex-shrink:0}
+.alt-btn:hover:not(:disabled){border-color:#38bdf8;background:#0b1828}
+.alt-btn.selected{border-color:#b06bf2;background:#1a0d28}
+.alt-btn.correct{border-color:#27c06a!important;background:#0a2018!important;color:#7fffa8!important}
+.alt-btn.wrong{border-color:#f25555!important;background:#200a0a!important;color:#ffaaaa!important}
+.alt-btn.reveal-correct{border-color:#27c06a;background:#0a2018;color:#7fffa8}
+.alt-btn:disabled{cursor:default;opacity:.85}
+.alt-letra.correct{color:#27c06a!important}
+.alt-letra.wrong{color:#f25555!important}
+.alt-letra.reveal-correct{color:#27c06a}
+.btn-confirm{width:100%;padding:12px;border-radius:10px;font-size:15px;font-weight:700;background:#16365a;color:#e8f0fb;border:1.5px solid #2a5a8a;transition:all .2s;margin-bottom:10px}
+.btn-confirm:hover:not(:disabled){background:#1e4a7a;border-color:#38bdf8}
+.btn-confirm:disabled{opacity:.4;cursor:default}
+.result-banner{padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;margin-bottom:12px}
+.result-banner.correct{background:#0a2018;border:1.5px solid #27c06a;color:#7fffa8}
+.result-banner.wrong{background:#200a0a;border:1.5px solid #f25555;color:#ffaaaa}
+.comment-wrap{margin-bottom:12px}
+.comment-toggle{background:#0d1e32;border:1px solid #16365a;color:#7aa3cc;padding:8px 14px;border-radius:8px;font-size:13px;width:100%;text-align:left;transition:all .2s}
+.comment-toggle:hover{border-color:#38bdf8;color:#c9d6e8}
+.comment-body{background:#040c1c;border:1px solid #16365a;border-top:none;border-radius:0 0 8px 8px;padding:14px;font-size:13px;line-height:1.7;color:#b8cce0;display:none}
+.comment-body.open{display:block}
+.sched-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.sched-label{font-size:11px;color:#55738e;margin-right:2px}
+.sched-btn{padding:5px 11px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #4a3200;color:#f5a623;background:#1a1200;transition:all .2s}
+.sched-btn:hover{background:#2a1e00;border-color:#f5a623}
+.sched-btn.remove{border-color:#16365a;color:#55738e;background:#050b18}
+.sched-btn.remove:hover{border-color:#f25555;color:#f25555}
+.star-btn{padding:6px 13px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #16365a;color:#55738e;background:#050b18;transition:all .2s}
+.star-btn.active{border-color:#b06bf2;color:#b06bf2;background:#160d24}
+.star-btn:hover{border-color:#b06bf2;color:#b06bf2}
+.nav-row{display:flex;justify-content:space-between;gap:8px;margin-top:4px}
+.nav-btn{flex:1;padding:10px;border-radius:10px;font-size:14px;font-weight:600;background:#0b1828;border:1.5px solid #16365a;color:#7aa3cc;transition:all .2s;max-width:48%}
+.nav-btn:hover:not(:disabled){border-color:#38bdf8;color:#c9d6e8}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.empty-state{text-align:center;padding:48px 20px;color:#55738e;font-size:14px}
+.empty-state .icon{font-size:40px;margin-bottom:12px}
+.io-row{display:flex;gap:6px;flex-wrap:wrap}
+.btn-io{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:6px 13px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-io:hover{border-color:#38bdf8;color:#c9d6e8}
+#fileInput{display:none}
+footer{padding:16px 14px 28px;text-align:center;font-size:11px;color:#2a4060}
+@media(max-width:480px){.stats-bar{gap:6px}.stat-chip{padding:4px 8px}.stat-chip .sv{font-size:16px}}
+.notas-wrap{margin-top:14px;border-top:1px dashed #1b3550;padding-top:12px}
+.notas-label{font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:7px}
+.notas-area{width:100%;min-height:70px;resize:vertical;background:#0b1828;border:1px solid #16365a;border-radius:10px;color:#dbe7f5;font-size:13.5px;font-family:inherit;line-height:1.5;padding:10px 12px;outline:none;transition:border .2s}
+.notas-area:focus{border-color:#fbbf24;box-shadow:0 0 0 2px rgba(251,191,36,.18)}
+.notas-area::placeholder{color:#3a5474}
+.claude-qbtn{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:#38bdf8;border-radius:6px;padding:3px 9px;font-size:13px;opacity:.45;transition:.15s;-webkit-tap-highlight-color:transparent;}
+.claude-qbtn:hover,.claude-qbtn:active{opacity:1;background:rgba(56,189,248,.2)}
+</style>
+</head>
+<body>
+<div class="banner-save">💾 Seu progresso é salvo automaticamente neste aparelho. Cada pessoa tem o seu.</div>
+<div class="banner-iframe" id="bannerIframe">
+  <span>⚠️ Abra sempre por link direto, não embutido em iframe (Notion/etc.), ou o progresso pode não ser salvo.</span>
+  <button onclick="dismissIframeBanner()" title="Fechar">✕</button>
+</div>
+<div class="header">
+  <h1>Meta 15 · Direito Notarial e Registral — Q195–Q208</h1>
+  <div class="timer-bar">
+    <span>⏱ <span class="time-val" id="timerQ">00:00</span></span><span>|</span>
+    <span>Sessão: <span class="time-val" id="timerS">00:00</span></span>
+    <button class="timer-btn" id="btnPause" onclick="togglePause()">Pausar</button>
+  </div>
+  <div class="stats-bar" id="statsBar"></div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel"></div>
+  </div>
+  <div class="mode-bar">
+    <button class="mode-btn" data-modo="todas" onclick="setModo('todas')">Todas</button>
+    <button class="mode-btn" data-modo="hoje" onclick="setModo('hoje')">Revisar hoje</button>
+    <button class="mode-btn" data-modo="caderno" onclick="setModo('caderno')">Caderno de erros</button>
+    <button class="mode-btn" data-modo="materia" onclick="setModo('materia')">Por tema</button>
+    <button class="mode-btn" data-modo="aleatorio" onclick="setModo('aleatorio')">Aleatório</button>
+    <select class="materia-select" id="materiaSelect" style="display:none" onchange="setMateriaFiltro(this.value)">
+      <option value="">— Escolha —</option>
+    </select>
+  </div>
+  <div class="action-row">
+    <div class="io-row">
+      <button class="btn-io" onclick="exportarProgresso()">⬇ Exportar</button>
+      <button class="btn-io" onclick="document.getElementById('fileInput').click()">⬆ Importar</button>
+      <input type="file" id="fileInput" accept=".json" onchange="importarProgresso(event)">
+      <button class="btn-io" onclick="exportarNotas()">📝 Baixar anotações (.txt)</button>
+    </div>
+    <button class="btn-sm btn-danger" onclick="recomecar()">🔄 Recomeçar</button>
+  </div>
+</div>
+<div style="padding:0 14px" id="mainContent"></div>
+<footer>Meta 15 · Direito Notarial e Registral · Lei 9.492/97 + Lei 8.935/94 · Q195–Q208</footer>
+<script>
+const STORE_KEY = 'concurso_meta15_protesto_cartorios_q195q208_v1';
+const QUESTOES = [
+  {id:'q195', materia:'Livros, arquivos e responsabilidade (Lei 9.492/97, arts. 32-39)', banca:'IESES · TJ-AM · 2023', tipo:'multipla',
+   enunciado:`Acerca dos livros, arquivos e responsabilidade do protesto, assinale a alternativa incorreta em relação à Lei 9.492/97:`,
+   alternativas:[
+     {letra:'A',texto:'Os livros de Registros de Protesto serão abertos e encerrados somente pelo Tabelião de Protestos ou seus Substitutos, com suas folhas numeradas e rubricadas.'},
+     {letra:'B',texto:'Os Tabeliães de Protesto de Títulos são civilmente responsáveis por todos os prejuízos que causarem, por culpa ou dolo, pessoalmente, pelos substitutos que designarem ou Escreventes que autorizarem, assegurado o direito de regresso.'},
+     {letra:'C',texto:'O prazo de arquivamento é de três anos para livros de protocolo e de dez anos para os livros de registros de protesto e respectivos títulos.'},
+     {letra:'D',texto:'As intimações e editais correspondentes a documentos protestados e ordens de cancelamento deverão ser conservados, pelo menos, durante um ano.'}
+   ],
+   correta:'A',
+   comentario:`<b>✅ Gabarito: LETRA A</b> — comando: marcar a INCORRETA.<br><br><b>⚖️ Por quê:</b> a trava está em "<b>somente</b>". O art. 33 admite abertura e encerramento pelo Tabelião, seus Substitutos <b>ou ainda por Escrevente autorizado</b>. Ao escrever "somente pelo Tabelião ou seus Substitutos", a alternativa amputa o terceiro legitimado → incorreta.<br><br><b>⚠️ As corretas:</b> (B) responsabilidade civil por culpa ou dolo, com direito de regresso (art. 38); (C) prazos de arquivamento; (D) intimações, editais e ordens de cancelamento conservados por, no mínimo, um ano.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 33 (literal: "…ou ainda por Escrevente autorizado…") e art. 38.<br><br><b>🔁 Revisar:</b> "somente" reproduzindo texto de lei → quase sempre é o erro; aqui a banca cortou o Escrevente autorizado. (Obs.: o enunciado traz "Lei 9.472/97" — typo do livro; o conteúdo é da 9.492/97.)<br><br><b>🎙️ Da prova oral:</b> <i>«Quem pode abrir e encerrar os livros de protesto?»</i> — Tabelião, Substituto ou Escrevente autorizado. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q196', materia:'Central Nacional de Serviços Eletrônicos (Lei 9.492/97)', banca:'FGV · Enac · 2025', tipo:'multipla',
+   enunciado:`Nos termos da Lei 9.492/97, os tabeliães de protesto manterão, em âmbito nacional, uma central nacional de serviços eletrônicos compartilhados que prestará determinados serviços previstos na referida legislação de regência. Nesse cenário, considerando as disposições da Lei 9.492/97, é correto afirmar que:`,
+   alternativas:[
+     {letra:'A',texto:'fica assegurada a gratuidade do serviço de escrituração e emissão de duplicata sob forma escritural, prestado pela central nacional de serviços eletrônicos compartilhados, observando-se o disposto na legislação específica, inclusive quanto ao requisito de autorização prévia para o exercício da atividade de escrituração pelo órgão supervisor e aos demais requisitos previstos na regulamentação por ele editada.'},
+     {letra:'B',texto:'a central nacional de serviços eletrônicos compartilhados poderá, diretamente, realizar serviços de coleta, de processamento, de armazenamento e de integração de dados para a emissão e a escrituração de documentos eletrônicos passíveis de protesto, vedada a celebração de convênios, para essa finalidade, com entidades públicas ou privadas.'},
+     {letra:'C',texto:'a central nacional de serviços eletrônicos compartilhados prestará o serviço de consulta, mediante pagamento, aos devedores inadimplentes e aos protestos realizados, aos dados desses protestos e dos tabelionatos aos quais foram distribuídos, salvo se os respectivos títulos e documentos de dívida não forem escriturais.'},
+     {letra:'D',texto:'a adesão, no prazo máximo de 12 meses, de todos os tabeliães de protesto do país ou responsáveis pelo expediente à central nacional de serviços eletrônicos compartilhados é obrigatória, sob pena de responsabilização civil, administrativa e penal.'},
+     {letra:'E',texto:'os tabelionatos de protesto, a partir da implementação da central nacional de serviços eletrônicos compartilhados, disponibilizarão ao poder público, por meio eletrônico e sem ônus, o acesso às informações constantes dos seus bancos de dados.'}
+   ],
+   correta:'E',
+   comentario:`<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> implementada a Central, os tabelionatos disponibilizam ao poder público, por meio eletrônico e <b>sem ônus</b>, o acesso às informações dos seus bancos de dados (transparência ativa ao Estado).<br><br><b>⚠️ Pegadinha:</b> (A) o gratuito é a <b>consulta</b>, não a escrituração/emissão de duplicata; (B) a Central <b>pode</b> celebrar convênios — o "vedada" é o erro; (C) consulta é <b>gratuita</b>, não "mediante pagamento"; (D) enxerta penalidade civil/administrativa/penal não prevista nesses termos.<br><br><b>📌 Base legal:</b> Lei 9.492/97, dispositivos da Central Nacional (art. 41-A e seguintes, redação Lei 13.775/18 e alterações).<br><br><b>🔁 Revisar:</b> o gratuito da Central é a CONSULTA; troca de serviço é a pegadinha-padrão.<br><br><b>🎙️ Da prova oral:</b> <i>«O que a Central Nacional oferece de graça?»</i> — Consulta a inadimplentes e protestos. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q197', materia:'Central Nacional / duplicata escritural (Lei 13.775/18)', banca:'FGV · TJ-SE · 2023', tipo:'multipla',
+   enunciado:`A Lei 13.775/18, ao disciplinar a duplicata escritural e dar outras providências, acrescentou dispositivo na Lei de Protestos para determinar que os tabeliães de protesto mantenham, em âmbito nacional, uma central nacional de serviços eletrônicos compartilhados que prestará o serviço de:`,
+   alternativas:[
+     {letra:'A',texto:'anuência eletrônica para a sustação ou o cancelamento de protestos.'},
+     {letra:'B',texto:'confirmação da autenticidade dos instrumentos de protesto em meio eletrônico ou cartular.'},
+     {letra:'C',texto:'recepção e distribuição de títulos e documentos de dívida para protesto, cartulares ou escriturais.'},
+     {letra:'D',texto:'escrituração e emissão de duplicata sob a forma escritural, observados os requisitos essenciais da duplicata cartular, exceto quanto ao requisito de autorização prévia para o exercício da atividade de escrituração.'},
+     {letra:'E',texto:'consulta gratuita quanto a devedores inadimplentes e aos protestos realizados, aos dados desses protestos e dos tabelionatos aos quais foram distribuídos, ainda que os respectivos títulos e documentos de dívida não sejam escriturais.'}
+   ],
+   correta:'E',
+   comentario:`<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> entre os serviços da Central está a <b>consulta gratuita</b> quanto a inadimplentes e protestos — ainda que os títulos não sejam escriturais. Reprodução fiel do inciso.<br><br><b>⚠️ Pegadinha:</b> (A) acrescenta "sustação" (a anuência eletrônica é para o cancelamento); (B) "ou cartular" — é só meio eletrônico; (C) "cartulares ou escriturais" — recepção/distribuição exige escriturais; (D) "exceto quanto à autorização prévia" — ao contrário, observa-se inclusive a autorização prévia.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 41-A, IV (incluído pela Lei 13.775/18).<br><br><b>🔁 Revisar:</b> recepção/distribuição na Central = só escriturais; consulta = gratuita e ampla (até não escriturais).<br><br><b>🎙️ Da prova oral:</b> <i>«A consulta da Central alcança título não escritural?»</i> — Sim a consulta; já a recepção/distribuição para protesto exige título escritural. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q198', materia:'Serviços da Central Nacional (Lei 9.492/97)', banca:'CONSULPLAN · TJ-AC · 2023', tipo:'multipla',
+   enunciado:`De acordo com a Lei 9.492/97, que define competência, regulamenta os serviços concernentes ao protesto de títulos e outros documentos de dívida, os tabeliães de protesto manterão, em âmbito nacional, uma central nacional de serviços eletrônicos compartilhados que prestará, ao menos, os seguintes serviços:<br><br>I. Escrituração e emissão de duplicata sob a forma escritural, observado o disposto na legislação específica, inclusive quanto ao requisito de autorização prévia para o exercício da atividade de escrituração pelo órgão supervisor e aos demais requisitos previstos na regulamentação por ele editada.<br>II. Recepção e distribuição de títulos e documentos de dívida para protesto, desde que escriturais.<br>III. Consulta paga quanto a devedores inadimplentes e aos protestos realizados, aos dados desses protestos e dos tabelionatos aos quais foram distribuídos, ainda que os respectivos títulos e documentos de dívida não sejam escriturais.<br>IV. Confirmação da autenticidade dos instrumentos de protesto em meio eletrônico; anuência eletrônica para o cancelamento de protestos.<br><br>Está correto o que se afirma em:`,
+   alternativas:[
+     {letra:'A',texto:'I, II, III e IV.'},
+     {letra:'B',texto:'III e IV, apenas.'},
+     {letra:'C',texto:'I, II e III, apenas.'},
+     {letra:'D',texto:'I, II e IV, apenas.'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b> (I, II e IV).<br><br><b>⚖️ Por quê:</b> I (escrituração de duplicata escritural, inclusive autorização prévia) ✓; II (recepção/distribuição, desde que escriturais) ✓; IV (confirmação de autenticidade em meio eletrônico + anuência eletrônica para cancelamento) ✓. <b>III ✗</b> — diz "consulta <b>paga</b>"; a consulta é <b>gratuita</b>.<br><br><b>⚠️ Pegadinha:</b> espelho da 197 — aqui o distrator é o adjetivo "paga" plantado no item da consulta (trocou gratuita → paga).<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 41-A, I a IV.<br><br><b>🔁 Revisar:</b> no tema Central, cace o par gratuita/paga e escritural/cartular — é onde a banca mexe.<br><br><b>🎙️ Da prova oral:</b> <i>«Cite ao menos três serviços da Central Nacional.»</i> — escrituração de duplicata escritural; recepção/distribuição (escriturais); confirmação de autenticidade + anuência eletrônica; consulta gratuita. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q199', materia:'Protesto facultativo × necessário', banca:'IESES · TJ-PA · 2026', tipo:'multipla',
+   enunciado:`Sobre protesto facultativo e necessário, assinale a alternativa correta:`,
+   alternativas:[
+     {letra:'A',texto:'O protesto é, em regra, facultativo, o que limita a atuação do tabelião, já que é a obrigatoriedade que assegura ao oficial um melhor rendimento. Isso acontece porque o protesto necessário, ou seja, com obrigatoriedade, ocorre em situações bastante restritas, de forma que, apesar do nome, não tem expressiva relevância.'},
+     {letra:'B',texto:'O ajuizamento de execução fiscal depende do prévio protesto do título, e a exigência não pode ser relativizada.'},
+     {letra:'C',texto:'O protesto é, em regra, necessário, pois serve para comprovar a mora do devedor.'},
+     {letra:'D',texto:'O protesto é necessário quando o credor pretende exercer direito de regresso em relação a coobrigados de um título.'},
+     {letra:'E',texto:'O protesto falimentar é considerado facultativo.'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> o protesto é, em regra, <b>facultativo</b>; torna-se <b>necessário</b> quando o credor quer exercer <b>direito de regresso contra os coobrigados</b> (endossantes e avalistas) — sem protesto tempestivo, perde-se o regresso.<br><br><b>⚠️ As erradas:</b> (A) raciocínio invertido e sem nexo; (B) execução fiscal não depende de protesto prévio; (C) a regra é facultativo, não necessário; (E) o protesto falimentar é necessário/especial, não facultativo.<br><br><b>📌 Base legal:</b> Lei 9.492/97 + regra cambiária do direito de regresso (LUG; CC, títulos de crédito).<br><br><b>🔁 Revisar:</b> facultativo = regra; necessário = regresso contra coobrigados e falência por impontualidade.<br><br><b>🎙️ Da prova oral:</b> <i>«Quando o protesto deixa de ser facultativo?»</i> — para garantir regresso contra endossantes/avalistas e para instruir pedido de falência. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q200', materia:'Súmula 475/STJ — protesto indevido / endosso', banca:'IESES · TJ-PA · 2026', tipo:'multipla',
+   enunciado:`Conforme a Súmula 475/STJ é correto afirmar:`,
+   alternativas:[
+     {letra:'A',texto:'Responde pelos danos decorrentes de protesto indevido o endossatário que recebe por endosso translativo título de crédito contendo vício formal extrínseco ou intrínseco, ficando ressalvado seu direito de regresso contra o endossante.'},
+     {letra:'B',texto:'Responde pelos danos decorrentes de protesto indevido o endossatário que recebe por endosso translativo título de crédito não contendo vício formal extrínseco ou intrínseco, sendo garantido direito de regresso contra o endossante.'},
+     {letra:'C',texto:'Responde pelos danos decorrentes de protesto indevido o terceiro de boa-fé que recebe por endosso translativo título de crédito contendo vício formal extrínseco ou intrínseco, não havendo direito de regresso contra os avalistas.'},
+     {letra:'D',texto:'Não responde pelos danos decorrentes de protesto indevido o endossatário que recebe por endosso translativo título de crédito contendo vício formal extrínseco ou intrínseco.'},
+     {letra:'E',texto:'Responde pelos danos decorrentes de protesto indevido o endossatário que recebe por endosso translativo título de crédito contendo vício formal extrínseco ou intrínseco, ficando ressalvado seu direito de regresso contra os endossantes e avalistas.'}
+   ],
+   correta:'E',
+   comentario:`<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> é a reprodução literal da Súmula 475: responde pelos danos do protesto indevido o endossatário que recebe por <b>endosso translativo</b> título com vício formal extrínseco ou intrínseco, ressalvado o regresso contra os <b>endossantes E avalistas</b>.<br><br><b>⚠️ Pegadinha:</b> (A) ressalva o regresso só "contra o endossante" e <b>omite os avalistas</b>; (B) "não contendo vício" inverte a hipótese; (C) troca por "terceiro de boa-fé" e nega regresso contra avalistas; (D) diz que "não responde", contra a súmula.<br><br><b>📌 Base legal:</b> Súmula 475/STJ (endosso translativo). Contraste com a Súmula 476 (endosso-mandato: responde o endossante-mandante).<br><br><b>🔁 Revisar:</b> translativo → endossatário responde; mandato → endossante (mandante) responde; regresso contra endossantes E avalistas.<br><br><b>🎙️ Da prova oral:</b> <i>«No endosso-mandato, o banco que leva a protesto responde pelo dano?»</i> — Não (Súmula 476); responde quem deu o mandato. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q201', materia:'Documento não protestável', banca:'IESES · TJ-PA · 2026', tipo:'multipla',
+   enunciado:`Assinale a alternativa que apresenta um documento que não pode ser objeto de protesto em tabelionato:`,
+   alternativas:[
+     {letra:'A',texto:'duplicata.'},
+     {letra:'B',texto:'contrato de aluguel.'},
+     {letra:'C',texto:'certidão de dívida ativa.'},
+     {letra:'D',texto:'dívida prescrita.'},
+     {letra:'E',texto:'conta de energia elétrica.'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D — dívida prescrita</b> (confira o gabarito oficial; é o ponto de atrito do tema).<br><br><b>⚖️ Por quê:</b> o protesto pressupõe obrigação <b>exigível</b>. A dívida prescrita perdeu a pretensão/exigibilidade; o STJ trata o protesto de dívida prescrita como indevido (há condenações por protesto de CDA prescrita).<br><br><b>⚠️ As protestáveis:</b> (A) duplicata; (B) contrato de aluguel (documento de dívida); (C) CDA, protestável desde a Lei 12.767/12 (art. 1º, par. único, da Lei 9.492/97); (E) conta de energia elétrica (concessionária cobra por protesto).<br><br><b>⚠️ Atenção (Ieses):</b> o art. 9º veda ao tabelião <b>investigar prescrição ou caducidade</b> — no balcão ele não recusa por prescrição. O recorte aqui é material (dívida prescrita não é objeto legítimo de protesto); se o enunciado falar do dever do tabelião, lembre que ele não examina prescrição.<br><br><b>📌 Base legal:</b> Lei 9.492/97, art. 1º + art. 9º; jurisprudência do STJ (protesto de dívida prescrita = indevido).<br><br><b>🔁 Revisar:</b> prescrição → tabelião não investiga (art. 9º), mas protesto de dívida prescrita é indevido. Saiba operar os dois lados.<br><br><b>🎙️ Da prova oral:</b> <i>«O tabelião pode recusar protesto alegando prescrição?»</i> — Não (art. 9º); o controle é só formal. A indevida desconstitui-se na via judicial. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q202', materia:'Natureza do protesto (facultativo/comum/necessário)', banca:'FGV · Enac · 2025', tipo:'multipla',
+   enunciado:`Foram apresentados três títulos para protesto junto ao Tabelionato de Protesto da circunscrição W. Em uma triagem inicial, o tabelião observou que os respectivos credores almejavam a realização de protestos de natureza:<br><br>I. facultativa.<br>II. comum; e<br>III. necessária.<br><br>À luz da sistemática vigente, é correto afirmar que:`,
+   alternativas:[
+     {letra:'A',texto:'em III, o que se almeja é assegurar o direito de ação.'},
+     {letra:'B',texto:'em I e II, o objetivo é o de comprovar a falta de devolução do título.'},
+     {letra:'C',texto:'em II, o protesto pode ser realizado para qualquer fim previsto na legislação.'},
+     {letra:'D',texto:'em I, II e III, o protesto pode ser utilizado para o requerimento de falência.'},
+     {letra:'E',texto:'em I e II, o protesto comprova a impontualidade do devedor, pressupondo que o título não caracterize a mora com o não pagamento na data aprazada.'}
+   ],
+   correta:'C',
+   comentario:`<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> o protesto <b>comum</b> (item II) é o ordinário/probatório — pode ser realizado para qualquer finalidade prevista na legislação (comprovar inadimplência, mora, recusa etc.).<br><br><b>⚠️ Pegadinha:</b> (A) no necessário (III) assegura-se o <b>direito de regresso</b>, não o "direito de ação"; (B) "falta de devolução" é modalidade específica, não o objetivo de facultativo/comum; (D) só o protesto especial/falimentar instrui pedido de falência; (E) embaralha mora e impontualidade.<br><br><b>📌 Base legal:</b> Lei 9.492/97 + classificação por obrigatoriedade (facultativo × necessário) e por finalidade (comum × especial/falimentar).<br><br><b>🔁 Revisar:</b> necessário = regresso; falimentar = falência; comum = qualquer fim.<br><br><b>🎙️ Da prova oral:</b> <i>«Diferencie protesto necessário de protesto especial.»</i> — Necessário garante regresso contra coobrigados; especial/falimentar instrui pedido de falência por impontualidade. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q203', materia:'Local de prestação (Lei 8.935/94, art. 4º)', banca:'IESES · TJ-PA · 2026', tipo:'multipla',
+   enunciado:`Sobre o local de prestação dos serviços notariais e de registro, conforme as diretrizes da Lei 8.935/94, assinale a alternativa correta:`,
+   alternativas:[
+     {letra:'A',texto:'O funcionamento será definido exclusivamente pelo titular da serventia.'},
+     {letra:'B',texto:'É permitida a abertura de sucursais sem autorização.'},
+     {letra:'C',texto:'O atendimento ao público poderá ser inferior a quatro horas diárias.'},
+     {letra:'D',texto:'Somente é permitida a abertura de sucursais com autorização das Corregedorias Estaduais, atendidas as peculiaridades locais.'},
+     {letra:'E',texto:'Os serviços serão prestados, de modo eficiente e adequado, em dias e horários estabelecidos pelo juízo competente, atendidas as peculiaridades locais, em local de fácil acesso ao público e que ofereça segurança para o arquivamento de livros e documentos.'}
+   ],
+   correta:'E',
+   comentario:`<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> reprodução do art. 4º, caput: serviços prestados de modo eficiente e adequado, em dias e horários estabelecidos pelo <b>juízo competente</b>, peculiaridades locais, local de fácil acesso e segurança para arquivamento.<br><br><b>⚠️ Pegadinha:</b> (A) "exclusivamente pelo titular" — quem fixa é o juízo competente; (B) sucursais "sem autorização"; (C) "inferior a quatro horas" — o mínimo é seis (§2º); (D) condiciona à "autorização das Corregedorias" sob roupagem de sucursal.<br><br><b>📌 Base legal:</b> Lei 8.935/94, art. 4º, caput.<br><br><b>🔁 Revisar:</b> quem define dias e horários = juízo competente. Frase do art. 4º cai literal.<br><br><b>🎙️ Da prova oral:</b> <i>«Quem fixa o horário de funcionamento da serventia?»</i> — O juízo competente, atendidas as peculiaridades locais. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q204', materia:'Lei 8.935/94 — regras gerais', banca:'IESES · TJ-AM · 2023', tipo:'multipla',
+   enunciado:`Em relação à Lei 8.935/94, assinale a alternativa correta:`,
+   alternativas:[
+     {letra:'A',texto:'O atendimento ao público será, no mínimo, de oito horas diárias.'},
+     {letra:'B',texto:'A delegação para o exercício da atividade notarial e de registro poderá ser feita a estrangeiro residente no Brasil.'},
+     {letra:'C',texto:'O tabelião de notas poderá praticar atos de seu ofício fora do Município para o qual recebeu delegação.'},
+     {letra:'D',texto:'Os serviços notariais e de registro serão prestados, de modo eficiente e adequado, em dias e horários estabelecidos pelo juízo competente, atendidas as peculiaridades locais, em local de fácil acesso ao público e que ofereça segurança para o arquivamento de livros e documentos.'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> art. 4º (prestação eficiente, horários pelo juízo competente, local de fácil acesso e segurança para arquivamento).<br><br><b>⚠️ Pegadinha:</b> (A) "oito horas" — o mínimo é seis (art. 4º, §2º); (B) delegação a estrangeiro é vedada — exige nacionalidade brasileira (art. 14, II); (C) tabelião de notas não pode praticar atos fora do Município (art. 9º).<br><br><b>📌 Base legal:</b> Lei 8.935/94, art. 4º (local), art. 9º (territorialidade) e art. 14, II (nacionalidade brasileira).<br><br><b>🔁 Revisar:</b> horário = juízo; delegado = brasileiro; tabelião de notas = dentro do Município.<br><br><b>🎙️ Da prova oral:</b> <i>«O tabelião de notas pode lavrar escritura fora do seu Município?»</i> — Não (art. 9º); mas a parte pode escolher livremente o tabelião de qualquer localidade (art. 8º). <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q205', materia:'Serviços notariais — definição e jornada (Lei 8.935/94)', banca:'IESES · TJ-AM · 2023', tipo:'multipla',
+   enunciado:`A Lei de Notários e Registradores dispõe sobre as diretrizes de gerenciamento administrativo e financeiro dos serviços delegados de modo a obter a melhor qualidade na prestação dos serviços. Sobre esses serviços, é correto afirmar:`,
+   alternativas:[
+     {letra:'A',texto:'Notário, ou registrador, e oficial de registro, ou tabelião, são profissionais do direito, dotados de fé pública, a quem é delegado o exercício da atividade notarial e de registro, independente de concurso público.'},
+     {letra:'B',texto:'Os serviços notariais e de registro serão prestados, de modo eficiente e adequado, em dias e horários estabelecidos de acordo com a conveniência do titular da serventia, atendidas as peculiaridades locais, em local de fácil acesso ao público e que ofereça segurança para o arquivamento de livros e documentos.'},
+     {letra:'C',texto:'Serviços notariais e de registro são os de organização técnica e judicial destinados a garantir a publicidade, autenticidade, segurança e eficácia dos atos jurídicos.'},
+     {letra:'D',texto:'Serviços notariais e de registro são os de organização técnica e administrativa destinados a garantir a publicidade, autenticidade, segurança e eficácia dos atos jurídicos, com atendimento ao público de, no mínimo, de 6 horas diárias.'}
+   ],
+   correta:'D',
+   comentario:`<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> junta duas regras corretas — definição do art. 1º ("organização técnica e <b>administrativa</b>", para garantir publicidade, autenticidade, segurança e eficácia) + art. 4º, §2º ("atendimento ao público de, no mínimo, <b>6 horas diárias</b>").<br><br><b>⚠️ Pegadinha:</b> (A) "independente de concurso público" — a delegação exige concurso (CF, art. 236, §3º; art. 14, I); (B) horários "conforme conveniência do titular" — quem fixa é o juízo competente; (C) "organização técnica e <b>judicial</b>" — o art. 1º diz administrativa.<br><br><b>📌 Base legal:</b> Lei 8.935/94, art. 1º + art. 4º, §2º.<br><br><b>🔁 Revisar:</b> mínimo de atendimento = 6 horas (não 4, não 8); art. 1º = técnica e administrativa.<br><br><b>🎙️ Da prova oral:</b> <i>«Qual a carga horária mínima de atendimento ao público?»</i> — Seis horas diárias (art. 4º, §2º). RCPN funciona em plantão nos fins de semana/feriados (§1º). <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q206', materia:'Local de prestação (Lei 8.935/94)', banca:'IESES · TJ-AM · 2023', tipo:'multipla',
+   enunciado:`Sobre o local de prestação dos serviços notariais e de registro, conforme diretrizes contidas na Lei 8.935/94, assinale a alternativa correta:`,
+   alternativas:[
+     {letra:'A',texto:'O atendimento ao público será, no mínimo, de quatro horas diárias, conforme as peculiaridades locais.'},
+     {letra:'B',texto:'O serviço de registro de imóveis será prestado, também, nos sábados, domingos e feriados pelo sistema de plantão.'},
+     {letra:'C',texto:'Os serviços notariais e de registro serão prestados, de modo eficiente e adequado, em dias e horários estabelecidos pelo juízo competente, atendidas as peculiaridades locais, em local de fácil acesso ao público e que ofereça segurança para o arquivamento de livros e documentos.'},
+     {letra:'D',texto:'Cada serviço de registro funcionará em quantos locais seja necessário, podendo ter mais de uma sucursal, a fim de atender o Princípio da Eficiência.'}
+   ],
+   correta:'C',
+   comentario:`<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> reprodução literal do art. 4º, caput (prestação eficiente, horários pelo juízo competente, fácil acesso e segurança para arquivamento).<br><br><b>⚠️ Pegadinha:</b> (A) "quatro horas" — é seis (§2º); (B) coloca o <b>registro de imóveis</b> em plantão — o plantão é do <b>Registro Civil das Pessoas Naturais</b> (§1º); (D) "sucursal" / vários locais — não existe na Lei 8.935.<br><br><b>📌 Base legal:</b> Lei 8.935/94, art. 4º, caput e §§ 1º e 2º.<br><br><b>🔁 Revisar:</b> plantão = RCPN, nunca imóveis; horas = 6; local definido pelo juízo.<br><br><b>🎙️ Da prova oral:</b> <i>«Qual serviço funciona em plantão aos fins de semana?»</i> — O Registro Civil das Pessoas Naturais. <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q207', materia:'Lei dos Cartórios — assertivas (Lei 8.935/94)', banca:'IESES · TJ-TO · 2022', tipo:'multipla',
+   enunciado:`Nos termos da Lei dos Cartórios, pode-se afirmar:<br><br>I. Notário, ou tabelião, e oficial de registro, ou registrador, são profissionais do direito, dotados de fé pública, a quem é delegado o exercício da atividade notarial e de registro.<br>II. O serviço de registro civil das pessoas naturais será prestado, também, nos sábados, domingos e feriados pelo sistema de plantão.<br>III. O atendimento ao público será, no mínimo, de oito horas diárias.<br>IV. Serviços notariais e de registro são os de organização técnica e administrativa destinados a garantir a publicidade, autenticidade, segurança e eficácia dos atos jurídicos.<br><br>A sequência correta é:`,
+   alternativas:[
+     {letra:'A',texto:'As assertivas I, II, III e IV estão corretas.'},
+     {letra:'B',texto:'Apenas as assertivas II e III estão incorretas.'},
+     {letra:'C',texto:'Apenas a assertiva III está incorreta.'},
+     {letra:'D',texto:'Apenas as assertivas I e II estão corretas.'}
+   ],
+   correta:'C',
+   comentario:`<b>✅ Gabarito: LETRA C</b> (apenas a III está incorreta).<br><br><b>⚖️ Por quê:</b> I (art. 3º) ✓; II (plantão do RCPN, art. 4º §1º) ✓; IV (definição do art. 1º) ✓. <b>III ✗</b> — diz "no mínimo oito horas"; o mínimo é <b>seis</b> (art. 4º, §2º).<br><br><b>⚠️ Pegadinha:</b> o distrator é o número 8 no lugar de 6 — mesma armadilha de 205/206.<br><br><b>📌 Base legal:</b> Lei 8.935/94, arts. 1º, 3º e 4º (§§ 1º e 2º).<br><br><b>🔁 Revisar:</b> fixe 6 horas — três questões seguidas batem nisso.<br><br><b>🎙️ Da prova oral:</b> <i>«O atendimento mínimo de oito horas é exigência legal?»</i> — Não; o piso legal é seis horas (art. 4º, §2º). <span style="color:#7aa3cc">[Banco Prova Oral]</span>`},
+
+  {id:'q208', materia:'Fé pública notarial (CF art. 236 / Lei 8.935/94 art. 3º)', banca:'IESES · TJ-TO · 2022', tipo:'multipla',
+   enunciado:`Acerca da temática da "fé pública notarial", pode-se afirmar:<br><br>I. O Notário ou Tabelião e o Oficial de Registro ou Registrador são dotados de fé pública, aos quais é delegado o exercício, em caráter privado, da atividade notarial e registral, por força de lei.<br>II. Os serviços notariais e de registro tem amparo constitucional (CF 88, art. 236).<br>III. A fé pública notarial está prevista no artigo 3º da Lei 8.935, de 18 de novembro de 1994.<br>IV. Há mera construção doutrinária, não existindo previsão expressa em lei sobre a fé pública notarial.<br><br>A sequência correta é:`,
+   alternativas:[
+     {letra:'A',texto:'Apenas as assertivas I e II estão corretas.'},
+     {letra:'B',texto:'Apenas a assertiva IV está incorreta.'},
+     {letra:'C',texto:'As assertivas I, II, III e IV estão corretas.'},
+     {letra:'D',texto:'Apenas as assertivas I e IV estão corretas.'}
+   ],
+   correta:'B',
+   comentario:`<b>✅ Gabarito: LETRA B</b> (apenas a IV está incorreta).<br><br><b>⚖️ Por quê:</b> I (fé pública, delegação em caráter privado por força de lei — CF art. 236; art. 3º) ✓; II (amparo constitucional, CF/88 art. 236) ✓; III (fé pública expressa no art. 3º da Lei 8.935/94) ✓. <b>IV ✗</b> — afirma ser "mera construção doutrinária, sem previsão em lei"; há previsão expressa (art. 3º).<br><br><b>⚠️ Pegadinha:</b> IV nega o que III afirma — se você sabe que o art. 3º existe, mata as duas.<br><br><b>📌 Base legal:</b> CF, art. 236 + Lei 8.935/94, art. 3º ("profissionais do direito, dotados de fé pública…").<br><br><b>🔁 Revisar:</b> fé pública = previsão legal expressa (art. 3º), exercício em caráter privado por delegação (art. 236).<br><br><b>🎙️ Da prova oral:</b> <i>«A delegação notarial é exercida em caráter público ou privado?»</i> — Em caráter privado, por delegação do Poder Público (CF, art. 236). <span style="color:#7aa3cc">[Banco Prova Oral]</span>`}
+];
+function defaultState(){return{respostas:{},revisao:{},caderno:{},revisarDepois:{},posicao:0,modo:'todas',materiaFiltro:'',notas:{}};}
+let state=defaultState(),lista=[],paused=false,qSecs=0,sSecs=0,timerInterval=null,commentOpen={};
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}catch(e){}}
+function loadState(){try{var raw=localStorage.getItem(STORE_KEY);if(raw){state=Object.assign(defaultState(),JSON.parse(raw));}}catch(e){state=defaultState();}}
+function today(){return new Date().toISOString().split('T')[0];}
+function addDays(d,n){var dt=new Date(d+'T12:00:00');dt.setDate(dt.getDate()+n);return dt.toISOString().split('T')[0];}
+function fmtDate(iso){if(!iso)return'';var p=iso.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function buildLista(){var t=today(),ids;if(state.modo==='todas'){ids=QUESTOES.map(function(q){return q.id;});}else if(state.modo==='hoje'){ids=QUESTOES.filter(function(q){var r=state.revisao[q.id];return r&&r.nextDate&&r.nextDate<=t;}).map(function(q){return q.id;});}else if(state.modo==='caderno'){ids=QUESTOES.filter(function(q){return state.caderno[q.id]||state.revisarDepois[q.id];}).map(function(q){return q.id;});}else if(state.modo==='materia'){var m=state.materiaFiltro;ids=QUESTOES.filter(function(q){return !m||q.materia===m;}).map(function(q){return q.id;});}else if(state.modo==='aleatorio'){ids=shuffle(QUESTOES.map(function(q){return q.id;}));}else{ids=QUESTOES.map(function(q){return q.id;});}return ids;}
+function computeStats(){var total=QUESTOES.length,acertos=0,erros=0,t=today(),revisadasHoje=0;QUESTOES.forEach(function(q){var r=state.respostas[q.id];if(r){if(r===q.correta)acertos++;else erros++;}var rev=state.revisao[q.id];if(rev&&rev.lastAnswered===t)revisadasHoje++;});var respondidas=acertos+erros,pendentes=total-respondidas,pct=total>0?Math.round(respondidas/total*100):0;return{total:total,acertos:acertos,erros:erros,pendentes:pendentes,revisadasHoje:revisadasHoje,respondidas:respondidas,pct:pct};}
+function renderStats(){var s=computeStats();document.getElementById('statsBar').innerHTML='<div class="stat-chip"><span class="sv green">'+s.acertos+'</span><span class="sl">Acertos</span></div><div class="stat-chip"><span class="sv red">'+s.erros+'</span><span class="sl">Erros</span></div><div class="stat-chip"><span class="sv amber">'+s.pendentes+'</span><span class="sl">Pendentes</span></div><div class="stat-chip"><span class="sv cyan">'+s.revisadasHoje+'</span><span class="sl">Revisadas hoje</span></div>';var fill=document.getElementById('progressFill'),lbl=document.getElementById('progressLabel');if(fill)fill.style.width=s.pct+'%';if(lbl)lbl.textContent=s.respondidas+'/'+s.total+' respondidas ('+s.pct+'%)';}
+function fmtTime(secs){return String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function startTimers(){if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(function(){if(!paused){qSecs++;sSecs++;}var q=document.getElementById('timerQ'),s=document.getElementById('timerS');if(q)q.textContent=fmtTime(qSecs);if(s)s.textContent=fmtTime(sSecs);},1000);}
+function resetQTimer(){qSecs=0;var q=document.getElementById('timerQ');if(q)q.textContent='00:00';}
+function togglePause(){paused=!paused;var b=document.getElementById('btnPause');if(b)b.textContent=paused?'Retomar':'Pausar';}
+function scheduleNext(id,acertou){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:1,acertos:0,lastAnswered:null};rv.lastAnswered=t;if(acertou){rv.acertos=(rv.acertos||0)+1;rv.interval=rv.acertos===1?1:rv.acertos===2?7:30;}else{rv.acertos=0;rv.interval=1;}rv.nextDate=addDays(t,rv.interval);state.revisao[id]=rv;}
+function scheduleManual(id,days){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:days,acertos:0,lastAnswered:t};rv.nextDate=days===0?null:addDays(t,days);rv.interval=days;state.revisao[id]=rv;saveState();renderCard();}
+function reviewBadgeHTML(id){var rv=state.revisao[id];if(!rv||!rv.nextDate)return'';if(rv.nextDate<=today())return'<span class="review-badge review-today">revisar hoje ⏰</span>';return'<span class="review-badge review-future">📅 '+fmtDate(rv.nextDate)+'</span>';}
+function schedRowHTML(id){return'<div class="sched-row"><span class="sched-label">Agendar:</span><button class="sched-btn" onclick="scheduleManual(\''+id+'\',1)">1 dia</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',7)">7 dias</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',30)">30 dias</button><button class="sched-btn remove" onclick="scheduleManual(\''+id+'\',0)">remover</button></div>';}
+function starBtnHTML(id){var active=state.revisarDepois[id]?' active':'',label=state.revisarDepois[id]?'⭐ No caderno':'☆ Revisar depois';return'<button class="star-btn'+active+'" onclick="toggleStar(\''+id+'\')">'+label+'</button>';}
+function toggleStar(id){if(state.revisarDepois[id])delete state.revisarDepois[id];else state.revisarDepois[id]=true;saveState();renderCard();renderStats();}
+function selecionarAlternativa(id,letra){if(state.respostas[id])return;document.querySelectorAll('.alt-btn[data-id="'+id+'"]').forEach(function(b){b.classList.remove('selected');});var btn=document.querySelector('.alt-btn[data-id="'+id+'"][data-letra="'+letra+'"]');if(btn)btn.classList.add('selected');var c=document.getElementById('confirm-'+id);if(c)c.disabled=false;}
+function confirmar(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var sel=document.querySelector('.alt-btn[data-id="'+id+'"].selected');if(!sel)return;var letra=sel.dataset.letra;state.respostas[id]=letra;var acertou=letra===q.correta;scheduleNext(id,acertou);if(!acertou)state.caderno[id]=true;saveState();renderCard();renderStats();}
+function toggleComment(id){commentOpen[id]=!commentOpen[id];var body=document.getElementById('comment-body-'+id),tog=document.getElementById('comment-toggle-'+id);if(body)body.classList.toggle('open',!!commentOpen[id]);if(tog)tog.textContent=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';}
+function salvarNota(id,txt){if(!state.notas)state.notas={};state.notas[id]=txt;saveState();}
+function renderCard(){var cont=document.getElementById('mainContent');if(!lista.length){cont.innerHTML='<div class="empty-state"><div class="icon">📭</div><div>Nenhuma questão neste filtro.</div></div>';return;}var pos=Math.min(Math.max(state.posicao,0),lista.length-1);state.posicao=pos;var id=lista[pos],q=QUESTOES.find(function(x){return x.id===id;});if(!q){cont.innerHTML='';return;}var resposta=state.respostas[id],respondida=!!resposta,acertou=respondida&&resposta===q.correta;var resultHTML='';if(respondida){resultHTML=acertou?'<div class="result-banner correct">✅ Correto! Resposta: '+resposta+'</div>':'<div class="result-banner wrong">❌ Incorreto. Sua resposta: '+resposta+' | Gabarito: '+q.correta+'</div>';}var altsHTML='<div class="alts">';q.alternativas.forEach(function(alt){var btnCls='alt-btn',letraCls='alt-letra',disabled=respondida?'disabled':'';if(respondida){if(alt.letra===q.correta&&alt.letra===resposta){btnCls='alt-btn correct';letraCls='alt-letra correct';}else if(alt.letra===q.correta){btnCls='alt-btn reveal-correct';letraCls='alt-letra reveal-correct';}else if(alt.letra===resposta){btnCls='alt-btn wrong';letraCls='alt-letra wrong';}}altsHTML+='<button class="'+btnCls+'" data-id="'+id+'" data-letra="'+alt.letra+'" '+disabled+' onclick="selecionarAlternativa(\''+id+'\',\''+alt.letra+'\')"><span class="'+letraCls+'">'+alt.letra+'</span><span>'+alt.texto+'</span></button>';});altsHTML+='</div>';var confirmHTML=respondida?'':'<button class="btn-confirm" id="confirm-'+id+'" onclick="confirmar(\''+id+'\')" disabled>Confirmar</button>';var cOpen=commentOpen[id]?' open':'',cLabel=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';var commentHTML=respondida?'<div class="comment-wrap"><button class="comment-toggle" id="comment-toggle-'+id+'" onclick="toggleComment(\''+id+'\')">'+cLabel+'</button><div class="comment-body'+cOpen+'" id="comment-body-'+id+'">'+q.comentario+'</div></div>':'';var schedHTML=respondida?schedRowHTML(id):'';var notaVal=(state.notas&&state.notas[id])?state.notas[id]:'';var notasHTML='<div class="notas-wrap"><div class="notas-label">📝 Minhas anotações</div><textarea class="notas-area" placeholder="Escreva aqui suas anotações sobre esta questão…" oninput="salvarNota(\''+id+'\', this.value)">'+notaVal.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</textarea></div>';cont.innerHTML='<div class="nav-counter">Questão '+(pos+1)+' de '+lista.length+'</div><div class="card"><div class="card-meta"><span class="badge badge-banca">'+q.banca+'</span><span class="badge badge-materia">'+q.materia+'</span>'+reviewBadgeHTML(id)+starBtnHTML(id)+claudeBtnHTML(id)+'</div><div class="enunciado">'+q.enunciado+'</div>'+altsHTML+confirmHTML+resultHTML+commentHTML+schedHTML+notasHTML+'</div><div class="nav-row"><button class="nav-btn" onclick="navPrev()" '+(pos===0?'disabled':'')+'>← Anterior</button><button class="nav-btn" onclick="navNext()" '+(pos>=lista.length-1?'disabled':'')+'>Próxima →</button></div>';}
+function navPrev(){if(state.posicao>0){state.posicao--;saveState();resetQTimer();renderCard();}}
+function navNext(){if(state.posicao<lista.length-1){state.posicao++;saveState();resetQTimer();renderCard();}}
+function setModo(modo){state.modo=modo;state.posicao=0;var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=modo==='materia'?'':'none';document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===modo);});lista=buildLista();saveState();resetQTimer();renderCard();renderStats();}
+function setMateriaFiltro(val){state.materiaFiltro=val;state.posicao=0;lista=buildLista();saveState();resetQTimer();renderCard();}
+function populateMateriaSelect(){var materias=[];QUESTOES.forEach(function(q){if(materias.indexOf(q.materia)===-1)materias.push(q.materia);});materias.sort();var sel=document.getElementById('materiaSelect');if(!sel)return;sel.innerHTML='<option value="">— Escolha —</option>';materias.forEach(function(m){var o=document.createElement('option');o.value=m;o.textContent=m;if(m===state.materiaFiltro)o.selected=true;sel.appendChild(o);});}
+function recomecar(){if(confirm('Tem certeza? Todo o progresso será apagado permanentemente.')){localStorage.removeItem(STORE_KEY);location.reload();}}
+function exportarProgresso(){var blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='progresso_meta15_protesto_cartorios_q195q208_'+today()+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function exportarNotas(){var txt='ANOTAÇÕES — Direito Notarial e Registral · Meta 15 (Q195–Q208)\n'+today()+'\n\n',n=0;QUESTOES.forEach(function(q){var nota=state.notas&&state.notas[q.id];if(nota&&nota.trim()){n++;txt+='【'+q.banca+' · '+q.materia+'】\n'+nota.trim()+'\n\n';}});if(!n){alert('Você ainda não tem anotações registradas.');return;}var blob=new Blob([txt],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='anotacoes_meta15_protesto_cartorios_q195q208_'+today()+'.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function importarProgresso(evt){var file=evt.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{state=Object.assign(defaultState(),JSON.parse(e.target.result));saveState();lista=buildLista();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=state.modo==='materia'?'':'none';renderStats();renderCard();alert('Progresso importado com sucesso!');}catch(err){alert('Arquivo inválido ou corrompido.');}};reader.readAsText(file);evt.target.value='';}
+function dismissIframeBanner(){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';try{sessionStorage.setItem('iframe_banner_dismissed','1');}catch(e){}}
+function checkIframeBanner(){try{if(sessionStorage.getItem('iframe_banner_dismissed')==='1'){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';}}catch(e){}}
+function init(){loadState();checkIframeBanner();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel&&state.modo==='materia')sel.style.display='';lista=buildLista();renderStats();renderCard();startTimers();}
+function claudeBtnHTML(id){return '<button class="claude-qbtn" onclick="askClaude(\''+id+'\')">🤖</button>';}
+function askClaude(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var ctx='Meta 15 · Direito Notarial e Registral · Questão '+id+'\nTema: '+q.materia+'\nBanca: '+(q.banca||'')+'\nConcurso: Cartório TJMT\n\nEnunciado:\n'+q.enunciado+'\n\nTenho uma dúvida sobre esta questão:\n';navigator.clipboard.writeText(ctx).catch(function(){});window.open('https://claude.ai/share/335a7657-2c2d-46ea-84f6-8c9e4d01edb5','_blank');}
+init();
+</script>
+</body>
+</html>
