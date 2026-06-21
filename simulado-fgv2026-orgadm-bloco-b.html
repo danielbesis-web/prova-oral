@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado FGV 2026 — Organização Administrativa · Bloco B (7 questões)</title>
+<style>
+:root{
+  --bg:#0f1419; --bg2:#161c24; --card:#1c242e; --card2:#222c38;
+  --border:#2c3947; --txt:#e6edf3; --muted:#8a99a8; --accent:#4c8dff;
+  --accent2:#3a6fd8; --ok:#33c27f; --okbg:#11321f; --err:#ff5c6c; --errbg:#3a1418;
+  --warn:#ffc24c; --warnbg:#3a2e10; --radius:14px; --shadow:0 6px 24px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.55;padding:0;min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:18px 16px 60px}
+.hidden{display:none!important}
+h1{font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
+h2{font-size:1.15rem;font-weight:700;margin-bottom:10px}
+.sub{color:var(--muted);font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 20px;font-size:.98rem;font-weight:700;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--txt)}
+.btn.ghost:hover{background:var(--card2)}
+.btn.sm{padding:8px 14px;font-size:.85rem}
+.btn.ok{background:var(--ok)} .btn.ok:hover{background:#2aa869}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.between{justify-content:space-between}
+input[type=text]{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--txt);font-size:1rem;width:100%}
+input[type=text]:focus{outline:none;border-color:var(--accent)}
+.badge{display:inline-block;background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:3px 11px;font-size:.74rem;color:var(--muted);font-weight:600}
+.badge.meta{background:#16263d;color:#7db4ff;border-color:#234a73}
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:30;background:rgba(15,20,25,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:10px 16px;margin:-18px -16px 16px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.05rem;color:var(--accent)}
+.progress{flex:1;min-width:120px;height:8px;background:var(--bg2);border-radius:6px;overflow:hidden}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:.3s}
+/* NAV GRID */
+.qnav{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:7px;margin-top:6px}
+.qnav button{aspect-ratio:1;border:1px solid var(--border);background:var(--card2);color:var(--muted);border-radius:8px;font-weight:700;font-size:.82rem;cursor:pointer;position:relative;transition:.1s}
+.qnav button:hover{border-color:var(--accent)}
+.qnav button.answered{background:#1d3a2c;color:var(--ok);border-color:#2c5e45}
+.qnav button.current{outline:2px solid var(--accent);outline-offset:1px;color:var(--txt)}
+.qnav button.flagged::after{content:'';position:absolute;top:3px;right:3px;width:7px;height:7px;background:var(--warn);border-radius:50%}
+/* ALTERNATIVES */
+.alt{display:flex;gap:12px;align-items:flex-start;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:9px;cursor:pointer;transition:.12s}
+.alt:hover{border-color:var(--accent)}
+.alt.sel{border-color:var(--accent);background:#15263d}
+.alt .letra{flex:none;width:28px;height:28px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem}
+.alt.sel .letra{background:var(--accent);color:#fff;border-color:var(--accent)}
+.alt.correct{border-color:var(--ok);background:var(--okbg)} .alt.correct .letra{background:var(--ok);color:#fff;border-color:var(--ok)}
+.alt.wrong{border-color:var(--err);background:var(--errbg)} .alt.wrong .letra{background:var(--err);color:#fff;border-color:var(--err)}
+.alt.disabled{cursor:default}
+.alt .txt{flex:1;padding-top:2px}
+.enun{font-size:1.02rem;margin:6px 0 16px;white-space:pre-wrap}
+.coment{margin-top:14px;padding:14px;background:var(--bg2);border-left:3px solid var(--accent);border-radius:8px;font-size:.92rem}
+.coment b{color:var(--txt)}
+/* STATS */
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin:14px 0}
+.stat{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.stat .n{font-size:1.7rem;font-weight:800}
+.stat .l{font-size:.78rem;color:var(--muted);margin-top:2px}
+.bar{height:9px;background:var(--bg2);border-radius:6px;overflow:hidden;margin-top:5px}
+.bar>i{display:block;height:100%}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.03em}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--border);padding:12px 20px;border-radius:10px;box-shadow:var(--shadow);z-index:99;font-size:.9rem;opacity:0;transition:.3s;pointer-events:none}
+.toast.show{opacity:1}
+.seg{display:inline-flex;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.seg button{background:none;border:none;color:var(--muted);padding:7px 13px;font-size:.82rem;font-weight:600;cursor:pointer}
+.seg button.on{background:var(--accent);color:#fff}
+textarea{width:100%;min-height:90px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--txt);font-family:inherit;font-size:.9rem;resize:vertical}
+.placar-row{display:flex;justify-content:space-between;padding:9px 12px;border-radius:8px;background:var(--card2);border:1px solid var(--border);margin-bottom:6px}
+.placar-row .pos{font-weight:800;color:var(--accent);margin-right:10px}
+.medal{margin-right:4px}
+a.lnk{color:var(--accent);cursor:pointer;text-decoration:underline;font-size:.88rem}
+.chip{display:inline-flex;gap:5px;align-items:center;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:.83rem;cursor:pointer}
+.chip.on{border-color:var(--accent);color:var(--accent)}
+hr.div{border:none;border-top:1px solid var(--border);margin:16px 0}
+@media(max-width:560px){.wrap{padding:14px 11px 50px}.topbar{margin:-14px -11px 14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ INTRO ============ -->
+<section id="scrIntro">
+  <div class="card" style="text-align:center">
+    <div class="badge meta">SIMULADO COLETIVO</div>
+    <h1 style="margin:12px 0 6px">FGV 2026 · Organização Administrativa — Bloco B (7 questões)</h1>
+    <p class="sub">Direito Administrativo: 7</p>
+    <p class="sub" style="margin-top:6px">Gerado em 21/06/2026 · 7 questões · Banca FGV (provas 2026)</p>
+  </div>
+  <div class="card">
+    <h2>Como funciona o coletivo</h2>
+    <p class="sub" style="margin-bottom:12px">Cada pessoa abre este mesmo link, digita o nome e resolve sozinha, <b>sem comentar nada</b> com os colegas até todos terminarem. Durante a prova você só marca a alternativa — <b>o gabarito e os comentários só aparecem no final</b>. No fim, cada um exporta seu cartão de resultado e cola no placar para comparar.</p>
+    <label class="sub" style="font-weight:700;display:block;margin-bottom:6px">Seu nome</label>
+    <input type="text" id="nome" placeholder="Ex.: Daniel" maxlength="40" autocomplete="off">
+    <div class="row between" style="margin-top:16px">
+      <label class="chip"><input type="checkbox" id="optShuffle" style="accent-color:var(--accent)"> Embaralhar ordem das questões</label>
+      <span id="resumeBox"></span>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn" id="btnStart">▶ Começar simulado</button>
+      <button class="btn ghost" id="btnResume" style="display:none">↻ Continuar de onde parei</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row between">
+      <div><h2 style="margin:0">Aparência</h2><p class="sub">Intensidade do tema escuro</p></div>
+      <div class="seg" id="themeSeg">
+        <button data-t="suave">Suave</button>
+        <button data-t="padrao" class="on">Padrão</button>
+        <button data-t="intenso">Intenso</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="scrQuiz" class="hidden">
+  <div class="topbar">
+    <span class="timer" id="timer">00:00</span>
+    <div class="progress"><i id="progBar"></i></div>
+    <span class="sub" id="progTxt">0/7</span>
+    <button class="btn ghost sm" id="btnSave">💾 Salvar</button>
+  </div>
+
+  <div class="card" id="qCard">
+    <div class="row between" style="margin-bottom:10px">
+      <div class="row" style="gap:7px">
+        <span class="badge meta" id="qMeta"></span>
+        <span class="badge" id="qMateria"></span>
+      </div>
+      <button class="chip" id="btnFlag">⚑ Revisar</button>
+    </div>
+    <div class="sub" id="qBanca" style="margin-bottom:4px"></div>
+    <div class="enun" id="qEnun"></div>
+    <div id="qAlts"></div>
+    <div class="coment hidden" id="qComent"></div>
+    <div class="row between" style="margin-top:18px">
+      <button class="btn ghost" id="btnPrev">← Anterior</button>
+      <button class="btn" id="btnNext">Próxima →</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row between" style="margin-bottom:8px">
+      <h2 style="margin:0;font-size:1rem">Navegação</h2>
+      <button class="btn ok sm" id="btnFinish">✓ Finalizar e ver gabarito</button>
+    </div>
+    <div class="qnav" id="qnav"></div>
+    <p class="sub" style="margin-top:10px">Respondidas <span style="color:var(--ok)">●</span> · Para revisar <span style="color:var(--warn)">●</span></p>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section id="scrResult" class="hidden">
+  <div class="card" style="text-align:center">
+    <div class="badge meta">RESULTADO</div>
+    <h1 style="margin:10px 0" id="rNome"></h1>
+    <div style="font-size:3rem;font-weight:800" id="rScore">0/7</div>
+    <div class="sub" id="rPct"></div>
+    <div class="statgrid">
+      <div class="stat"><div class="n" style="color:var(--ok)" id="rOk">0</div><div class="l">Acertos</div></div>
+      <div class="stat"><div class="n" style="color:var(--err)" id="rErr">0</div><div class="l">Erros</div></div>
+      <div class="stat"><div class="n" id="rTime">00:00</div><div class="l">Tempo</div></div>
+      <div class="stat"><div class="n" id="rRend">0%</div><div class="l">Rendimento</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Desempenho por disciplina</h2>
+    <div id="rByDisc"></div>
+  </div>
+
+  <div class="card">
+    <h2>Seu cartão de resultado</h2>
+    <p class="sub" style="margin-bottom:10px">Copie e cole no grupo do WhatsApp para entrar no placar coletivo.</p>
+    <textarea id="rCard" readonly></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="btn sm" id="btnCopyCard">📋 Copiar cartão</button>
+      <button class="btn ghost sm" id="btnDownCard">⬇ Baixar .txt</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Placar coletivo</h2>
+    <p class="sub" style="margin-bottom:10px">Cole aqui os cartões de todos (um colado embaixo do outro) e clique em montar o ranking.</p>
+    <textarea id="placarIn" placeholder="Cole os cartões de resultado de todos aqui..."></textarea>
+    <div class="row" style="margin:10px 0">
+      <button class="btn sm" id="btnPlacar">🏆 Montar ranking</button>
+      <button class="btn ghost sm" id="btnAddMe">+ Adicionar o meu</button>
+    </div>
+    <div id="placarOut"></div>
+  </div>
+
+  <div class="card">
+    <h2>Revisar questões</h2>
+    <div class="row" style="margin:10px 0">
+      <button class="chip on" data-f="all">Todas</button>
+      <button class="chip" data-f="wrong">Só erradas</button>
+      <button class="chip" data-f="flagged">Marcadas p/ revisar</button>
+    </div>
+    <div class="row">
+      <button class="btn" id="btnRedoWrong">↻ Refazer só as erradas</button>
+      <button class="btn ghost" id="btnReviewAll">📖 Ver gabarito completo</button>
+      <button class="btn ghost" id="btnRestart">🔄 Recomeçar do zero</button>
+    </div>
+    <div id="reviewList" style="margin-top:16px"></div>
+  </div>
+</section>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const QB64="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";
+let ALL=[];
+async function _loadData(){
+  try{
+    const bin=Uint8Array.from(atob(QB64),c=>c.charCodeAt(0));
+    if(typeof DecompressionStream!=="undefined"){
+      const st=new Blob([bin]).stream().pipeThrough(new DecompressionStream("gzip"));
+      const buf=await new Response(st).arrayBuffer();
+      return JSON.parse(new TextDecoder().decode(buf));
+    }else{
+      throw new Error("no DecompressionStream");
+    }
+  }catch(e){
+    document.body.innerHTML='<div style="max-width:600px;margin:60px auto;padding:24px;font-family:sans-serif;color:#e6edf3;background:#1c242e;border-radius:14px"><h2>Navegador incompatível</h2><p>Este simulado precisa de um navegador moderno (Chrome, Edge, Safari 16.4+ ou Firefox recente). Abra o link em um navegador atualizado.</p></div>';
+    throw e;
+  }
+}
+const LSKEY='simFGVorgB_v1';
+let S = { idx:0, order:[], answers:{}, flags:{}, started:null, elapsed:0, finished:false, nome:'', activeSet:null };
+
+const $=id=>document.getElementById(id);
+const screens={intro:$('scrIntro'),quiz:$('scrQuiz'),result:$('scrResult')};
+function show(s){for(const k in screens)screens[k].classList.add('hidden');screens[s].classList.remove('hidden');window.scrollTo(0,0);}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1900);}
+function fmt(s){const m=Math.floor(s/60),x=s%60;return String(m).padStart(2,'0')+':'+String(x).padStart(2,'0');}
+
+/* THEME */
+const THEMES={
+  suave:{'--bg':'#171c22','--bg2':'#1e242b','--card':'#232a32','--card2':'#2a323b','--border':'#36404b','--txt':'#eef3f7','--muted':'#9aa8b6'},
+  padrao:{'--bg':'#0f1419','--bg2':'#161c24','--card':'#1c242e','--card2':'#222c38','--border':'#2c3947','--txt':'#e6edf3','--muted':'#8a99a8'},
+  intenso:{'--bg':'#05080b','--bg2':'#0a0f14','--card':'#0e151c','--card2':'#131c25','--border':'#1d2935','--txt':'#dde6ee','--muted':'#6f7f8e'}
+};
+function applyTheme(t){const v=THEMES[t]||THEMES.padrao;for(const k in v)document.documentElement.style.setProperty(k,v[k]);localStorage.setItem(LSKEY+'_theme',t);
+  document.querySelectorAll('#themeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));}
+document.querySelectorAll('#themeSeg button').forEach(b=>b.onclick=()=>applyTheme(b.dataset.t));
+applyTheme(localStorage.getItem(LSKEY+'_theme')||'padrao');
+
+/* TIMER */
+let timerInt=null;
+function startTimer(){clearInterval(timerInt);timerInt=setInterval(()=>{if(!S.finished){S.elapsed++;if($('timer'))$('timer').textContent=fmt(S.elapsed);}},1000);}
+
+/* PERSIST */
+function save(silent){localStorage.setItem(LSKEY,JSON.stringify(S));if(!silent)toast('Progresso salvo ✓');}
+function loadSaved(){try{return JSON.parse(localStorage.getItem(LSKEY));}catch(e){return null;}}
+
+/* INIT INTRO */
+(function(){const sv=loadSaved();if(sv&&sv.order&&sv.order.length&&!sv.finished){
+  $('btnResume').style.display='inline-flex';
+  $('resumeBox').innerHTML='<span class="sub">Há um simulado em andamento de <b>'+(sv.nome||'?')+'</b> ('+Object.keys(sv.answers).length+'/'+sv.order.length+').</span>';
+}})();
+
+function buildOrder(shuffle){let o=ALL.map((q,i)=>i);if(shuffle){for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]];}}return o;}
+
+$('btnStart').onclick=()=>{const n=$('nome').value.trim();if(!n){toast('Digite seu nome');$('nome').focus();return;}
+  S={idx:0,order:buildOrder($('optShuffle').checked),answers:{},flags:{},started:Date.now(),elapsed:0,finished:false,nome:n,activeSet:null};
+  save(true);startQuiz();};
+$('btnResume').onclick=()=>{const sv=loadSaved();if(sv){S=sv;startQuiz();}};
+
+function startQuiz(){show('quiz');startTimer();renderNav();render();}
+
+/* RENDER QUESTION */
+function curList(){return S.activeSet||S.order;}
+function render(){
+  const list=curList();const qi=list[S.idx];const q=ALL[qi];
+  $('qMeta').textContent=q.meta+' · '+q.disciplina;
+  $('qMateria').textContent=q.materia||'';
+  $('qBanca').textContent=q.banca||'';
+  $('qEnun').textContent=q.enunciado;
+  const ans=S.answers[qi];const reveal=S.finished; // gabarito so no final (modo prova)
+  let h='';
+  q.alternativas.forEach(a=>{
+    let cls='alt';
+    if(ans===a.letra)cls+=' sel';
+    if(reveal){cls+=' disabled';
+      if(a.letra===q.correta)cls+=' correct';
+      else if(ans===a.letra)cls+=' wrong';
+    }
+    h+='<div class="'+cls+'" data-l="'+a.letra+'"><div class="letra">'+a.letra+'</div><div class="txt">'+a.texto+'</div></div>';
+  });
+  $('qAlts').innerHTML=h;
+  if(!reveal){$('qAlts').querySelectorAll('.alt').forEach(el=>el.onclick=()=>pick(qi,el.dataset.l));}
+  // comentario NUNCA durante a prova — so na revisao final
+  $('qComent').classList.add('hidden');
+  $('btnFlag').classList.toggle('on',!!S.flags[qi]);
+  $('btnFlag').textContent=S.flags[qi]?'⚑ Marcada':'⚑ Revisar';
+  $('btnPrev').disabled=S.idx===0;
+  $('btnNext').textContent=S.idx===list.length-1?'Fim':'Próxima →';
+  updateProg();highlightNav();
+}
+function pick(qi,letra){S.answers[qi]=letra;save(true);render();renderNav();}
+function updateProg(){const list=curList();const done=list.filter(i=>S.answers[i]!==undefined).length;
+  $('progTxt').textContent=done+'/'+list.length;$('progBar').style.width=(done/list.length*100)+'%';}
+
+/* NAV GRID */
+function renderNav(){const list=curList();let h='';list.forEach((qi,n)=>{h+='<button data-n="'+n+'">'+(n+1)+'</button>';});
+  $('qnav').innerHTML=h;$('qnav').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.idx=+b.dataset.n;render();});highlightNav();}
+function highlightNav(){const list=curList();$('qnav').querySelectorAll('button').forEach((b,n)=>{const qi=list[n];
+  b.classList.toggle('answered',S.answers[qi]!==undefined);b.classList.toggle('flagged',!!S.flags[qi]);b.classList.toggle('current',n===S.idx);});}
+
+$('btnPrev').onclick=()=>{if(S.idx>0){S.idx--;render();}};
+$('btnNext').onclick=()=>{const list=curList();if(S.idx<list.length-1){S.idx++;render();}else{finish();}};
+$('btnFlag').onclick=()=>{const qi=curList()[S.idx];S.flags[qi]=!S.flags[qi];save(true);render();renderNav();};
+$('btnSave').onclick=()=>save(false);
+$('btnFinish').onclick=()=>finish();
+
+/* FINISH / RESULTS */
+function finish(){const list=curList();const un=list.filter(i=>S.answers[i]===undefined).length;
+  if(un>0&&!confirm('Você deixou '+un+' questão(ões) em branco. Finalizar mesmo assim?'))return;
+  S.finished=true;clearInterval(timerInt);save(true);renderResults();}
+
+function calc(set){let ok=0,err=0;const byd={};set.forEach(qi=>{const q=ALL[qi];const a=S.answers[qi];
+  if(!byd[q.disciplina])byd[q.disciplina]={ok:0,total:0};byd[q.disciplina].total++;
+  if(a===q.correta){ok++;byd[q.disciplina].ok++;}else if(a!==undefined){err++;}});
+  return{ok,err,total:set.length,byd};}
+
+function renderResults(){show('result');const r=calc(S.order);
+  $('rNome').textContent=S.nome;
+  $('rScore').textContent=r.ok+'/'+r.total;
+  const pct=Math.round(r.ok/r.total*100);
+  $('rPct').textContent=pct+'% de aproveitamento · '+S.nome;
+  $('rOk').textContent=r.ok;$('rErr').textContent=r.err;$('rTime').textContent=fmt(S.elapsed);$('rRend').textContent=pct+'%';
+  // by discipline
+  let h='';Object.keys(r.byd).sort().forEach(d=>{const o=r.byd[d];const p=Math.round(o.ok/o.total*100);
+    const col=p>=70?'var(--ok)':p>=50?'var(--warn)':'var(--err)';
+    h+='<div style="margin-bottom:12px"><div class="row between"><span style="font-weight:600">'+d+'</span><span class="sub">'+o.ok+'/'+o.total+' ('+p+'%)</span></div><div class="bar"><i style="width:'+p+'%;background:'+col+'"></i></div></div>';});
+  $('rByDisc').innerHTML=h;
+  // card
+  const card='🎯 SIMULADO FGV 2026 · ORG. ADM · Bloco B (7 questões)\n👤 '+S.nome+'\n✅ '+r.ok+'/'+r.total+' ('+pct+'%)\n⏱ '+fmt(S.elapsed)+'\n#simFGVorgB';
+  $('rCard').value=card;
+  buildReview('all');
+}
+
+$('btnCopyCard').onclick=()=>{$('rCard').select();navigator.clipboard.writeText($('rCard').value).then(()=>toast('Cartão copiado ✓')).catch(()=>{document.execCommand('copy');toast('Copiado ✓');});};
+$('btnDownCard').onclick=()=>{const b=new Blob([$('rCard').value],{type:'text/plain'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='resultado-'+S.nome.replace(/\s+/g,'_')+'.txt';a.click();URL.revokeObjectURL(u);};
+
+/* PLACAR */
+$('btnAddMe').onclick=()=>{const t=$('placarIn');t.value=(t.value?t.value+'\n\n':'')+$('rCard').value;toast('Seu cartão adicionado');};
+$('btnPlacar').onclick=()=>{const txt=$('placarIn').value;const people=[];const blocks=txt.split(/\n\s*\n/);
+  blocks.forEach(b=>{const nm=(b.match(/👤\s*(.+)/)||[])[1];const sc=b.match(/✅\s*(\d+)\/(\d+)\s*\((\d+)%\)/);const tm=(b.match(/⏱\s*([0-9:]+)/)||[])[1];
+    if(nm&&sc){people.push({nome:nm.trim(),ok:+sc[1],total:+sc[2],pct:+sc[3],time:tm||''});}});
+  if(!people.length){toast('Nenhum cartão válido encontrado');$('placarOut').innerHTML='';return;}
+  people.sort((a,b)=>b.pct-a.pct||tsec(a.time)-tsec(b.time));
+  const med=['🥇','🥈','🥉'];let h='';
+  people.forEach((p,i)=>{h+='<div class="placar-row"><div><span class="pos">'+(i+1)+'º</span><span class="medal">'+(med[i]||'')+'</span><b>'+esc(p.nome)+'</b></div><div class="sub">'+p.ok+'/'+p.total+' · '+p.pct+'% · '+(p.time||'—')+'</div></div>';});
+  $('placarOut').innerHTML=h;};
+function tsec(t){if(!t)return 9e9;const[m,s]=t.split(':').map(Number);return m*60+(s||0);}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+/* REVIEW LIST */
+function buildReview(filter){const r=calc(S.order);let set=S.order.slice();
+  if(filter==='wrong')set=set.filter(qi=>S.answers[qi]!==ALL[qi].correta);
+  else if(filter==='flagged')set=set.filter(qi=>S.flags[qi]);
+  document.querySelectorAll('#scrResult .chip[data-f]').forEach(c=>c.classList.toggle('on',c.dataset.f===filter));
+  if(!set.length){$('reviewList').innerHTML='<p class="sub">Nenhuma questão neste filtro.</p>';return;}
+  let h='';set.forEach(qi=>{const q=ALL[qi];const a=S.answers[qi];const ok=a===q.correta;
+    h+='<div class="card" style="margin-bottom:12px;background:var(--bg2)"><div class="row between" style="margin-bottom:6px"><span class="badge meta">'+q.meta+' · '+q.disciplina+'</span><span class="badge" style="color:'+(ok?'var(--ok)':a===undefined?'var(--muted)':'var(--err)')+'">'+(ok?'✓ Acertou':a===undefined?'— Em branco':'✗ Errou')+'</span></div><div class="enun" style="font-size:.95rem">'+esc(q.enunciado)+'</div>';
+    q.alternativas.forEach(al=>{let c='alt disabled';if(al.letra===q.correta)c+=' correct';else if(a===al.letra)c+=' wrong';
+      h+='<div class="'+c+'" style="padding:9px 12px"><div class="letra">'+al.letra+'</div><div class="txt">'+al.texto+'</div></div>';});
+    if(q.comentario)h+='<div class="coment">'+q.comentario+'</div>';
+    h+='</div>';});
+  $('reviewList').innerHTML=h;}
+document.querySelectorAll('#scrResult .chip[data-f]').forEach(c=>c.onclick=()=>buildReview(c.dataset.f));
+
+/* REDO WRONG */
+$('btnRedoWrong').onclick=()=>{const wrong=S.order.filter(qi=>S.answers[qi]!==ALL[qi].correta&&S.answers[qi]!==undefined);
+  if(!wrong.length){toast('Você não errou nenhuma 🎉');return;}
+  wrong.forEach(qi=>{delete S.answers[qi];});S.activeSet=wrong;S.idx=0;S.finished=false;S.elapsed=0;
+  save(true);show('quiz');startTimer();renderNav();render();toast('Refazendo '+wrong.length+' erradas');};
+$('btnReviewAll').onclick=()=>{buildReview('all');$('reviewList').scrollIntoView({behavior:'smooth'});};
+$('btnRestart').onclick=()=>{if(confirm('Recomeçar do zero? Seu progresso atual será apagado.')){localStorage.removeItem(LSKEY);location.reload();}};
+
+/* keyboard */
+document.addEventListener('keydown',e=>{if(screens.quiz.classList.contains('hidden'))return;
+  if(e.key==='ArrowLeft')$('btnPrev').click();else if(e.key==='ArrowRight')$('btnNext').click();
+  else if(/^[a-eA-E]$/.test(e.key)){const el=$('qAlts').querySelector('.alt[data-l="'+e.key.toUpperCase()+'"]');if(el&&!el.classList.contains('disabled'))el.click();}});
+
+/* BOOT: decompress question data, then enable */
+$('btnStart').disabled=true;
+_loadData().then(data=>{ALL=data;$('btnStart').disabled=false;}).catch(()=>{});
+</script>
+</body>
+</html>
