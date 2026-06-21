@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado Constitucional FGV 2026 — Profa. Nelma Fontana</title>
+<style>
+  :root{
+    --bg:#0f1419; --bg2:#1a2129; --card:#1e2730; --line:#2c3744;
+    --txt:#e6edf3; --muted:#8b9aa8; --accent:#4da3ff; --accent2:#7c5cff;
+    --ok:#3fb950; --okbg:#102a16; --err:#f85149; --errbg:#2d1416;
+    --warn:#d29922;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;padding:0 0 60px}
+  .wrap{max-width:820px;margin:0 auto;padding:0 18px}
+  header{background:linear-gradient(135deg,#141b22,#1c2430);border-bottom:1px solid var(--line);padding:26px 0 22px;margin-bottom:24px}
+  header .wrap{display:flex;flex-direction:column;gap:6px}
+  .tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--accent);background:rgba(77,163,255,.1);padding:3px 10px;border-radius:20px;width:fit-content}
+  h1{font-size:22px;font-weight:700;margin-top:4px}
+  .sub{color:var(--muted);font-size:14px}
+  .hidden{display:none!important}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:18px}
+  .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 22px;font-size:15px;font-weight:600;cursor:pointer;transition:.15s}
+  .btn:hover{filter:brightness(1.1)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+  .btn.ghost:hover{border-color:var(--accent)}
+  .intro-meta{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+  .chip{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--muted)}
+  .chip b{color:var(--txt)}
+  ul.topics{list-style:none;margin:14px 0;display:grid;gap:8px}
+  ul.topics li{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:9px 13px;font-size:13.5px;display:flex;justify-content:space-between}
+  ul.topics li span{color:var(--muted)}
+  /* quiz */
+  .bar{height:7px;background:var(--bg2);border-radius:6px;overflow:hidden;margin-bottom:6px}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width .3s}
+  .qmeta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);margin-bottom:14px}
+  .qtopic{color:var(--accent);font-weight:600}
+  .qnum{font-variant-numeric:tabular-nums}
+  .enun{font-size:16px;margin-bottom:18px;white-space:pre-wrap}
+  .opts{display:grid;gap:9px}
+  .opt{display:flex;gap:11px;align-items:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;transition:.12s;font-size:14.5px}
+  .opt:hover{border-color:var(--accent)}
+  .opt .ltr{font-weight:700;color:var(--accent);min-width:18px}
+  .opt.sel{border-color:var(--accent);background:rgba(77,163,255,.08)}
+  .opt.ok{border-color:var(--ok);background:var(--okbg)}
+  .opt.ok .ltr{color:var(--ok)}
+  .opt.bad{border-color:var(--err);background:var(--errbg)}
+  .opt.bad .ltr{color:var(--err)}
+  .opt.disabled{cursor:default}
+  .feedback{margin-top:16px;border-radius:10px;padding:14px 16px;font-size:14px;display:none}
+  .feedback.show{display:block}
+  .feedback.right{background:var(--okbg);border:1px solid var(--ok)}
+  .feedback.wrong{background:var(--errbg);border:1px solid var(--err)}
+  .feedback .fh{font-weight:700;margin-bottom:6px}
+  .feedback.right .fh{color:var(--ok)}
+  .feedback.wrong .fh{color:var(--err)}
+  .feedback .peg{margin-top:8px;padding-top:8px;border-top:1px solid var(--line);color:var(--warn);font-size:13.5px}
+  .feedback .fund{margin-top:6px;color:var(--muted);font-size:12.5px}
+  .navrow{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+  /* result */
+  .score-circle{width:160px;height:160px;border-radius:50%;margin:6px auto 14px;display:grid;place-items:center;position:relative}
+  .score-circle .inner{width:124px;height:124px;border-radius:50%;background:var(--card);display:grid;place-items:center;flex-direction:column;text-align:center}
+  .score-circle .pct{font-size:34px;font-weight:700}
+  .score-circle .lbl{font-size:12px;color:var(--muted)}
+  .res-line{text-align:center;color:var(--muted);font-size:14px;margin-bottom:18px}
+  .filters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+  .filters button{background:var(--bg2);border:1px solid var(--line);color:var(--muted);border-radius:20px;padding:6px 15px;font-size:13px;cursor:pointer}
+  .filters button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .rev{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+  .rev .rh{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;margin-bottom:7px}
+  .rev .rt{color:var(--accent);font-weight:600}
+  .rev .rg{font-weight:700}
+  .rev.c .rg{color:var(--ok)} .rev.w .rg{color:var(--err)}
+  .rev .rq{font-size:14px;margin-bottom:8px;white-space:pre-wrap}
+  .rev .ra{font-size:13.5px;color:var(--muted)}
+  .rev .ra b{color:var(--txt)}
+  .rev .rpeg{margin-top:7px;color:var(--warn);font-size:13px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <span class="tag">Prova Oral &amp; 1ª Fase · TJ-MT 2026</span>
+  <h1>Simulado de Direito Constitucional — FGV 2026</h1>
+  <div class="sub">Banco da Profa. Nelma Fontana (Copa das Questões / Estratégia) · 16 questões A–E</div>
+</div></header>
+
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="s-intro">
+    <div class="card">
+      <p style="font-size:15px">16 questões de Constitucional no estilo <b>FGV</b>, extraídas do material da Profa. Nelma Fontana, com <b>gabarito comentado, fundamento legal e a pegadinha de cada questão</b>. Ideal para fixar antes da prova oral do TJ-MT.</p>
+      <div class="intro-meta">
+        <div class="chip"><b>16</b> questões</div>
+        <div class="chip"><b>7</b> temas</div>
+        <div class="chip">Múltipla escolha <b>A–E</b></div>
+        <div class="chip">Estilo <b>FGV</b></div>
+      </div>
+      <ul class="topics">
+        <li>Direitos Individuais <span>4 questões</span></li>
+        <li>Direitos Políticos <span>2 questões</span></li>
+        <li>Nacionalidade <span>3 questões</span></li>
+        <li>Processo Legislativo <span>3 questões</span></li>
+        <li>Poder Legislativo <span>3 questões</span></li>
+        <li>Poder Judiciário <span>1 questão</span></li>
+        <li>Organização do Estado <span>—</span></li>
+      </ul>
+      <label style="display:flex;align-items:center;gap:9px;font-size:14px;color:var(--muted);margin:6px 0 16px;cursor:pointer">
+        <input type="checkbox" id="shuffle" checked style="width:16px;height:16px"> Embaralhar a ordem das questões
+      </label>
+      <button class="btn" onclick="start()">Começar simulado →</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="s-quiz" class="hidden">
+    <div class="bar"><i id="prog"></i></div>
+    <div class="card">
+      <div class="qmeta">
+        <span class="qtopic" id="qtopic"></span>
+        <span class="qnum" id="qnum"></span>
+      </div>
+      <div class="enun" id="enun"></div>
+      <div class="opts" id="opts"></div>
+      <div class="feedback" id="fb"></div>
+      <div class="navrow">
+        <button class="btn ghost" id="skipBtn" onclick="next()">Pular</button>
+        <button class="btn" id="nextBtn" onclick="next()" disabled>Próxima →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="s-result" class="hidden">
+    <div class="card" style="text-align:center">
+      <div class="score-circle" id="circle">
+        <div class="inner"><div><div class="pct" id="pct">0%</div><div class="lbl">de acerto</div></div></div>
+      </div>
+      <div class="res-line" id="resline"></div>
+      <button class="btn" onclick="restart()">Refazer simulado</button>
+    </div>
+    <div class="filters">
+      <button class="on" data-f="all" onclick="filterRev('all',this)">Todas</button>
+      <button data-f="err" onclick="filterRev('err',this)">Só erros</button>
+      <button data-f="ok" onclick="filterRev('ok',this)">Só acertos</button>
+    </div>
+    <div id="review"></div>
+  </section>
+
+  <footer>Conteúdo verificado por questão · Banco Prova Oral (Notion) atualizado · Daniel Besis</footer>
+</div>
+
+<script>
+const QS = [
+ {t:"Direitos Individuais",q:"Em razão de tradição local, a Câmara Municipal mantém um crucifixo em sua sede. Cidadão impetra MS sustentando violação à laicidade estatal. À luz da CF/88 e do STF, a manutenção do símbolo religioso:",
+  o:{A:"é vedada por violar a laicidade",B:"é vedada por configurar promoção de culto",C:"só é admitida se houver lei autorizadora",D:"é admitida, pois traduz expressão da cultura e tradição da sociedade, sem caráter de promoção religiosa",E:"é admitida apenas em prédios privados"},
+  g:"D",e:"Símbolos religiosos em repartições públicas, p/ o STF, expressam a cultura e tradição da sociedade brasileira. Laicidade ≠ laicismo: o Estado é neutro, não hostil à religião.",
+  f:"CF, art. 5º, VI; art. 19, I",p:"Laicidade NÃO é laicismo. Símbolo cultural não viola o art. 19, I."},
+
+ {t:"Direitos Individuais",q:"A associação Alfa, regularmente constituída, desenvolve atividade lícita. O Poder Público pretende dissolvê-la compulsoriamente. Nos termos da CF/88, a dissolução compulsória da associação:",
+  o:{A:"depende de decisão judicial transitada em julgado",B:"pode ser feita por ato administrativo motivado",C:"depende apenas de decisão judicial, ainda que não transitada em julgado",D:"é vedada em qualquer hipótese",E:"depende de lei específica"},
+  g:"A",e:"Dissolução compulsória de associação só por decisão judicial TRANSITADA EM JULGADO. Para mera SUSPENSÃO das atividades basta decisão judicial (sem trânsito).",
+  f:"CF, art. 5º, XIX",p:"Dissolução → trânsito em julgado. Suspensão → basta decisão judicial. Nunca ato administrativo."},
+
+ {t:"Direitos Individuais",q:"José foi condenado por erro judiciário e ficou preso além do tempo fixado na sentença. Caio, terceiro, também sofreu prejuízo decorrente do mesmo erro. Conforme a CF/88, o Estado:",
+  o:{A:"indeniza apenas José",B:"não indeniza, por ausência de previsão",C:"indeniza apenas se houver dolo do juiz",D:"indeniza apenas Caio",E:"indeniza tanto o condenado por erro judiciário quanto quem ficou preso além do tempo fixado na sentença"},
+  g:"E",e:"O Estado indeniza o condenado por erro judiciário, assim como o que ficar preso além do tempo fixado na sentença. Duas hipóteses cumulativas.",
+  f:"CF, art. 5º, LXXV",p:"O inciso LXXV traz DUAS hipóteses: erro judiciário E prisão além do tempo. A questão tenta excluir uma."},
+
+ {t:"Direitos Individuais",q:"Renan, que teve seus direitos políticos suspensos, pretende ajuizar ação popular para anular ato lesivo ao patrimônio público. À luz da CF/88, Renan:",
+  o:{A:"pode, pois a ação popular independe de cidadania",B:"pode, desde que assistido por advogado",C:"pode, pois basta ser brasileiro",D:"pode, em razão da gratuidade",E:"não pode, pois a ação popular exige a condição de cidadão, e os direitos políticos suspensos retiram dele essa qualidade"},
+  g:"E",e:"A ação popular só pode ser proposta por CIDADÃO (eleitor no gozo dos direitos políticos). Suspensos os direitos políticos, perde-se a legitimidade ativa.",
+  f:"CF, art. 5º, LXXIII; Lei 4.717/65; CF art. 15",p:"Legitimidade = cidadania (eleitor). Suspensão retira a condição de cidadão p/ esse fim."},
+
+ {t:"Direitos Políticos",q:"Sobre plebiscito e referendo, avalie:\nI — O plebiscito é convocado com anterioridade a ato legislativo ou administrativo, cabendo ao povo aprovar ou denegar o que lhe foi submetido.\nII — O referendo é convocado após a edição do ato, cabendo ao povo ratificá-lo ou rejeitá-lo.\nIII — Compete exclusivamente ao Congresso Nacional autorizar referendo e convocar plebiscito.\nAs afirmativas são, respectivamente:",
+  o:{A:"V – V – V",B:"V – F – V",C:"F – V – F",D:"V – V – F",E:"F – F – V"},
+  g:"A",e:"Plebiscito = consulta PRÉvia (antes do ato). Referendo = consulta POSTERIOR (ratifica/rejeita ato editado). Compete ao Congresso autorizar referendo e convocar plebiscito (art. 49, XV).",
+  f:"CF, art. 14, I e II; art. 49, XV; Lei 9.709/98",p:"PLEbiscito = PRÉvio. REFerendo = ReaFirma depois. Não inverter a ordem."},
+
+ {t:"Direitos Políticos",q:"João foi condenado criminalmente, com trânsito em julgado, à pena restritiva de direitos. Quanto aos seus direitos políticos, conforme a CF/88:",
+  o:{A:"permanecem inalterados",B:"são perdidos definitivamente",C:"ficam suspensos somente se a pena for privativa de liberdade",D:"ficam suspensos enquanto durarem os efeitos da condenação, restabelecendo-se após o cumprimento da pena",E:"ficam suspensos apenas por decisão específica do juízo eleitoral"},
+  g:"D",e:"Condenação criminal transitada em julgado SUSPENDE os direitos políticos enquanto durarem os efeitos — inclusive em pena restritiva de direitos (STF). Cumprida a pena, restabelecem-se automaticamente.",
+  f:"CF, art. 15, III",p:"Suspensão independe de a pena ser privativa ou restritiva. É SUSPENSÃO, não perda."},
+
+ {t:"Nacionalidade",q:"Peter nasceu no Brasil, filho de pais ingleses que aqui estavam apenas em férias (não a serviço de seu país). Quanto à nacionalidade e à capacidade política de Peter:",
+  o:{A:"é brasileiro nato (jus solis) e pode ocupar qualquer cargo, inclusive os privativos de brasileiro nato",B:"é brasileiro naturalizado",C:"é estrangeiro",D:"é nato, mas não pode ser Presidente",E:"depende de opção ao completar a maioridade"},
+  g:"A",e:"Nascido no Brasil, filho de estrangeiros NÃO a serviço de seu país → brasileiro NATO (jus solis). Como nato, pode ocupar qualquer cargo, inclusive os privativos de nato.",
+  f:"CF, art. 12, I, 'a'; art. 12, §3º",p:"A exceção do jus solis só ocorre se os pais estiverem A SERVIÇO de seu país. Férias não afasta."},
+
+ {t:"Nacionalidade",q:"Anne nasceu no Brasil, filha de pais turcos que estavam a serviço da embaixada da Alemanha. Anos depois, discute-se sua nacionalidade. À luz da CF/88 (com a EC 131/2023):",
+  o:{A:"é estrangeira",B:"é brasileira naturalizada",C:"é nata, sem possibilidade de renunciar",D:"é nata, mas perdeu automaticamente a nacionalidade",E:"é brasileira nata, podendo renunciar à nacionalidade, o que não ocorreu"},
+  g:"E",e:"A exceção ao jus solis exige que os pais estejam a serviço DO PRÓPRIO PAÍS deles. Pais turcos a serviço da Alemanha (terceiro Estado) não afasta o jus solis → nata. EC 131/2023: perda só por renúncia expressa, que não houve.",
+  f:"CF, art. 12, I, 'a'; art. 12, §4º, II (EC 131/2023)",p:"'A serviço de seu país' = país DOS PAIS. Servindo a terceiro Estado → prevalece jus solis."},
+
+ {t:"Nacionalidade",q:"Marie, belga, reside no Brasil há mais de 16 anos ininterruptos, sem condenação penal. Pretende naturalizar-se. À luz da CF/88:",
+  o:{A:"não pode, pois só portugueses se naturalizam",B:"depende de residência de 30 anos",C:"pode requerer a naturalização extraordinária, exigindo-se apenas residência por mais de 15 anos ininterruptos e ausência de condenação penal, bastando o requerimento",D:"depende de lei específica",E:"só mediante casamento com brasileiro"},
+  g:"C",e:"Naturalização EXTRAORDINÁRIA (art. 12, II, 'b'): residência +15 anos ininterruptos e sem condenação penal, bastando requerer. Preenchidos os requisitos, há direito subjetivo.",
+  f:"CF, art. 12, II, 'b'",p:"Extraordinária = +15 anos + sem condenação + REQUERIMENTO (direito subjetivo). 30 anos é distrator."},
+
+ {t:"Processo Legislativo",q:"A Lei LEX, de iniciativa parlamentar, instituiu isenção de pedágio para PCD e fixou prazo para regulamentação pelo Executivo. Questiona-se a constitucionalidade. À luz da CF/88 e do STF:",
+  o:{A:"há vício de iniciativa, pois só o Executivo pode legislar sobre o tema",B:"há vício material por criar despesa",C:"é integralmente inconstitucional",D:"é constitucional quanto à isenção, havendo vício apenas quanto à fixação de prazo para o Executivo regulamentar",E:"viola a separação de poderes em todos os pontos"},
+  g:"D",e:"Lei parlamentar pode dispor sobre proteção de PCD (sem reserva de iniciativa do Executivo). O vício está só na imposição de PRAZO ao Executivo para regulamentar — viola a separação de poderes nesse ponto.",
+  f:"CF, art. 2º; art. 61, §1º; jurisp. STF",p:"Inconstitucionalidade PARCIAL: cai só a parte que impõe prazo ao Executivo. Não há vício de iniciativa."},
+
+ {t:"Processo Legislativo",q:"Em determinado Estado, a Constituição Estadual é silente sobre a matéria 'X'. Lei Complementar estadual e Lei Ordinária estadual dispõem de forma conflitante. Discute-se a hierarquia e o controle. À luz da CF/88:",
+  o:{A:"prevalece a lei ordinária, por especialidade",B:"há hierarquia entre LC e LO",C:"o conflito se resolve pela anterioridade",D:"prevalece a LC, e o controle concentrado se faz perante o TJ tendo a Constituição Estadual como parâmetro",E:"cabe controle concentrado perante o STF"},
+  g:"D",e:"Não há hierarquia entre LC e LO, mas reserva de matéria; reservada à LC, esta prevalece. Controle concentrado em face da Constituição ESTADUAL → competência do TJ, com a CE como parâmetro.",
+  f:"CF, art. 125, §2º; art. 59",p:"Controle com a Constituição ESTADUAL como parâmetro → TJ, não STF. LC x LO = reserva, não hierarquia."},
+
+ {t:"Processo Legislativo",q:"Proposta de Emenda à Constituição pretende ampliar as hipóteses de matéria reservada à lei complementar. Discute-se sua admissibilidade. À luz da CF/88:",
+  o:{A:"é inconstitucional, por violar cláusula pétrea",B:"depende de plebiscito",C:"só por lei ordinária",D:"é admissível, pois decorre da autonomia política do poder constituinte derivado, observados os limites do art. 60",E:"viola a separação de poderes"},
+  g:"D",e:"O poder constituinte derivado pode, por EC, ampliar matérias reservadas à LC, respeitados os limites do art. 60. Ampliar reserva de LC não atinge cláusula pétrea.",
+  f:"CF, art. 60; art. 59",p:"Ampliar reserva de LC por EC é admissível — não é cláusula pétrea. O distrator inventa a vedação."},
+
+ {t:"Poder Legislativo",q:"Uma CPI instaurada na Câmara Municipal pretende determinar a quebra de sigilo bancário de investigado. Assinale a opção que indica uma INCORREÇÃO sobre os poderes dessa CPI:",
+  o:{A:"pode convocar testemunhas",B:"tem poderes de investigação próprios das autoridades judiciais",C:"deve observar a reserva de jurisdição em certos atos",D:"a CPI municipal pode determinar, por autoridade própria, a quebra de sigilo bancário",E:"submete-se ao controle judicial"},
+  g:"D",e:"A assertiva INCORRETA é a 'D': CPI municipal NÃO pode determinar quebra de sigilo bancário por autoridade própria (falta simetria); depende de autorização judicial. As demais estão corretas.",
+  f:"CF, art. 58, §3º; STF",p:"CPI municipal investiga, mas NÃO quebra sigilo bancário diretamente. Reserva de jurisdição: interceptação, busca domiciliar, prisão (salvo flagrante)."},
+
+ {t:"Poder Legislativo",q:"Deputado, em discurso no plenário, profere ofensas no exercício do mandato. Vítima pretende responsabilizar civilmente o Estado pelos danos. À luz da CF/88 e do STF, a imunidade material parlamentar:",
+  o:{A:"não impede a responsabilização civil do Estado",B:"exclui a responsabilidade civil do Estado, pois a inviolabilidade abrange as opiniões, palavras e votos do parlamentar",C:"só alcança o âmbito penal",D:"depende de autorização da Casa",E:"não existe para vereadores"},
+  g:"B",e:"A imunidade material (inviolabilidade) torna não indenizáveis as opiniões, palavras e votos no exercício do mandato (civil e penal). Sendo o ato inviável de responsabilização, não há dever de indenizar — nem do parlamentar, nem do Estado.",
+  f:"CF, art. 53, caput; STF",p:"Imunidade material = inviolabilidade civil E penal. Exclui responsabilidade civil do Estado. Vereador tem imunidade material no município (art. 29, VIII)."},
+
+ {t:"Poder Legislativo",q:"A Mesa da Assembleia encaminhou pedido escrito de informações a Secretário de Estado, que se recusou a prestá-las e não respondeu no prazo. À luz da CF/88, tal conduta:",
+  o:{A:"é mera irregularidade administrativa",B:"configura crime de responsabilidade, por recusa ou não atendimento, no prazo de 30 dias, ou prestação de informações falsas",C:"configura improbidade",D:"exige prévia autorização judicial",E:"não gera consequência"},
+  g:"B",e:"A recusa, o não atendimento no prazo de 30 dias, ou a prestação de informações falsas aos pedidos escritos das Mesas configura CRIME DE RESPONSABILIDADE (controle político do Legislativo).",
+  f:"CF, art. 50, §2º",p:"Pedido de informações das Mesas → prazo de 30 DIAS; descumprimento = crime de responsabilidade. Não confundir com convocação (caput)."},
+
+ {t:"Poder Judiciário",q:"Sobre a autonomia financeira e orçamentária do Poder Judiciário, assinale a opção INCORRETA:",
+  o:{A:"os tribunais elaboram suas propostas orçamentárias dentro dos limites da LDO",B:"é assegurada autonomia administrativa e financeira",C:"o encaminhamento da proposta observa limites da LDO",D:"em caso de não encaminhamento no prazo, o Executivo considera os valores da lei orçamentária vigente",E:"a proposta orçamentária do Judiciário é elaborada pelo Poder Executivo"},
+  g:"E",e:"A INCORRETA é a 'E': a proposta orçamentária do Judiciário é elaborada pelos PRÓPRIOS TRIBUNAIS, dentro dos limites da LDO — expressão de sua autonomia. Não é elaborada pelo Executivo.",
+  f:"CF, art. 99, caput e §§1º e 2º",p:"Autonomia do art. 99: o próprio Judiciário elabora sua proposta. Dizer que o Executivo a elabora é o erro."}
+];
+
+let order=[], idx=0, answers=[], answered=false;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function start(){
+  order=QS.map((_,i)=>i);
+  if(document.getElementById('shuffle').checked) shuffle(order);
+  idx=0; answers=new Array(QS.length).fill(null);
+  document.getElementById('s-intro').classList.add('hidden');
+  document.getElementById('s-result').classList.add('hidden');
+  document.getElementById('s-quiz').classList.remove('hidden');
+  render();
+}
+
+function render(){
+  answered=false;
+  const q=QS[order[idx]];
+  document.getElementById('qtopic').textContent=q.t;
+  document.getElementById('qnum').textContent='Questão '+(idx+1)+' / '+QS.length;
+  document.getElementById('prog').style.width=((idx)/QS.length*100)+'%';
+  document.getElementById('enun').textContent=q.q;
+  const ob=document.getElementById('opts'); ob.innerHTML='';
+  ['A','B','C','D','E'].forEach(L=>{
+    if(!q.o[L])return;
+    const d=document.createElement('div');
+    d.className='opt'; d.dataset.l=L;
+    d.innerHTML='<span class="ltr">'+L+'</span><span>'+q.o[L]+'</span>';
+    d.onclick=()=>pick(L,d);
+    ob.appendChild(d);
+  });
+  const fb=document.getElementById('fb'); fb.className='feedback'; fb.innerHTML='';
+  document.getElementById('nextBtn').disabled=true;
+  document.getElementById('skipBtn').classList.remove('hidden');
+  document.getElementById('nextBtn').textContent = (idx===QS.length-1)?'Ver resultado →':'Próxima →';
+}
+
+function pick(L,el){
+  if(answered)return; answered=true;
+  const q=QS[order[idx]];
+  answers[order[idx]]=L;
+  document.querySelectorAll('.opt').forEach(o=>{
+    o.classList.add('disabled');
+    if(o.dataset.l===q.g) o.classList.add('ok');
+    if(o.dataset.l===L && L!==q.g) o.classList.add('bad');
+  });
+  const right=L===q.g;
+  const fb=document.getElementById('fb');
+  fb.className='feedback show '+(right?'right':'wrong');
+  fb.innerHTML='<div class="fh">'+(right?'✓ Correto':'✗ Incorreto')+' — Gabarito: '+q.g+'</div>'
+    +'<div>'+q.e+'</div>'
+    +'<div class="peg">⚠️ Pegadinha: '+q.p+'</div>'
+    +'<div class="fund">📘 '+q.f+'</div>';
+  document.getElementById('nextBtn').disabled=false;
+  document.getElementById('skipBtn').classList.add('hidden');
+}
+
+function next(){
+  if(idx<QS.length-1){idx++;render();}
+  else result();
+}
+
+function result(){
+  document.getElementById('s-quiz').classList.add('hidden');
+  document.getElementById('s-result').classList.remove('hidden');
+  const tot=QS.length;
+  const correct=QS.reduce((a,q,i)=>a+(answers[i]===q.g?1:0),0);
+  const pct=Math.round(correct/tot*100);
+  document.getElementById('pct').textContent=pct+'%';
+  const col = pct>=70?'var(--ok)':pct>=50?'var(--warn)':'var(--err)';
+  document.getElementById('circle').style.background='conic-gradient('+col+' '+(pct*3.6)+'deg, var(--line) 0deg)';
+  document.getElementById('resline').textContent=correct+' de '+tot+' corretas · '
+    +(pct>=70?'Bom desempenho, siga para a oral.':pct>=50?'Revise as pegadinhas marcadas.':'Refaça com calma — foco nos fundamentos.');
+  buildReview('all');
+}
+
+function buildReview(filter){
+  const box=document.getElementById('review'); box.innerHTML='';
+  QS.forEach((q,i)=>{
+    const ua=answers[i]; const right=ua===q.g;
+    if(filter==='err' && right) return;
+    if(filter==='ok' && !right) return;
+    const d=document.createElement('div');
+    d.className='rev '+(right?'c':'w');
+    const uaTxt = ua? ua+') '+q.o[ua] : '— (em branco)';
+    d.innerHTML='<div class="rh"><span class="rt">'+q.t+'</span><span class="rg">'+(right?'✓ Acertou':'✗ Errou')+'</span></div>'
+      +'<div class="rq">'+q.q+'</div>'
+      +'<div class="ra"><b>Sua resposta:</b> '+uaTxt+'<br><b>Gabarito '+q.g+':</b> '+q.o[q.g]+'<br>'+q.e+'</div>'
+      +'<div class="rpeg">⚠️ '+q.p+'<br><span style="color:var(--muted)">📘 '+q.f+'</span></div>';
+    box.appendChild(d);
+  });
+  if(!box.children.length) box.innerHTML='<div class="rev" style="text-align:center;color:var(--muted)">Nenhuma questão nesta categoria.</div>';
+}
+
+function filterRev(f,btn){
+  document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  buildReview(f);
+}
+
+function restart(){
+  document.getElementById('s-result').classList.add('hidden');
+  document.getElementById('s-intro').classList.remove('hidden');
+}
+</script>
+</body>
+</html>

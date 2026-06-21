@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado · Constitucional (Profa. Nelma) · 5 dias · 25 Questões</title>
+<style>
+:root{
+  --bg:#07080f; --card:#0d0f1c; --border:#1e2240; --text:#eef0fc; --muted:#7880aa; --soft:#b0b8d8;
+  --indigo:#6e7ef2; --indigobg:#0a0c28;
+  --A:#e05555; --A-bg:#1c0d12; --A-border:#3a1620;
+  --B:#27c06a; --B-bg:#0a1c12; --B-border:#163a26;
+  --C:#f5a623; --C-bg:#1c160a; --C-border:#3a2e16;
+  --D:#4e8ef7; --D-bg:#0a121c; --D-border:#16263a;
+  --E:#b06bf2; --E-bg:#150a1c; --E-border:#2a163a;
+  --ok:#27c06a; --okbg:#0a1c12; --okbd:#163a26;
+  --err:#e05555; --errbg:#1c0d12; --errbd:#3a1620;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;padding:0;min-height:100vh}
+.wrap{max-width:780px;margin:0 auto;padding:28px 20px 70px}
+.hidden{display:none!important}
+h1{font-size:1.55rem;font-weight:700;letter-spacing:-.5px;margin-bottom:6px}
+.sub{color:var(--muted);font-size:.95rem;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:18px}
+.badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.btn{display:inline-block;background:var(--indigo);color:#fff;border:none;border-radius:12px;padding:14px 26px;font-size:1rem;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--soft)}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.dias-list{margin:18px 0 4px}
+.dia-line{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border);font-size:.92rem}
+.dia-line:last-child{border-bottom:none}
+.dia-dot{width:10px;height:10px;border-radius:50%;flex:none}
+.dia-nome{font-weight:600}
+.dia-tema{color:var(--muted)}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;font-size:.85rem;color:var(--muted)}
+.timer{font-variant-numeric:tabular-nums;font-weight:600;color:var(--soft)}
+.progress{height:6px;background:var(--border);border-radius:999px;overflow:hidden;margin-bottom:22px}
+.progress-fill{height:100%;background:var(--indigo);width:0;transition:width .3s}
+.q-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.q-num{font-size:.8rem;color:var(--muted);font-weight:600}
+.q-statement{font-size:1.12rem;line-height:1.6;margin-bottom:26px}
+.ce-row{display:flex;gap:14px}
+.ce-btn{flex:1;background:var(--card);border:1.5px solid var(--border);color:var(--text);border-radius:14px;padding:18px;font-size:1.05rem;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;letter-spacing:.5px}
+.ce-btn:hover{border-color:var(--indigo)}
+.ce-certo:hover{border-color:var(--ok);color:var(--ok)}
+.ce-errado:hover{border-color:var(--err);color:var(--err)}
+.flash-c{animation:flashc .42s}
+.flash-e{animation:flashe .42s}
+@keyframes flashc{0%,100%{background:var(--card)}40%{background:var(--okbg)}}
+@keyframes flashe{0%,100%{background:var(--card)}40%{background:var(--errbg)}}
+.score-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px 0 6px}
+.score-circle{width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--indigo) calc(var(--pct)*1%), var(--border) 0);margin-bottom:18px}
+.score-inner{width:120px;height:120px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-pct{font-size:2rem;font-weight:700;line-height:1}
+.score-frac{font-size:.85rem;color:var(--muted);margin-top:3px}
+.result-label{font-size:1.25rem;font-weight:700;margin-bottom:6px}
+.result-sub{color:var(--muted);font-size:.92rem;margin-bottom:8px}
+.bloco-stats{margin:22px 0 4px}
+.bloco-stat{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:.9rem}
+.bloco-stat:last-child{border-bottom:none}
+.bs-bar{flex:1;height:7px;background:var(--border);border-radius:999px;overflow:hidden}
+.bs-bar-fill{height:100%}
+.bs-frac{font-variant-numeric:tabular-nums;color:var(--soft);font-weight:600;min-width:42px;text-align:right}
+.sec-title{font-size:1.05rem;font-weight:700;margin:30px 0 6px}
+.sec-hint{color:var(--muted);font-size:.85rem;margin-bottom:16px}
+.revisao-item{border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:12px;border-left-width:4px}
+.revisao-item.ok{border-left-color:var(--ok)}
+.revisao-item.err{border-left-color:var(--err)}
+.rv-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.rv-tag{font-size:.68rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.rv-tag.ok{background:var(--okbg);color:var(--ok);border:1px solid var(--okbd)}
+.rv-tag.err{background:var(--errbg);color:var(--err);border:1px solid var(--errbd)}
+.rv-dia{font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.4px}
+.rv-q{font-size:.97rem;margin-bottom:10px}
+.rv-gab{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.rv-gab .g-certo{color:var(--ok)}
+.rv-gab .g-errado{color:var(--err)}
+.rv-your{font-size:.78rem;color:var(--muted);margin-bottom:8px}
+.rv-comment{font-size:.88rem;color:var(--soft);background:var(--indigobg);border:1px solid var(--border);border-radius:10px;padding:11px 13px}
+.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.fbtn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:999px;padding:6px 14px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit}
+.fbtn.active{background:var(--indigobg);border-color:var(--indigo);color:var(--text)}
+.foot{text-align:center;color:var(--muted);font-size:.78rem;margin-top:34px}
+.theme-ctl{position:fixed;top:10px;right:12px;display:flex;gap:5px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:5px 9px;z-index:50}
+.theme-ctl .tlabel{font-size:.6rem;color:var(--muted);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-right:2px}
+.tdot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);cursor:pointer;padding:0;background:var(--text)}
+.tdot.on{border-color:var(--indigo);box-shadow:0 0 0 2px var(--indigobg)}
+.flag-btn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:999px;padding:6px 14px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:16px}
+.flag-btn.on{background:var(--C-bg);border-color:var(--C);color:var(--C)}
+.resume-card{border:1px solid var(--indigo);background:var(--indigobg)}
+.rv-flag{font-size:.68rem;font-weight:700;color:var(--C);letter-spacing:.4px}
+</style>
+</head>
+<body>
+<div class="theme-ctl">
+  <span class="tlabel">Tema</span>
+  <button class="tdot" data-th="suave" onclick="setTheme('suave')" title="Suave"></button>
+  <button class="tdot" data-th="padrao" onclick="setTheme('padrao')" title="Padrão"></button>
+  <button class="tdot" data-th="intenso" onclick="setTheme('intenso')" title="Intenso"></button>
+</div>
+<div class="wrap">
+
+  <section id="s-intro">
+    <span class="badge" style="background:var(--indigobg);color:var(--indigo);border:1px solid var(--border)">Constitucional · Profa. Nelma Fontana</span>
+    <h1>Simulado · 5 dias · 25 questões</h1>
+    <p class="sub">Hermenêutica constitucional, teorias da interpretação, palavras-gatilho FGV e direito intertemporal (recepção, repristinação, desconstitucionalização, inconstitucionalidade superveniente e controle). Formato Certo/Errado, estilo CEBRASPE.</p>
+
+    <div id="resume-box" class="card resume-card hidden">
+      <div style="font-weight:700;margin-bottom:6px">Você tem um simulado em andamento</div>
+      <div class="sub" id="resume-info" style="margin-bottom:14px">—</div>
+      <div class="btn-row">
+        <button class="btn" onclick="resumeQuiz()">Retomar de onde parei</button>
+        <button class="btn btn-ghost" onclick="discardSaved()">Começar do zero</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="dias-list">
+        <div class="dia-line"><span class="dia-dot" style="background:var(--A)"></span><span class="dia-nome">Dia 1</span><span class="dia-tema">— Hermenêutica e teorias da interpretação</span></div>
+        <div class="dia-line"><span class="dia-dot" style="background:var(--B)"></span><span class="dia-nome">Dia 2</span><span class="dia-tema">— Métodos e palavras-gatilho (FGV)</span></div>
+        <div class="dia-line"><span class="dia-dot" style="background:var(--C)"></span><span class="dia-nome">Dia 3</span><span class="dia-tema">— Recepção e desconstitucionalização</span></div>
+        <div class="dia-line"><span class="dia-dot" style="background:var(--D)"></span><span class="dia-nome">Dia 4</span><span class="dia-tema">— Repristinação e direito intertemporal</span></div>
+        <div class="dia-line"><span class="dia-dot" style="background:var(--E)"></span><span class="dia-nome">Dia 5</span><span class="dia-tema">— Inconstitucionalidade superveniente e controle</span></div>
+      </div>
+    </div>
+
+    <p class="sub" style="margin-bottom:18px">São 25 afirmativas. Julgue cada uma como <b style="color:var(--ok)">CERTO</b> ou <b style="color:var(--err)">ERRADO</b>. Ao final você verá sua nota, o desempenho por dia e o <b>comentário de todas as questões</b> — tanto as que você acertou quanto as que errou.</p>
+    <div class="btn-row">
+      <button class="btn" onclick="startQuiz()">Começar simulado</button>
+    </div>
+  </section>
+
+  <section id="s-quiz" class="hidden">
+    <div class="topbar">
+      <span id="q-counter">Questão 1 de 25</span>
+      <span class="timer" id="timer">00:00</span>
+    </div>
+    <div class="progress"><div class="progress-fill" id="prog"></div></div>
+
+    <div class="card">
+      <div class="q-meta">
+        <span class="badge" id="q-badge" style="margin-bottom:0">Dia 1</span>
+        <span class="q-num" id="q-num">#1</span>
+      </div>
+      <div class="q-statement" id="q-statement">…</div>
+      <button class="flag-btn" id="flag-btn" onclick="toggleFlag()">☆ Marcar para revisar</button>
+      <div class="ce-row">
+        <button class="ce-btn ce-certo" onclick="answer(1)">CERTO</button>
+        <button class="ce-btn ce-errado" onclick="answer(0)">ERRADO</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-result" class="hidden">
+    <div class="card">
+      <div class="score-wrap">
+        <div class="score-circle" id="score-circle" style="--pct:0">
+          <div class="score-inner">
+            <span class="score-pct" id="score-pct">0%</span>
+            <span class="score-frac" id="score-frac">0/25</span>
+          </div>
+        </div>
+        <div class="result-label" id="result-label">—</div>
+        <div class="result-sub" id="result-sub">—</div>
+      </div>
+
+      <div class="bloco-stats" id="bloco-stats"></div>
+    </div>
+
+    <div class="sec-title">Revisão comentada — todas as questões</div>
+    <div class="sec-hint">Confira o gabarito e o comentário de cada item. Os acertos aparecem em verde; os erros, em vermelho.</div>
+    <div class="filter-row">
+      <button class="fbtn active" data-f="all" onclick="filterRev('all')">Todas (25)</button>
+      <button class="fbtn" data-f="err" onclick="filterRev('err')">Só erros</button>
+      <button class="fbtn" data-f="ok" onclick="filterRev('ok')">Só acertos</button>
+      <button class="fbtn" data-f="flag" onclick="filterRev('flag')">★ Marcadas</button>
+    </div>
+    <div id="revisao"></div>
+
+    <div class="btn-row" style="margin-top:24px">
+      <button class="btn" onclick="redoWrong()">Refazer só as erradas</button>
+      <button class="btn btn-ghost" onclick="restartQuiz()">Refazer simulado</button>
+    </div>
+    <div class="foot">Material da Profa. Nelma Fontana · Constitucional · TJ-MT 2025 · Notários e Registradores (CEBRASPE)</div>
+  </section>
+
+</div>
+
+<script>
+const DIAS = {
+  '1':{nome:'Dia 1', tema:'Hermenêutica e teorias da interpretação', cor:'--A'},
+  '2':{nome:'Dia 2', tema:'Métodos e palavras-gatilho (FGV)', cor:'--B'},
+  '3':{nome:'Dia 3', tema:'Recepção e desconstitucionalização', cor:'--C'},
+  '4':{nome:'Dia 4', tema:'Repristinação e direito intertemporal', cor:'--D'},
+  '5':{nome:'Dia 5', tema:'Inconstitucionalidade superveniente e controle', cor:'--E'}
+};
+
+const QS = [
+  {d:'1', g:1, q:'A hermenêutica constitucional ocupa-se da fixação dos métodos e princípios que orientam a interpretação da Constituição, ao passo que a interpretação é a aplicação concreta desses métodos ao texto.',
+   e:'CERTO. Hermenêutica é a teoria/ciência que estuda os critérios da interpretação; interpretar é o ato de atribuir sentido à norma. Distinção clássica cobrada pela banca.'},
+  {d:'1', g:0, q:'Segundo o originalismo, o intérprete deve buscar o sentido que melhor se ajuste aos valores sociais do momento da aplicação da norma, ainda que se afaste da intenção original do constituinte.',
+   e:'ERRADO. O originalismo prega justamente o contrário: vincula o intérprete à vontade/intenção original do constituinte (original intent / original meaning). A descrição corresponde a uma leitura evolutiva (mutação constitucional), não ao originalismo.'},
+  {d:'1', g:1, q:'O formalismo interpretativo valoriza a literalidade do texto e a aplicação lógico-dedutiva da norma, reduzindo o espaço de valoração do intérprete.',
+   e:'CERTO. O formalismo (positivismo legalista) apega-se à letra da lei e à subsunção lógica, minimizando juízos de valor do intérprete.'},
+  {d:'1', g:0, q:'A jurisprudência dos conceitos e o realismo jurídico são, em essência, a mesma corrente, pois ambos defendem que o Direito se reduz às decisões efetivamente proferidas pelos tribunais.',
+   e:'ERRADO. São correntes opostas. A jurisprudência dos conceitos é formalista/conceitual-dedutiva (o Direito como sistema lógico de conceitos); o realismo jurídico afirma que o Direito é o que os tribunais decidem na prática. Confundi-las é pegadinha frequente.'},
+  {d:'1', g:1, q:'A lógica do razoável, de Recaséns Siches, propõe que a interpretação jurídica não se faça pela lógica formal pura, mas por uma razão sensível ao contexto, aos fins e aos valores da vida humana.',
+   e:'CERTO. A lógica do razoável (logos de lo humano) substitui a lógica formal dedutiva por um raciocínio prudencial, orientado a fins e valores concretos.'},
+
+  {d:'2', g:1, q:'Pela tópica de Theodor Viehweg, a interpretação parte do problema concreto (pensamento problematizante) e não da dedução a partir do sistema, valendo-se de topoi (pontos de vista) para construir a solução.',
+   e:'CERTO. Palavra-gatilho: "problema" / "topoi" → Viehweg, método tópico-problemático. Parte-se do caso concreto, não do sistema.'},
+  {d:'2', g:1, q:'No método concretista (estruturante) de Friedrich Müller, a norma jurídica não se confunde com o texto: ela resulta da conjugação do programa normativo (texto) com o âmbito normativo (realidade fática a que se refere).',
+   e:'CERTO. Palavra-gatilho FGV: "programa normativo + âmbito normativo" → Müller. A norma é construída na concretização, não é o mero enunciado linguístico.'},
+  {d:'2', g:0, q:'A expressão "sociedade aberta dos intérpretes da Constituição" foi cunhada por Konrad Hesse para defender que apenas os órgãos jurisdicionais podem legitimamente interpretar a Constituição.',
+   e:'ERRADO. A "sociedade aberta dos intérpretes" é de Peter Häberle — e prega exatamente o oposto: todos que vivem a Constituição participam de sua interpretação, ampliando o círculo para além dos juízes. Hesse é a "força normativa da Constituição".'},
+  {d:'2', g:1, q:'Pela escola do direito livre, admite-se ao julgador maior liberdade criativa diante de lacunas e insuficiências da lei, podendo decidir para além do texto legal.',
+   e:'CERTO. A escola do direito livre (Freirecht) sustenta a liberdade do intérprete para colmatar lacunas e até afastar a solução legal injusta — gatilho: "direito livre / liberdade do juiz".'},
+  {d:'2', g:0, q:'O método hermenêutico-concretizador de Konrad Hesse parte do pressuposto de que a interpretação prescinde de qualquer pré-compreensão do intérprete sobre o texto constitucional.',
+   e:'ERRADO. O método hermenêutico-concretizador de Hesse pressupõe justamente a pré-compreensão (pré-conceitos) do intérprete, que vai e volta entre texto e realidade (círculo hermenêutico). Negar a pré-compreensão inverte o método.'},
+
+  {d:'3', g:1, q:'A recepção da legislação infraconstitucional anterior pela nova Constituição exige apenas compatibilidade material com o novo texto, sendo irrelevante eventual incompatibilidade meramente formal quanto ao processo legislativo da época.',
+   e:'CERTO. A recepção analisa a compatibilidade material com a nova Constituição. A forma exigida é a vigente ao tempo da edição da norma; mudança no processo legislativo posterior não impede a recepção (o novo regime apenas regula futuras alterações).'},
+  {d:'3', g:0, q:'A recepção da norma infraconstitucional anterior depende de manifestação expressa da nova Constituição, não se admitindo recepção tácita.',
+   e:'ERRADO. A recepção é, em regra, tácita: a norma anterior compatível continua em vigor independentemente de previsão expressa. O que exige previsão expressa é a recepção de norma constitucional anterior como infraconstitucional (desconstitucionalização).'},
+  {d:'3', g:1, q:'O fenômeno da desconstitucionalização, que faz com que normas da Constituição anterior sejam recebidas com status de lei ordinária pela nova ordem, somente é admitido no Brasil quando houver expressa previsão na nova Constituição.',
+   e:'CERTO. A desconstitucionalização não é automática no Brasil; depende de cláusula expressa na nova Constituição que recepcione dispositivos da Carta anterior como legislação infraconstitucional.'},
+  {d:'3', g:0, q:'Uma lei anterior à Constituição, materialmente compatível com o novo texto, mas que tratava de matéria hoje reservada a lei complementar, é considerada inconstitucional e expelida do ordenamento.',
+   e:'ERRADO. Havendo compatibilidade material, a lei é recepcionada — eventualmente com nova roupagem (ex.: recebida com status de lei complementar, como o CTN). A mudança de espécie normativa exigida pela nova Carta não impede a recepção.'},
+  {d:'3', g:1, q:'A análise da recepção pressupõe que a norma anterior tenha sido validamente editada (vigente e válida) à luz do ordenamento sob o qual nasceu; não se recepciona norma que já era inválida na ordem pretérita.',
+   e:'CERTO. Só se recepciona o que era válido e vigente sob a ordem anterior; norma já inválida ao tempo de sua edição não ganha validade pela nova Constituição.'},
+
+  {d:'4', g:0, q:'No direito brasileiro, a revogação da lei revogadora restaura automaticamente a vigência da lei anteriormente revogada, em razão do efeito repristinatório.',
+   e:'ERRADO. A repristinação NÃO é automática no Brasil (LINDB, art. 2º, §3º): a lei revogada só volta a vigorar se a nova lei expressamente assim dispuser.'},
+  {d:'4', g:1, q:'A repristinação é admitida no ordenamento brasileiro desde que prevista de forma expressa pela nova lei.',
+   e:'CERTO. Embora não automática, a repristinação é possível quando a lei nova determina expressamente o restabelecimento da norma revogada (art. 2º, §3º, LINDB).'},
+  {d:'4', g:1, q:'O efeito repristinatório no controle de constitucionalidade ocorre quando a declaração de inconstitucionalidade da lei revogadora faz retornar a vigência da norma anterior por ela revogada, salvo modulação de efeitos pelo STF.',
+   e:'CERTO. Diferente da repristinação legislativa: declarada inconstitucional a lei revogadora (nulidade ex tunc), restabelece-se a norma anteriormente revogada, podendo o STF modular os efeitos para afastar esse retorno.'},
+  {d:'4', g:0, q:'Em regra, a lei nova tem efeito retroativo, alcançando os atos jurídicos perfeitos e o direito adquirido constituídos sob a lei antiga.',
+   e:'ERRADO. A regra é a irretroatividade: a lei nova respeita o ato jurídico perfeito, o direito adquirido e a coisa julgada (CF, art. 5º, XXXVI). A retroatividade é excepcional e não pode prejudicar essas garantias.'},
+  {d:'4', g:1, q:'A norma constitucional originária tem aplicação imediata e, em regra, retroatividade mínima, alcançando os efeitos futuros de fatos passados (facta pendentia), salvo disposição em contrário.',
+   e:'CERTO. Entende-se que as normas constitucionais originárias têm retroatividade mínima (atingem prestações futuras de negócios anteriores), salvo ressalva expressa em sentido diverso.'},
+
+  {d:'5', g:0, q:'A incompatibilidade entre uma lei anterior e a Constituição nova configura inconstitucionalidade superveniente, devendo ser reconhecida por meio de ação direta de inconstitucionalidade (ADI).',
+   e:'ERRADO. Para o STF, lei anterior incompatível com a nova Constituição é caso de não recepção (revogação), e não de inconstitucionalidade superveniente. O instrumento cabível é a ADPF, não a ADI.'},
+  {d:'5', g:1, q:'A não recepção de norma pré-constitucional pode ser arguida perante o STF por meio de arguição de descumprimento de preceito fundamental (ADPF).',
+   e:'CERTO. A ADPF é o instrumento próprio para controle concentrado de direito pré-constitucional (não recepção), justamente por não caber ADI contra norma anterior à Constituição.'},
+  {d:'5', g:1, q:'A cláusula de reserva de plenário (full bench) não se aplica ao juízo de não recepção de norma anterior à Constituição, pois não se trata de declaração de inconstitucionalidade.',
+   e:'CERTO. Reserva de plenário (CF, art. 97; Súmula Vinculante 10) incide sobre declaração de inconstitucionalidade. Como a não recepção é hipótese de revogação, o órgão fracionário pode reconhecê-la sem submeter ao plenário.'},
+  {d:'5', g:0, q:'Segundo o STF, é possível o controle de constitucionalidade de norma pré-constitucional tendo como parâmetro a Constituição vigente à época de sua edição, em sede de ADI.',
+   e:'ERRADO. Não cabe ADI para aferir norma pré-constitucional em face da Constituição revogada (parâmetro já não vigente). O controle de direito pré-constitucional frente à Carta atual se faz por não recepção (ADPF).'},
+  {d:'5', g:1, q:'A teoria da inconstitucionalidade superveniente, no sentido de norma originalmente constitucional que se torna inconstitucional por mudança nas circunstâncias fáticas ou jurídicas, é admitida pela doutrina e jurisprudência sob a ideia de "lei ainda constitucional" / mutação inconstitucional, não se confundindo com a não recepção do direito pré-constitucional.',
+   e:'CERTO. Há a inconstitucionalidade superveniente em sentido próprio (norma válida que se torna incompatível por alteração do quadro fático/normativo — ex.: "lei ainda constitucional"), distinta da não recepção (lei anterior à nova Constituição). A banca explora essa diferença.'}
+];
+
+const LS_KEY='simulado_nelma_5dias_v1';
+const LS_THEME='simulado_theme_intensity';
+const THEMES={
+  suave:   {'--bg':'#141826','--card':'#1b2030','--border':'#2c3350','--text':'#f2f4fc','--muted':'#9aa3c8','--soft':'#c4cbe6','--indigobg':'#1a1f3a'},
+  padrao:  {'--bg':'#07080f','--card':'#0d0f1c','--border':'#1e2240','--text':'#eef0fc','--muted':'#7880aa','--soft':'#b0b8d8','--indigobg':'#0a0c28'},
+  intenso: {'--bg':'#020308','--card':'#070912','--border':'#161a33','--text':'#eef0fc','--muted':'#5f6890','--soft':'#a2abce','--indigobg':'#06081c'}
+};
+
+let order=[], idx=0, answers=[], flags=[], startTime=0, elapsed=0, timerInt=null, revFilter='all', done=false;
+
+function setTheme(name){
+  const t=THEMES[name]||THEMES.padrao;
+  for(const k in t){document.documentElement.style.setProperty(k,t[k]);}
+  document.querySelectorAll('.tdot').forEach(b=>b.classList.toggle('on',b.dataset.th===name));
+  try{localStorage.setItem(LS_THEME,name);}catch(e){}
+}
+
+function persist(){
+  try{
+    const cur = (timerInt && startTime) ? elapsed + Math.floor((Date.now()-startTime)/1000) : elapsed;
+    localStorage.setItem(LS_KEY, JSON.stringify({order,idx,answers,flags,done,elapsed:cur}));
+  }catch(e){}
+}
+function clearSaved(){ try{localStorage.removeItem(LS_KEY);}catch(e){} }
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function fmtTime(s){const m=Math.floor(s/60),ss=s%60;return String(m).padStart(2,'0')+':'+String(ss).padStart(2,'0');}
+
+function startTimer(){
+  clearInterval(timerInt); startTime=Date.now();
+  document.getElementById('timer').textContent=fmtTime(elapsed);
+  timerInt=setInterval(()=>{document.getElementById('timer').textContent=fmtTime(elapsed+Math.floor((Date.now()-startTime)/1000));},1000);
+}
+
+function startQuiz(){
+  order = shuffle(QS.map((_,i)=>i));
+  idx=0; answers=[]; flags=[]; done=false; elapsed=0;
+  clearSaved();
+  document.getElementById('s-intro').classList.add('hidden');
+  document.getElementById('s-result').classList.add('hidden');
+  document.getElementById('s-quiz').classList.remove('hidden');
+  startTimer();
+  showQ(); persist();
+}
+
+function resumeQuiz(){
+  document.getElementById('resume-box').classList.add('hidden');
+  document.getElementById('s-intro').classList.add('hidden');
+  document.getElementById('s-result').classList.add('hidden');
+  if(done){ showResult(); return; }
+  document.getElementById('s-quiz').classList.remove('hidden');
+  startTimer();
+  showQ();
+}
+
+function discardSaved(){
+  clearSaved();
+  document.getElementById('resume-box').classList.add('hidden');
+}
+
+function showQ(){
+  const q=QS[order[idx]];
+  const dia=DIAS[q.d];
+  document.getElementById('q-counter').textContent='Questão '+(idx+1)+' de '+QS.length;
+  document.getElementById('prog').style.width=((idx)/QS.length*100)+'%';
+  const badge=document.getElementById('q-badge');
+  badge.textContent=dia.nome;
+  badge.style.background='var('+dia.cor+'-bg)';
+  badge.style.color='var('+dia.cor+')';
+  badge.style.border='1px solid var('+dia.cor+'-border)';
+  document.getElementById('q-num').textContent='#'+(order[idx]+1);
+  document.getElementById('q-statement').textContent=q.q;
+  updateFlagBtn();
+}
+
+function updateFlagBtn(){
+  const on=!!flags[order[idx]];
+  const b=document.getElementById('flag-btn');
+  b.classList.toggle('on',on);
+  b.textContent=(on?'★ Marcada para revisar':'☆ Marcar para revisar');
+}
+function toggleFlag(){
+  flags[order[idx]]=!flags[order[idx]];
+  updateFlagBtn(); persist();
+}
+
+function answer(v){
+  const q=QS[order[idx]];
+  const correct=(v===q.g);
+  answers.push({i:order[idx], your:v, correct:correct});
+  const card=document.querySelector('#s-quiz .card');
+  card.classList.remove('flash-c','flash-e');
+  void card.offsetWidth;
+  card.classList.add(correct?'flash-c':'flash-e');
+  persist();
+  setTimeout(()=>{
+    card.classList.remove('flash-c','flash-e');
+    idx++;
+    if(idx>=QS.length){ done=true; persist(); showResult(); }
+    else { showQ(); }
+  },420);
+}
+
+function showResult(){
+  clearInterval(timerInt);
+  if(startTime){ elapsed = elapsed + Math.floor((Date.now()-startTime)/1000); startTime=0; }
+  persist();
+  document.getElementById('s-quiz').classList.add('hidden');
+  document.getElementById('s-intro').classList.add('hidden');
+  document.getElementById('s-result').classList.remove('hidden');
+
+  const total=QS.length;
+  const acertos=answers.filter(a=>a.correct).length;
+  const pct=Math.round(acertos/total*100);
+  document.getElementById('score-circle').style.setProperty('--pct',pct);
+  document.getElementById('score-pct').textContent=pct+'%';
+  document.getElementById('score-frac').textContent=acertos+'/'+total;
+
+  let label,sub;
+  if(pct>=90){label='Excelente! 🏆';sub='Domínio sólido do conteúdo de Constitucional.';}
+  else if(pct>=70){label='Bom resultado 👍';sub='Você está no caminho — revise os erros abaixo.';}
+  else if(pct>=50){label='Continue praticando 📖';sub='Reforce os temas com mais erros por dia.';}
+  else{label='Reveja os cadernos 📚';sub='Vale reler o material da Profa. Nelma antes de refazer.';}
+  document.getElementById('result-label').textContent=label;
+  document.getElementById('result-sub').textContent=sub;
+
+  const stats={};
+  Object.keys(DIAS).forEach(d=>stats[d]={ok:0,tot:0});
+  answers.forEach(a=>{const d=QS[a.i].d;stats[d].tot++;if(a.correct)stats[d].ok++;});
+  let html='';
+  Object.keys(DIAS).forEach(d=>{
+    const s=stats[d], cor=DIAS[d].cor;
+    const p=s.tot?Math.round(s.ok/s.tot*100):0;
+    html+='<div class="bloco-stat">'
+      +'<span class="dia-dot" style="background:var('+cor+')"></span>'
+      +'<span style="min-width:46px;font-weight:600">'+DIAS[d].nome+'</span>'
+      +'<div class="bs-bar"><div class="bs-bar-fill" style="width:'+p+'%;background:var('+cor+')"></div></div>'
+      +'<span class="bs-frac">'+s.ok+'/'+s.tot+'</span></div>';
+  });
+  document.getElementById('bloco-stats').innerHTML=html;
+
+  renderRevisao();
+}
+
+function renderRevisao(){
+  let html='';
+  answers.forEach((a,n)=>{
+    const q=QS[a.i];
+    const cls=a.correct?'ok':'err';
+    if(revFilter==='err'&&a.correct)return;
+    if(revFilter==='ok'&&!a.correct)return;
+    if(revFilter==='flag'&&!flags[a.i])return;
+    const gabTxt=q.g?'<span class="g-certo">CERTO</span>':'<span class="g-errado">ERRADO</span>';
+    const yourTxt=a.your?'CERTO':'ERRADO';
+    const flagTag=flags[a.i]?'<span class="rv-flag">★ MARCADA</span>':'';
+    html+='<div class="revisao-item '+cls+'">'
+      +'<div class="rv-top">'
+        +'<span class="rv-tag '+cls+'">'+(a.correct?'Acertou':'Errou')+'</span>'
+        +'<span class="rv-dia">'+DIAS[q.d].nome+' · #'+(a.i+1)+'</span>'
+        +flagTag
+      +'</div>'
+      +'<div class="rv-q">'+q.q+'</div>'
+      +'<div class="rv-gab">Gabarito: '+gabTxt+'</div>'
+      +'<div class="rv-your">Sua resposta: '+yourTxt+(a.correct?' ✓':' ✗')+'</div>'
+      +'<div class="rv-comment">'+q.e+'</div>'
+    +'</div>';
+  });
+  if(!html)html='<p class="sub">Nenhuma questão neste filtro.</p>';
+  document.getElementById('revisao').innerHTML=html;
+}
+
+function filterRev(f){
+  revFilter=f;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('active',b.dataset.f===f));
+  renderRevisao();
+}
+
+function redoWrong(){
+  const wrong=answers.filter(a=>!a.correct).map(a=>a.i);
+  if(!wrong.length){alert('Você não errou nenhuma questão — não há o que refazer!');return;}
+  order=shuffle(wrong.slice());
+  idx=0; answers=[]; done=false; elapsed=0;
+  document.getElementById('s-result').classList.add('hidden');
+  document.getElementById('s-quiz').classList.remove('hidden');
+  document.getElementById('q-counter').textContent='Questão 1 de '+order.length;
+  startTimer();
+  showQ();
+  document.getElementById('q-counter').textContent='Questão 1 de '+order.length;
+  persist();
+}
+
+function restartQuiz(){
+  clearSaved();
+  done=false; answers=[]; flags=[]; idx=0; elapsed=0;
+  document.getElementById('s-result').classList.add('hidden');
+  document.getElementById('s-intro').classList.remove('hidden');
+  revFilter='all';
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('active',b.dataset.f==='all'));
+  document.getElementById('resume-box').classList.add('hidden');
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  let savedTheme='padrao';
+  try{savedTheme=localStorage.getItem(LS_THEME)||'padrao';}catch(e){}
+  setTheme(savedTheme);
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(raw){
+      const s=JSON.parse(raw);
+      if(s&&Array.isArray(s.order)&&s.order.length&&!(s.done&&(!s.answers||!s.answers.length))){
+        order=s.order; idx=s.idx||0; answers=s.answers||[]; flags=s.flags||[]; done=!!s.done; elapsed=s.elapsed||0;
+        const box=document.getElementById('resume-box');
+        const info=document.getElementById('resume-info');
+        if(done){ info.textContent='Simulado concluído — você pode rever a correção comentada.'; }
+        else { info.textContent='Você respondeu '+answers.length+' de '+QS.length+' questões · tempo '+fmtTime(elapsed)+'.'; }
+        box.classList.remove('hidden');
+      }
+    }
+  }catch(e){}
+});
+</script>
+</body>
+</html>
