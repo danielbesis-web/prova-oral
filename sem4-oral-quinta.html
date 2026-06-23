@@ -109,13 +109,14 @@ function renderPills(){
   });
 }
 function tick(){
-  t++;const el=$('#timer');el.textContent=fmt(t);
+  t++;const el=$('#timer');if(!el)return;el.textContent=fmt(t);
   const lim=QS[cur].tempo||0;
   el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
 }
 function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
 function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
-function resetTimer(){pauseTimer();t=0;$('#timer').textContent='00:00';$('#timer').className='timer';}
+function resetTimer(){pauseTimer();t=0;const _rt=$('#timer');if(_rt){
+_rt.textContent='00:00';_rt.className='timer';}}
 function toggleAp(j){
   const q=$('#apq'+j),a=$('#apa'+j);
   q.classList.toggle('open');a.classList.toggle('open');
