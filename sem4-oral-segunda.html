@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado Oral — Retificação de Registro</title>
+<style>
+:root{
+  --bg:#050b18; --card:#0b1828; --border:#16365a; --text:#e9f0f8;
+  --muted:#90a6c0; --soft:#b9c8dc; --accent:var(--red);
+  --red:#e05555; --green:#27c06a; --amber:#f5a623; --blue:#4e8ef7;
+  --cyan:#38bdf8; --purple:#b06bf2; --teal:#2dd4bf;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.top{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:8px 0 6px;font-size:26px;line-height:1.2}
+.ribbon{display:inline-block;background:var(--accent);color:#04101f;font-weight:800;
+  padding:4px 12px;border-radius:999px;font-size:12.5px;letter-spacing:.04em}
+.sub{color:var(--soft);font-size:14px;margin-top:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.solid{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.pill{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--soft);
+  font-size:13px;cursor:pointer;font-weight:700}
+.pill.active{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pill.done{border-color:var(--green);color:var(--green)}
+.pill.done.active{background:var(--accent);color:#04101f}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:16px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.area{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;color:var(--soft)}
+.timer.warn{color:var(--amber)}
+.timer.over{color:var(--red)}
+.tcontrols{display:flex;gap:6px;align-items:center}
+.tbtn{background:#04101f;border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.tbtn:hover{border-color:var(--accent)}
+.enun{margin:16px 0 6px;font-size:16.5px;line-height:1.6}
+.topico{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;margin-top:10px}
+textarea{width:100%;min-height:120px;margin-top:10px;background:#04101f;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14.5px;
+  font-family:inherit;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.label{font-size:12px;color:var(--muted);margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.padrao{display:none;margin-top:12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 16px;background:#071426}
+.padrao.open{display:block}
+.padrao h4{margin:6px 0 8px;color:var(--accent);font-size:14px}
+.padrao ul{margin:6px 0;padding-left:20px}
+.padrao li{margin:5px 0}
+.lei{color:var(--amber);font-weight:600}
+.aprof{margin-top:16px}
+.aprtools{display:flex;gap:8px;margin-bottom:8px}
+.aprow{border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.apq{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;background:#071426;font-weight:600}
+.apq:hover{background:#0a1a30}
+.apq .tri{color:var(--accent);transition:transform .15s;display:inline-block}
+.apq.open .tri{transform:rotate(90deg)}
+.apa{display:none;padding:0 14px 14px 36px;color:var(--soft);font-size:14.5px;line-height:1.6}
+.apa.open{display:block;padding-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nota{background:#071426;border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+  margin:18px 0 4px;color:var(--soft);font-size:13.5px}
+.nota b{color:var(--accent)}
+.progress{color:var(--muted);font-size:12.5px;margin-top:6px}
+footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+<div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 4 — Segunda</div>
+<h1>Simulado Oral — Retificação de Registro</h1>
+<span class="ribbon">Bloco A · Notarial e Registral</span>
+<div class="sub">Banca virtual · 5 questões · resposta livre · padrão de resposta revelável</div>
+</header>
+<div class="nota"><b>Postura na banca:</b> abra pelo conceito e fundamento legal, depois desça ao caso. Cite o artigo da LRP antes de explicar. Mantenha tom firme e objetivo.</div>
+<div class="controls">
+<button class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button class="btn" id="prev">← Anterior</button>
+<button class="btn" id="next">Próxima →</button>
+<span class="progress" id="progress"></span>
+</div>
+<div class="pills" id="pills"></div>
+<div class="card" id="card"></div>
+<footer>Fontes: LRP (Lei 6.015/73, arts. 212-214) · Lei 14.382/2022 · caderno Semana 4 — Segunda.</footer>
+</div>
+<script>
+const PONTOS={"RET": {"titulo": "Retificação de Registro", "questoes": [{"area": "Registros Públicos", "tempo": 300, "enunciado": "Candidato, conceitue a <b>retificação de registro</b> imobiliário e explique, à luz da Lei 14.382/2022, qual é hoje a <b>regra de competência</b> para processá-la. A via judicial foi extinta?", "topico": "LRP art. 212 · desjudicialização · Lei 14.382/2022", "padrao": "<h4>Resposta esperada</h4><ul><li>Retificação é o procedimento de <b>correção de inexatidão do registro</b> para fazê-lo refletir a realidade jurídica/física do imóvel, sem alterar a substância do direito (princípio da <span class='lei'>verdade registral</span>).</li><li>Após a <span class='lei'>Lei 14.382/2022</span>, a regra é a <b>via administrativa</b>, processada perante o <b>próprio Oficial do Registro de Imóveis</b> (art. 212, caput, LRP).</li><li>A via judicial <b>não foi extinta</b>: é <b>facultada</b> ao interessado e necessária quando houver litígio/impugnação não resolvida (art. 212, §2º).</li><li>Distinguir retificação (corrige erro) de <b>cancelamento</b> (extingue) e de <b>averbação</b> (anota fato superveniente).</li></ul>", "aprofundamento": [{"pergunta": "A retificação pode alterar a titularidade do domínio?", "resposta": "Não. A retificação <b>não pode modificar a substância do direito</b> nem transferir propriedade; serve para corrigir a descrição/inexatidão. Alteração de titularidade exige título próprio (registro de transmissão) ou ação adequada."}, {"pergunta": "Quem tem legitimidade para requerer?", "resposta": "O <b>interessado</b> (proprietário, titular de direito real) e o <b>próprio Oficial de ofício</b> nas hipóteses do art. 213, I. O <span class='lei'>art. 213, §3º</span> admite requerimento por qualquer interessado instruído com documentos."}, {"pergunta": "Há prazo decadencial para retificar?", "resposta": "Não há prazo; a inexatidão pode ser corrigida a qualquer tempo, pois prevalece o interesse na <b>fidelidade do registro</b>. Ressalva-se a proteção do terceiro de boa-fé."}]}, {"area": "Registros Públicos", "tempo": 300, "enunciado": "Diferencie a <b>retificação de ofício (art. 213, I)</b> da <b>retificação de área a requerimento (art. 213, II)</b>. Em qual delas é dispensada a anuência dos confrontantes?", "topico": "LRP art. 213, I e II", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Art. 213, I</b> — retificação <b>de ofício ou a requerimento</b> em hipóteses objetivas: erro de transposição, indicação/inserção de confrontação, alteração de denominação de logradouro, inserção de georreferenciamento <b>sem alteração de perímetro</b>, retificação de cálculo, correção de qualificação. <b>Dispensa</b> ouvir confrontantes.</li><li><b>Art. 213, II</b> — <b>retificação de área</b> a requerimento: exige <span class='lei'>planta e memorial descritivo</span> assinados por profissional habilitado (com <span class='lei'>ART/RRT</span>) e <b>anuência dos confrontantes</b>.</li><li>Critério: o inciso I trata de correções que <b>não afetam terceiros</b>; o inciso II pode atingir confrontações, por isso a anuência.</li></ul>", "aprofundamento": [{"pergunta": "Como se obtém a anuência dos confrontantes no art. 213, II?", "resposta": "Por <b>assinatura na planta/memorial</b> ou por <b>notificação</b> (pelo Oficial, pessoalmente ou por edital). O <span class='lei'>silêncio do confrontante notificado presume anuência</span> (art. 213, §4º)."}, {"pergunta": "E se um confrontante impugnar?", "resposta": "O Oficial tenta a <b>conciliação</b>; persistindo a impugnação <b>fundamentada</b>, remete ao <b>juízo competente</b> (art. 213, §5º e §6º). Impugnação sem fundamento idôneo pode ser afastada."}, {"pergunta": "A inserção de georreferenciamento sempre dispensa confrontantes?", "resposta": "Apenas quando <b>não altera o perímetro</b> (art. 213, I, 'g'/correlato). Se a georreferência <b>modifica a área/perímetro</b>, cai na lógica do inciso II, com anuência."}]}, {"area": "Registros Públicos", "tempo": 300, "enunciado": "Disserte sobre o <b>art. 214 da LRP</b>: o que é a <b>nulidade de pleno direito</b> do registro e como ela se distingue do vício <b>intrínseco</b> do título?", "topico": "LRP art. 214 · nulidade tabular × intrínseca", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Art. 214</b> — as nulidades de pleno direito do registro podem ser <b>declaradas</b> mediante processo próprio, e <b>independem de ação rescisória</b>.</li><li><b>Vício tabular (extrínseco)</b>: defeito do <b>próprio ato registral</b> (ex.: registro feito sem título, duplicidade de matrícula, desrespeito à continuidade). Pode ser declarado em procedimento de retificação/nulidade.</li><li><b>Vício intrínseco</b>: defeito do <b>negócio jurídico subjacente</b> (causa do título). Exige <b>ação ordinária própria</b> (anulatória), com contraditório amplo — não se resolve pela mera nulidade tabular.</li></ul>", "aprofundamento": [{"pergunta": "Qual o recurso cabível da decisão do art. 214?", "resposta": "Conforme o <span class='lei'>art. 214, §2º</span>, da decisão cabe <b>apelação</b> (sentença) ou <b>agravo</b> (interlocutória), pois o procedimento tramita perante o juízo da vara de registros públicos/corregedoria."}, {"pergunta": "A nulidade pode ser decretada de ofício pelo juiz?", "resposta": "Sim, tratando-se de <b>nulidade de pleno direito</b>, pode ser reconhecida de ofício no procedimento, resguardado o <b>contraditório</b> dos interessados e do terceiro de boa-fé."}, {"pergunta": "A nulidade do registro atinge automaticamente o título?", "resposta": "Não necessariamente. A nulidade <b>tabular</b> desfaz o registro; o <b>título</b> e o negócio podem subsistir ou ser atacados por via própria. São planos distintos."}]}, {"area": "Registros Públicos", "tempo": 300, "enunciado": "O <b>art. 214, §5º</b> da LRP protege o <b>terceiro de boa-fé</b> que preencheu os requisitos da usucapião. Explique essa regra e sua razão de ser.", "topico": "LRP art. 214, §5º · proteção do terceiro · usucapião", "padrao": "<h4>Resposta esperada</h4><ul><li>O <span class='lei'>art. 214, §5º</span> dispõe que a nulidade <b>não será decretada</b> se atingir terceiro de boa-fé que <b>já preencheu os requisitos da usucapião</b> do imóvel.</li><li>Fundamento: prevalência da <b>função social</b> e da <b>aparência registral</b> em favor de quem consolidou situação possessória apta à aquisição originária.</li><li>O terceiro pode <b>alegar a usucapião como matéria de defesa</b> (Súmula 237 STF) ou buscar a usucapião extrajudicial (art. 216-A).</li></ul>", "aprofundamento": [{"pergunta": "A usucapião do §5º precisa estar já declarada por sentença?", "resposta": "Não. Basta que o terceiro tenha <b>preenchido os requisitos</b> (posse + tempo + demais). Pode alegá-la como defesa para obstar a nulidade, ainda que não declarada formalmente."}, {"pergunta": "Essa proteção alcança o adquirente a non domino?", "resposta": "Protege o <b>terceiro de boa-fé</b> que confiou no registro e consolidou usucapião. A boa-fé e o decurso do prazo são essenciais; má-fé afasta a tutela."}, {"pergunta": "Como isso dialoga com a usucapião extrajudicial (art. 216-A)?", "resposta": "O terceiro pode regularizar o domínio pela <b>via extrajudicial</b> no RI, com ata notarial, planta e anuências, evitando a desconstituição e dando segurança jurídica à cadeia dominial."}]}, {"area": "Registros Públicos", "tempo": 300, "enunciado": "Na retificação de área (art. 213, II), o confrontante foi regularmente <b>notificado e silenciou</b>. Qual a consequência? E se houvesse <b>impugnação</b>, como o Oficial deve proceder?", "topico": "LRP art. 213, §§4º a 6º · silêncio × impugnação", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Silêncio</b> do confrontante notificado: <span class='lei'>presunção de anuência</span> (art. 213, §4º). O procedimento segue e a retificação pode ser concluída.</li><li><b>Impugnação</b>: o Oficial tenta a <b>conciliação</b> entre as partes. Frustrada, e sendo a impugnação <b>fundamentada</b>, remete os autos ao <b>juízo competente</b> (art. 213, §5º/§6º).</li><li>Impugnação <b>genérica/infundada</b> pode ser desconsiderada pelo Oficial, que prossegue.</li></ul>", "aprofundamento": [{"pergunta": "A notificação pode ser por edital?", "resposta": "Sim. Não localizado o confrontante ou em lugar incerto, admite-se <b>notificação por edital</b>; decorrido o prazo sem manifestação, opera a presunção de anuência."}, {"pergunta": "Quem decide a conciliação frustrada?", "resposta": "O <b>juízo competente</b> (vara de registros públicos ou cível, conforme organização local). O Oficial não julga o mérito do litígio; encaminha para a jurisdição."}, {"pergunta": "O Oficial pode negar a retificação por dúvida?", "resposta": "Pode suscitar <b>dúvida registral</b> (art. 198) quando houver óbice à qualificação. Mas, havendo impugnação de confrontante, o caminho é a remessa ao juízo, não a dúvida."}]}]}};
+const STORE='oral_segunda_sem4_';
+
+const QS=[]; Object.keys(PONTOS).forEach(k=>{(PONTOS[k].questoes||[]).forEach(q=>{q._k=k;QS.push(q);});});
+let cur=0, t=0, running=false, timerId=null;
+const $=s=>document.querySelector(s);
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function renderPills(){
+  const p=$('#pills');p.innerHTML='';
+  QS.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='pill'+(i===cur?' active':'')+(localStorage.getItem(STORE+'done_'+i)?' done':'');
+    d.textContent=(i+1);d.onclick=()=>{cur=i;render();};p.appendChild(d);
+  });
+}
+function tick(){
+  t++;const el=$('#timer');el.textContent=fmt(t);
+  const lim=QS[cur].tempo||0;
+  el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
+}
+function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
+function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
+function resetTimer(){pauseTimer();t=0;$('#timer').textContent='00:00';$('#timer').className='timer';}
+function toggleAp(j){
+  const q=$('#apq'+j),a=$('#apa'+j);
+  q.classList.toggle('open');a.classList.toggle('open');
+}
+function expandAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.add('open');$('#apa'+j).classList.add('open');});}
+function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.remove('open');$('#apa'+j).classList.remove('open');});}
+function togglePadrao(){$('#padrao').classList.toggle('open');
+  const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
+function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();}
+function render(){
+  resetTimer();
+  const q=QS[cur];
+  const ap=q.aprofundamento.map((a,j)=>
+    '<div class="aprow"><div class="apq" id="apq'+j+'" onclick="toggleAp('+j+')"><span class="tri">▶</span><span>'+a.pergunta+'</span></div><div class="apa" id="apa'+j+'">'+a.resposta+'</div></div>'
+  ).join('');
+  $('#card').innerHTML=
+    '<div class="qhead"><span class="area">'+q.area+'</span>'+
+    '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
+    '<button class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<div class="enun">'+q.enunciado+'</div>'+
+    '<div class="topico">'+q.topico+'</div>'+
+    '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
+    '<textarea id="resp" placeholder="Esboce os tópicos da sua resposta..."></textarea>'+
+    '<button class="btn solid" id="bpad" onclick="togglePadrao()" style="margin-top:14px">Revelar padrão de resposta da banca</button>'+
+    '<div class="padrao" id="padrao">'+q.padrao+'</div>'+
+    '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
+    '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
+    '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
+    '<div class="nav"><button class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button class="btn" onclick="go(1)">Próxima →</button></div>';
+  const ta=$('#resp');
+  ta.value=localStorage.getItem(STORE+cur)||'';
+  ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
+  $('#progress').textContent='Questão '+(cur+1)+' de '+QS.length;
+  renderPills();
+}
+$('#sortear').onclick=()=>{cur=Math.floor(Math.random()*QS.length);render();};
+$('#prev').onclick=()=>go(-1);
+$('#next').onclick=()=>go(1);
+render();
+
+</script></body></html>

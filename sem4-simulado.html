@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado · Semana 4 · 20 Questões</title>
+<style>
+:root{
+  --bg:#07080f;--card:#0d0f1c;--border:#1e2240;
+  --text:#eef0fc;--muted:#7880aa;--soft:#b0b8d8;
+  --indigo:#6e7ef2;--indigob:#2a3080;--indigobg:#0a0c28;
+  --A:#e05555;--Abg:rgba(224,85,85,.12);--Aborder:rgba(224,85,85,.3);
+  --B:#27c06a;--Bbg:rgba(39,192,106,.12);--Bborder:rgba(39,192,106,.3);
+  --C:#f5a623;--Cbg:rgba(245,166,35,.12);--Cborder:rgba(245,166,35,.3);
+  --D:#4e8ef7;--Dbg:rgba(78,142,247,.12);--Dborder:rgba(78,142,247,.3);
+  --E:#b06bf2;--Ebg:rgba(176,107,242,.12);--Eborder:rgba(176,107,242,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 800px at 50% -100px,#0e1030 0%,var(--bg) 60%);
+  color:var(--text);min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.screen{max-width:640px;margin:0 auto;padding:24px 16px 80px}
+.hidden{display:none!important}
+
+/* ── INTRO ── */
+.intro-logo{font-size:40px;text-align:center;margin-bottom:12px}
+.intro-title{font-size:22px;font-weight:800;text-align:center;margin-bottom:6px}
+.intro-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:28px}
+.blocos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:28px}
+.bloco-pill{border-radius:10px;padding:12px 8px;text-align:center}
+.bloco-pill .bl-letter{font-size:16px;font-weight:900;margin-bottom:4px}
+.bloco-pill .bl-tema{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;line-height:1.4;color:rgba(255,255,255,.7)}
+.bloco-pill.A{background:var(--Abg);border:1px solid var(--Aborder);color:var(--A)}
+.bloco-pill.B{background:var(--Bbg);border:1px solid var(--Bborder);color:var(--B)}
+.bloco-pill.C{background:var(--Cbg);border:1px solid var(--Cborder);color:var(--C)}
+.bloco-pill.D{background:var(--Dbg);border:1px solid var(--Dborder);color:var(--D)}
+.bloco-pill.E{background:var(--Ebg);border:1px solid var(--Eborder);color:var(--E)}
+.rules{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:24px}
+.rules ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.rules li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--soft)}
+.rules li span{font-size:18px;flex-shrink:0}
+.btn-start{width:100%;padding:16px;border-radius:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#5060e0,#7e50e8);
+  color:#fff;font-size:16px;font-weight:800;letter-spacing:.3px;transition:.15s}
+.btn-start:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(110,126,242,.3)}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+  font-size:12px;text-decoration:none;margin-bottom:20px;
+  border:1px solid var(--border);border-radius:7px;padding:4px 10px;transition:.14s}
+.back-link:hover{color:var(--indigo);border-color:var(--indigob)}
+
+/* ── QUIZ ── */
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.timer{font-size:14px;font-weight:800;color:var(--indigo);
+  background:var(--indigobg);border:1px solid var(--indigob);
+  border-radius:8px;padding:6px 14px;font-variant-numeric:tabular-nums}
+.prog-text{font-size:13px;color:var(--muted);font-weight:700}
+.prog-bar{height:4px;background:rgba(255,255,255,.06);border-radius:4px;margin-bottom:20px;overflow:hidden}
+.prog-fill{height:4px;background:var(--indigo);border-radius:4px;transition:.3s}
+.q-bloco{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;
+  border-radius:20px;font-size:11px;font-weight:800;letter-spacing:.6px;
+  text-transform:uppercase;margin-bottom:14px}
+.q-bloco.A{background:var(--Abg);border:1px solid var(--Aborder);color:var(--A)}
+.q-bloco.B{background:var(--Bbg);border:1px solid var(--Bborder);color:var(--B)}
+.q-bloco.C{background:var(--Cbg);border:1px solid var(--Cborder);color:var(--C)}
+.q-bloco.D{background:var(--Dbg);border:1px solid var(--Dborder);color:var(--D)}
+.q-bloco.E{background:var(--Ebg);border:1px solid var(--Eborder);color:var(--E)}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:24px 20px;margin-bottom:24px;min-height:140px;
+  display:flex;align-items:center;transition:.15s}
+.q-card.flash-c{border-color:var(--B);background:rgba(39,192,106,.07)}
+.q-card.flash-e{border-color:var(--A);background:rgba(224,85,85,.07)}
+.q-text{font-size:16px;font-weight:600;line-height:1.6;color:var(--text)}
+.ce-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ce-btn{padding:18px;border-radius:14px;border:none;cursor:pointer;
+  font-size:18px;font-weight:900;letter-spacing:.8px;transition:.12s}
+.ce-btn.certo{background:rgba(39,192,106,.1);border:2px solid rgba(39,192,106,.25);color:var(--B)}
+.ce-btn.errado{background:rgba(224,85,85,.1);border:2px solid rgba(224,85,85,.25);color:var(--A)}
+.ce-btn:hover{transform:translateY(-2px)}
+.ce-btn:active{transform:scale(.97)}
+.ce-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* ── RESULT ── */
+.result-header{text-align:center;margin-bottom:28px}
+.score-circle{width:120px;height:120px;border-radius:50%;
+  background:conic-gradient(var(--indigo) calc(var(--pct)*1%),rgba(255,255,255,.06) 0);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 14px;position:relative}
+.score-inner{width:90px;height:90px;border-radius:50%;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-num{font-size:24px;font-weight:900;color:var(--text)}
+.score-den{font-size:12px;color:var(--muted);font-weight:700}
+.result-label{font-size:18px;font-weight:800;margin-bottom:4px}
+.result-time{font-size:13px;color:var(--muted)}
+.blocos-result{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.br-card{background:var(--card);border-radius:12px;padding:14px 16px;
+  display:flex;align-items:center;gap:14px}
+.br-card.A{border:1px solid var(--Aborder)}
+.br-card.B{border:1px solid var(--Bborder)}
+.br-card.C{border:1px solid var(--Cborder)}
+.br-card.D{border:1px solid var(--Dborder)}
+.br-card.E{border:1px solid var(--Eborder)}
+.br-letter{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;font-weight:900;flex-shrink:0}
+.br-card.A .br-letter{background:var(--Abg);color:var(--A)}
+.br-card.B .br-letter{background:var(--Bbg);color:var(--B)}
+.br-card.C .br-letter{background:var(--Cbg);color:var(--C)}
+.br-card.D .br-letter{background:var(--Dbg);color:var(--D)}
+.br-card.E .br-letter{background:var(--Ebg);color:var(--E)}
+.br-info{flex:1}
+.br-tema{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.br-score{font-size:14px;font-weight:800;margin-top:2px}
+.br-dots{display:flex;gap:5px;margin-top:6px}
+.br-dot{width:18px;height:18px;border-radius:5px;font-size:10px;
+  display:flex;align-items:center;justify-content:center;font-weight:800}
+.br-dot.ok{background:rgba(39,192,106,.15);color:var(--B)}
+.br-dot.nok{background:rgba(224,85,85,.15);color:var(--A)}
+.br-link{font-size:11px;font-weight:700;text-decoration:none;padding:5px 10px;
+  border-radius:7px;border:1px solid var(--border);color:var(--muted);transition:.14s;white-space:nowrap}
+.br-link:hover{color:var(--indigo);border-color:var(--indigob)}
+.revisao-title{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.revisao-item{background:var(--card);border-radius:12px;padding:16px;margin-bottom:10px;border-left:3px solid}
+.revisao-item.A{border-color:var(--A)}
+.revisao-item.B{border-color:var(--B)}
+.revisao-item.C{border-color:var(--C)}
+.revisao-item.D{border-color:var(--D)}
+.revisao-item.E{border-color:var(--E)}
+.rv-q{font-size:14px;color:var(--soft);line-height:1.6;margin-bottom:10px;font-style:italic}
+.rv-gab{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:6px;
+  font-size:11px;font-weight:800;margin-bottom:8px}
+.rv-gab.c{background:rgba(39,192,106,.12);border:1px solid rgba(39,192,106,.25);color:var(--B)}
+.rv-gab.e{background:rgba(224,85,85,.12);border:1px solid rgba(224,85,85,.25);color:var(--A)}
+.rv-comment{font-size:13px;color:var(--soft);line-height:1.7;background:rgba(255,255,255,.03);
+  border-radius:8px;padding:10px 12px}
+.btn-refazer{width:100%;padding:14px;border-radius:12px;border:none;cursor:pointer;
+  background:var(--indigobg);border:1px solid var(--indigob);
+  color:var(--indigo);font-size:14px;font-weight:800;margin-top:20px;margin-bottom:10px;transition:.14s}
+.btn-refazer:hover{background:rgba(110,126,242,.12)}
+.no-errors{text-align:center;padding:28px;color:var(--B);font-size:14px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ══ INTRO ══ -->
+<div id="s-intro" class="screen">
+  <a class="back-link" href="index.html">← Voltar ao índice</a>
+  <div class="intro-logo">🎯</div>
+  <div class="intro-title">Simulado · Semana 4</div>
+  <div class="intro-sub">20 questões C/E · 4 por bloco · enunciados do Banco Prova Oral TJMT</div>
+
+  <div class="blocos-grid">
+    <div class="bloco-pill A"><div class="bl-letter">A</div><div class="bl-tema">Notarial Registral</div></div>
+    <div class="bloco-pill B"><div class="bl-letter">B</div><div class="bl-tema">Civil</div></div>
+    <div class="bloco-pill C"><div class="bl-letter">C</div><div class="bl-tema">Penal</div></div>
+    <div class="bloco-pill D"><div class="bl-letter">D</div><div class="bl-tema">Const DH</div></div>
+    <div class="bloco-pill E"><div class="bl-letter">E</div><div class="bl-tema">Tributário</div></div>
+  </div>
+
+  <div class="rules">
+    <ul>
+      <li><span>⏱</span> Timer começa ao clicar em Iniciar</li>
+      <li><span>⚡</span> Responda CERTO ou ERRADO — avança automaticamente</li>
+      <li><span>📊</span> Ao final: placar por bloco + revisão completa dos erros</li>
+      <li><span>📚</span> Cada erro linka direto para o caderno do dia</li>
+    </ul>
+  </div>
+  <button class="btn-start" onclick="startQuiz()">Iniciar Simulado →</button>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="s-quiz" class="screen hidden">
+  <div class="quiz-top">
+    <div class="timer" id="timer">00:00</div>
+    <div class="prog-text" id="prog-text">1 / 20</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:5%"></div></div>
+  <div class="q-bloco" id="q-bloco">A</div>
+  <div class="q-card" id="q-card">
+    <p class="q-text" id="q-text"></p>
+  </div>
+  <div class="ce-btns">
+    <button class="ce-btn certo" id="btn-c" onclick="answer(1)">✓ CERTO</button>
+    <button class="ce-btn errado" id="btn-e" onclick="answer(0)">✗ ERRADO</button>
+  </div>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div id="s-result" class="screen hidden">
+  <a class="back-link" href="index.html">← Voltar ao índice</a>
+
+  <div class="result-header">
+    <div class="score-circle" id="score-circle">
+      <div class="score-inner">
+        <div class="score-num" id="score-num">0</div>
+        <div class="score-den">de 20</div>
+      </div>
+    </div>
+    <div class="result-label" id="result-label"></div>
+    <div class="result-time" id="result-time"></div>
+  </div>
+
+  <div class="blocos-result" id="blocos-result"></div>
+
+  <div class="revisao-title">
+    <div style="width:8px;height:8px;border-radius:50%;background:#e05555;flex-shrink:0"></div>
+    Questões erradas — revisão
+  </div>
+  <div id="revisao-list"></div>
+
+  <button class="btn-refazer" onclick="restartQuiz()">↺ Refazer simulado</button>
+</div>
+
+<script>
+const BLOCOS = {
+  A:{nome:'Notarial/Registral', tema:'Usucapião Extrajudicial',                  url:'sem4-segunda.html'},
+  B:{nome:'Civil',              tema:'Contratos + Resilição × Resolução × Rescisão', url:'sem4-terca.html'},
+  C:{nome:'Penal',              tema:'Princípios + Júri (Quesitação)',            url:'sem4-quarta.html'},
+  D:{nome:'Const/DH',           tema:'Direitos × Garantias + Tratados de DH',     url:'sem4-quinta.html'},
+  E:{nome:'Tributário',         tema:'Pedágio + LC × LO',                         url:'sem4-sexta.html'}
+};
+
+const QS=[
+  // ── BLOCO A ──
+  {b:'A',
+   q:'A usucapião extrajudicial é processada diretamente no cartório de registro de imóveis da situação do bem, mediante requerimento do interessado obrigatoriamente assistido por advogado, instruído com ata notarial lavrada pelo tabelião atestando o tempo de posse e a de seus antecessores.',
+   g:1,
+   e:'Correto. Art. 216-A da LRP (Lei 6.015/73, incluído pela Lei 13.105/2015 e alterado pela Lei 13.465/2017): processa-se no RI da situação do imóvel, com advogado obrigatório e ata notarial do tabelião atestando o tempo de posse próprio e dos antecessores. O Provimento 149/2023 do CNJ (arts. 398 e ss., antigo Prov. 65/2017) consolidou todo o rito. Fonte: Banco PO TJMT, Notarial Ponto Usucapião.'},
+  {b:'A',
+   q:'Na usucapião extrajudicial, o silêncio do titular registral regularmente notificado para se manifestar é interpretado como discordância, o que impede o prosseguimento na via administrativa e obriga o interessado a buscar a via judicial.',
+   g:0,
+   e:'Errado. Pela redação dada pela Lei 13.465/2017 ao §2º do art. 216-A da LRP, o silêncio do titular notificado passou a ser interpretado como CONCORDÂNCIA (anuência tácita). Antes da alteração, o silêncio era tido como discordância e travava o procedimento — exatamente o ponto que a banca explora. Notificado e inerte no prazo de 15 dias = consentimento. Fonte: Banco PO TJMT, pegadinha.'},
+  {b:'A',
+   q:'A rejeição do pedido de usucapião extrajudicial pelo oficial de registro de imóveis não impede que o interessado ajuíze a ação de usucapião pela via judicial, pois a decisão administrativa não produz coisa julgada material.',
+   g:1,
+   e:'Correto. Art. 216-A, §10, da LRP: rejeitado o pedido extrajudicial, o interessado pode suscitar o procedimento de dúvida ou ajuizar a ação de usucapião. O procedimento é facultativo e de natureza administrativa, sem coisa julgada material. Fonte: Banco PO TJMT, Notarial Ponto Usucapião.'},
+  {b:'A',
+   q:'A usucapião extrajudicial somente pode ser requerida quando se tratar de usucapião extraordinária, sendo vedado o seu processamento perante o registro de imóveis para as modalidades ordinária, especial urbana ou especial rural.',
+   g:0,
+   e:'Errado. A via extrajudicial admite TODAS as modalidades de direito material (extraordinária, ordinária, especial urbana, especial rural, familiar etc.). O que se altera é apenas a via — administrativa em vez de judicial —, não a espécie de usucapião. Fonte: Banco PO TJMT, pegadinha.'},
+
+  // ── BLOCO B ──
+  {b:'B',
+   q:'A resilição é forma de extinção do contrato que decorre da vontade das partes, podendo ser bilateral (distrato) ou unilateral (denúncia), e produz efeitos, em regra, ex nunc — para o futuro.',
+   g:1,
+   e:'Correto. Resilição = dissolução por vontade. Bilateral é o distrato (art. 472, CC); unilateral é a denúncia (art. 473), cabível quando a lei expressa ou implicitamente o permita. Efeitos, em regra, ex nunc. Não confundir com resolução (inadimplemento) nem com rescisão (lesão/estado de perigo). Fonte: Banco PO TJMT, Civil Ponto Extinção dos Contratos.'},
+  {b:'B',
+   q:'A resolução do contrato decorre de vício de consentimento ou defeito do negócio jurídico, como o erro e a coação, ao passo que a rescisão pressupõe sempre o inadimplemento culposo de uma das partes.',
+   g:0,
+   e:'Errado. Há inversão dos conceitos. RESOLUÇÃO é a extinção por INADIMPLEMENTO (arts. 474-475, CC — cláusula resolutiva expressa ou tácita). RESCISÃO, em sentido técnico estrito, é o desfazimento por lesão (art. 157) ou estado de perigo (art. 156). Vícios de consentimento (erro, coação) geram anulabilidade, não resolução. A banca cobra a distinção fina. Fonte: Banco PO TJMT, pegadinha.'},
+  {b:'B',
+   q:'Quando a denúncia unilateral de um contrato exigir investimentos consideráveis da outra parte, a resilição unilateral só produzirá efeito depois de transcorrido prazo compatível com a natureza e o vulto desses investimentos.',
+   g:1,
+   e:'Correto. Art. 473, parágrafo único, CC: se uma das partes houver feito investimentos consideráveis para a execução do contrato, a denúncia unilateral só produz efeito depois de transcorrido prazo compatível com a natureza e o vulto dos investimentos. Norma de proteção à confiança e à boa-fé objetiva. Fonte: Banco PO TJMT, Civil Ponto Extinção dos Contratos.'},
+  {b:'B',
+   q:'Os contratos podem ser classificados, quanto à formação, em paritários e de adesão; e, quanto ao momento de cumprimento, em instantâneos, de execução diferida e de trato sucessivo, sendo esta última classificação relevante para a aplicação da teoria da imprevisão.',
+   g:1,
+   e:'Correto. Quanto à formação: paritários (negociados) × de adesão (cláusulas predispostas, art. 423-424). Quanto à execução: instantâneos, diferidos e de trato sucessivo/continuado. A teoria da imprevisão / onerosidade excessiva (art. 478, CC) pressupõe contrato de execução continuada ou diferida. Fonte: Banco PO TJMT, Civil Ponto Classificação dos Contratos.'},
+
+  // ── BLOCO C ──
+  {b:'C',
+   q:'O princípio da legalidade penal desdobra-se em reserva legal e anterioridade, e dele decorrem a exigência de lei certa (taxatividade) e a vedação ao emprego da analogia in malam partem.',
+   g:1,
+   e:'Correto. Art. 5º, XXXIX, CF, e art. 1º do CP. Legalidade = reserva legal (só lei em sentido estrito) + anterioridade. Desdobramentos: lex scripta, lex stricta (veda analogia in malam partem), lex certa (taxatividade) e lex praevia. A analogia in bonam partem é admitida. Fonte: Banco PO TJMT, Penal Ponto Princípios.'},
+  {b:'C',
+   q:'Pelo princípio da lesividade (ofensividade), admite-se a punição da autolesão e dos atos meramente preparatórios sempre que revelarem a periculosidade do agente, ainda que não exteriorizada lesão a bem jurídico de terceiro.',
+   g:0,
+   e:'Errado. O princípio da lesividade VEDA a punição da autolesão, da mera cogitação e de condutas que não transcendam a esfera do próprio agente (nullum crimen sine iniuria). Só se pune a conduta que lesione ou ameace bem jurídico de TERCEIRO. É manifestação do direito penal do fato, e não do autor. Fonte: Banco PO TJMT, pegadinha.'},
+  {b:'C',
+   q:'No procedimento do júri, após a reforma de 2008, a absolvição é decidida por meio de quesito genérico e obrigatório — O jurado absolve o acusado? —, formulado após os quesitos sobre a materialidade do fato e a autoria ou participação.',
+   g:1,
+   e:'Correto. Art. 483, III e §2º, do CPP (Lei 11.689/2008). Após os quesitos de materialidade (I) e autoria/participação (II), formula-se o quesito genérico de absolvição. Resposta afirmativa de mais de 3 jurados absolve o réu, inclusive por clemência, sem necessidade de motivação. Fonte: Banco PO TJMT, Penal/Processo Ponto Tribunal do Júri.'},
+  {b:'C',
+   q:'Segundo o STF, é cabível o recurso de apelação, com posterior submissão do réu a novo júri, quando a absolvição decidida pelos jurados, ainda que fundada no quesito genérico de clemência, mostrar-se manifestamente contrária à prova dos autos.',
+   g:1,
+   e:'Correto. STF, Tema 1.087 (ARE 1.225.185, julgado em 2024): a soberania dos veredictos não impede a apelação por decisão manifestamente contrária à prova dos autos (art. 593, III, d, CPP), inclusive na absolvição por clemência, com possibilidade de novo julgamento. Tema atual e sensível na banca — confira sempre a redação mais recente. Fonte: Banco PO TJMT, aprofundamento (STF Tema 1.087).'},
+
+  // ── BLOCO D ──
+  {b:'D',
+   q:'Na clássica distinção de Rui Barbosa, os direitos são disposições declaratórias, que enunciam a existência de um bem jurídico, enquanto as garantias são disposições assecuratórias, voltadas a proteger e limitar o poder em defesa desses direitos.',
+   g:1,
+   e:'Correto. Rui Barbosa: direitos = normas declaratórias (afirmam a existência do bem jurídico); garantias = normas assecuratórias (instrumentos de tutela, como o habeas corpus e o mandado de segurança). Os remédios constitucionais são espécie do gênero garantias. Fonte: Banco PO TJMT, Const Ponto Direitos e Garantias.'},
+  {b:'D',
+   q:'O rol de direitos e garantias fundamentais do art. 5º da CF é exemplificativo, admitindo-se direitos decorrentes do regime e dos princípios constitucionais, bem como dos tratados internacionais de que o Brasil seja parte.',
+   g:1,
+   e:'Correto. Art. 5º, §2º, CF: cláusula de abertura material — o rol não é taxativo. Há direitos fundamentais implícitos e decorrentes de tratados, o que fundamenta a ideia de bloco de constitucionalidade. Fonte: Banco PO TJMT, Const Ponto Direitos e Garantias.'},
+  {b:'D',
+   q:'Os tratados internacionais de direitos humanos ingressam no ordenamento brasileiro, em qualquer hipótese, com status de emenda constitucional, por força do art. 5º, §2º, da CF, independentemente do rito de aprovação adotado.',
+   g:0,
+   e:'Errado. Regra fixada pelo STF (RE 466.343): os tratados de direitos humanos têm status SUPRALEGAL — acima da lei e abaixo da Constituição. Só adquirem status de emenda se aprovados pelo rito do art. 5º, §3º (dois turnos, três quintos, em cada Casa), incluído pela EC 45/2004. Os demais tratados (não de DH) têm status de lei ordinária. Fonte: Banco PO TJMT, aprofundamento.'},
+  {b:'D',
+   q:'No sistema interamericano, somente os Estados-partes e a Comissão Interamericana têm legitimidade para submeter um caso à Corte Interamericana de Direitos Humanos; o indivíduo, isoladamente, não possui acesso direto à Corte.',
+   g:1,
+   e:'Correto. Art. 61 da CADH (Pacto de San José da Costa Rica): apenas os Estados-partes e a Comissão IDH podem submeter caso à Corte. O indivíduo peticiona à COMISSÃO (art. 44), que então pode levar o caso à Corte — diferentemente do sistema europeu, em que há acesso direto. Fonte: Banco PO TJMT, DH Ponto Sistema Interamericano.'},
+
+  // ── BLOCO E ──
+  {b:'E',
+   q:'Segundo o STF, o pedágio cobrado pela utilização de vias conservadas pelo Poder Público tem natureza jurídica de taxa de serviço, submetendo-se integralmente ao regime tributário, inclusive ao princípio da legalidade estrita e à anterioridade.',
+   g:0,
+   e:'Errado. STF, ADI 800 (2014): o pedágio tem natureza de PREÇO PÚBLICO (tarifa), e não de taxa, pois decorre da utilização efetiva e facultativa da via, sem o caráter compulsório próprio do tributo. Logo, não se submete ao regime tributário (legalidade estrita, anterioridade). Pegadinha clássica. Fonte: Banco PO TJMT, Tributário Ponto Pedágio.'},
+  {b:'E',
+   q:'Cabe à lei complementar estabelecer normas gerais em matéria de legislação tributária; o Código Tributário Nacional, embora editado formalmente como lei ordinária, foi recepcionado pela ordem constitucional vigente com status de lei complementar.',
+   g:1,
+   e:'Correto. Art. 146, III, CF: normas gerais de direito tributário são reservadas à lei complementar. O CTN (Lei 5.172/66) é, na forma, lei ordinária, mas foi recepcionado materialmente como lei complementar — só podendo ser alterado por LC. Fonte: Banco PO TJMT, Tributário Ponto Lei Complementar.'},
+  {b:'E',
+   q:'Exigem lei complementar, entre outras matérias, a instituição de empréstimo compulsório, do imposto sobre grandes fortunas, dos impostos residuais da União e das contribuições sociais residuais da seguridade social.',
+   g:1,
+   e:'Correto. Casos de reserva de lei complementar: empréstimo compulsório (art. 148), imposto sobre grandes fortunas (art. 153, VII), impostos residuais da União (art. 154, I) e contribuições residuais da seguridade social (art. 195, §4º). Memorizar esse rol é cobrança recorrente. Fonte: Banco PO TJMT, Tributário Ponto Lei Complementar.'},
+  {b:'E',
+   q:'Por força do princípio da legalidade tributária, é admitida a edição de medida provisória para instituir ou regular tributos cuja disciplina a Constituição reserva à lei complementar, desde que a medida seja convertida em lei no prazo constitucional.',
+   g:0,
+   e:'Errado. Art. 62, §1º, III, CF: é VEDADA a edição de medida provisória sobre matéria reservada a lei complementar. A MP só pode versar sobre matéria de lei ordinária. Logo, tributos sujeitos à reserva de LC (empréstimo compulsório, IGF, impostos residuais etc.) não podem ser instituídos por MP. Fonte: Banco PO TJMT, pegadinha.'}
+];
+
+// ── STATE ──
+let shuffled=[], idx=0, answers=[], timerRef=null, elapsed=0;
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+  return a;
+}
+function fmtTime(s){
+  const m=Math.floor(s/60),ss=s%60;
+  return `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+}
+function startQuiz(){
+  shuffled=shuffle(QS);
+  idx=0; answers=[]; elapsed=0;
+  document.getElementById('s-intro').classList.add('hidden');
+  document.getElementById('s-quiz').classList.remove('hidden');
+  document.getElementById('s-result').classList.add('hidden');
+  clearInterval(timerRef);
+  timerRef=setInterval(()=>{
+    elapsed++;
+    document.getElementById('timer').textContent=fmtTime(elapsed);
+  },1000);
+  showQ();
+}
+function showQ(){
+  const q=shuffled[idx];
+  document.getElementById('q-text').textContent=q.q;
+  const bl=document.getElementById('q-bloco');
+  bl.className='q-bloco '+q.b;
+  bl.textContent='Bloco '+q.b+' · '+BLOCOS[q.b].nome;
+  document.getElementById('prog-text').textContent=(idx+1)+' / '+shuffled.length;
+  document.getElementById('prog-fill').style.width=((idx+1)/shuffled.length*100)+'%';
+  const card=document.getElementById('q-card');
+  card.className='q-card';
+  document.getElementById('btn-c').disabled=false;
+  document.getElementById('btn-e').disabled=false;
+}
+function answer(v){
+  document.getElementById('btn-c').disabled=true;
+  document.getElementById('btn-e').disabled=true;
+  const q=shuffled[idx];
+  const correct=(v===q.g);
+  answers.push({q,v,correct});
+  const card=document.getElementById('q-card');
+  card.classList.add(correct?'flash-c':'flash-e');
+  setTimeout(()=>{
+    idx++;
+    if(idx>=shuffled.length){showResult();}
+    else{showQ();}
+  },420);
+}
+function showResult(){
+  clearInterval(timerRef);
+  document.getElementById('s-quiz').classList.add('hidden');
+  document.getElementById('s-result').classList.remove('hidden');
+
+  const total=answers.length;
+  const hits=answers.filter(a=>a.correct).length;
+  const pct=Math.round(hits/total*100);
+
+  document.getElementById('score-circle').style.setProperty('--pct',pct);
+  document.getElementById('score-num').textContent=hits;
+  const lbl=pct>=90?'Excelente! 🏆':pct>=70?'Bom resultado 👍':pct>=50?'Continue praticando 📖':'Reveja os cadernos 📚';
+  document.getElementById('result-label').textContent=lbl;
+  document.getElementById('result-time').textContent='Tempo: '+fmtTime(elapsed);
+
+  // Blocos summary
+  const blocoRes={};
+  ['A','B','C','D','E'].forEach(b=>{blocoRes[b]={h:0,t:0,items:[]}});
+  answers.forEach(a=>{
+    blocoRes[a.q.b].t++;
+    if(a.correct)blocoRes[a.q.b].h++;
+    blocoRes[a.q.b].items.push(a);
+  });
+  document.getElementById('blocos-result').innerHTML=Object.entries(blocoRes).map(([b,r])=>{
+    const dots=r.items.map(a=>`<div class="br-dot ${a.correct?'ok':'nok'}">${a.correct?'✓':'✗'}</div>`).join('');
+    return `<div class="br-card ${b}">
+      <div class="br-letter">${b}</div>
+      <div class="br-info">
+        <div class="br-tema">${BLOCOS[b].tema}</div>
+        <div class="br-score" style="color:var(--${b})">${r.h}/${r.t}</div>
+        <div class="br-dots">${dots}</div>
+      </div>
+      <a class="br-link" href="${BLOCOS[b].url}">Caderno →</a>
+    </div>`;
+  }).join('');
+
+  // Revisão erros
+  const wrong=answers.filter(a=>!a.correct);
+  if(!wrong.length){
+    document.getElementById('revisao-list').innerHTML='<div class="no-errors">🎉 Nenhum erro! Perfeito.</div>';
+  } else {
+    document.getElementById('revisao-list').innerHTML=wrong.map(a=>{
+      const gabTxt=a.q.g===1?'CERTO':'ERRADO';
+      const gabCls=a.q.g===1?'c':'e';
+      return `<div class="revisao-item ${a.q.b}">
+        <p class="rv-q">${a.q.q}</p>
+        <div class="rv-gab ${gabCls}">${a.q.g===1?'✓':'✗'} Gabarito: ${gabTxt}</div>
+        <div class="rv-comment">${a.q.e}</div>
+      </div>`;
+    }).join('');
+  }
+}
+function restartQuiz(){
+  document.getElementById('s-result').classList.add('hidden');
+  document.getElementById('s-intro').classList.remove('hidden');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado Oral — Controle de Constitucionalidade e Lei 14.133</title>
+<style>
+:root{
+  --bg:#050b18; --card:#0b1828; --border:#16365a; --text:#e9f0f8;
+  --muted:#90a6c0; --soft:#b9c8dc; --accent:var(--blue);
+  --red:#e05555; --green:#27c06a; --amber:#f5a623; --blue:#4e8ef7;
+  --cyan:#38bdf8; --purple:#b06bf2; --teal:#2dd4bf;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.top{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:8px 0 6px;font-size:26px;line-height:1.2}
+.ribbon{display:inline-block;background:var(--accent);color:#04101f;font-weight:800;
+  padding:4px 12px;border-radius:999px;font-size:12.5px;letter-spacing:.04em}
+.sub{color:var(--soft);font-size:14px;margin-top:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.solid{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.pill{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--soft);
+  font-size:13px;cursor:pointer;font-weight:700}
+.pill.active{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pill.done{border-color:var(--green);color:var(--green)}
+.pill.done.active{background:var(--accent);color:#04101f}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:16px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.area{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;color:var(--soft)}
+.timer.warn{color:var(--amber)}
+.timer.over{color:var(--red)}
+.tcontrols{display:flex;gap:6px;align-items:center}
+.tbtn{background:#04101f;border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.tbtn:hover{border-color:var(--accent)}
+.enun{margin:16px 0 6px;font-size:16.5px;line-height:1.6}
+.topico{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;margin-top:10px}
+textarea{width:100%;min-height:120px;margin-top:10px;background:#04101f;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14.5px;
+  font-family:inherit;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.label{font-size:12px;color:var(--muted);margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.padrao{display:none;margin-top:12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 16px;background:#071426}
+.padrao.open{display:block}
+.padrao h4{margin:6px 0 8px;color:var(--accent);font-size:14px}
+.padrao ul{margin:6px 0;padding-left:20px}
+.padrao li{margin:5px 0}
+.lei{color:var(--amber);font-weight:600}
+.aprof{margin-top:16px}
+.aprtools{display:flex;gap:8px;margin-bottom:8px}
+.aprow{border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.apq{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;background:#071426;font-weight:600}
+.apq:hover{background:#0a1a30}
+.apq .tri{color:var(--accent);transition:transform .15s;display:inline-block}
+.apq.open .tri{transform:rotate(90deg)}
+.apa{display:none;padding:0 14px 14px 36px;color:var(--soft);font-size:14.5px;line-height:1.6}
+.apa.open{display:block;padding-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nota{background:#071426;border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+  margin:18px 0 4px;color:var(--soft);font-size:13.5px}
+.nota b{color:var(--accent)}
+.progress{color:var(--muted);font-size:12.5px;margin-top:6px}
+footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+<div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 4 — Quinta</div>
+<h1>Simulado Oral — Controle de Constitucionalidade e Lei 14.133</h1>
+<span class="ribbon">Bloco D · Constitucional e Administrativo</span>
+<div class="sub">Banca virtual · 5 questões · resposta livre · padrão de resposta revelável</div>
+</header>
+<div class="nota"><b>Postura na banca:</b> separe sempre via/competência/efeitos no controle, e ancore o administrativo na Lei 14.133/21 com o número do artigo. Sinalize o que mudou frente à 8.666/93.</div>
+<div class="controls">
+<button class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button class="btn" id="prev">← Anterior</button>
+<button class="btn" id="next">Próxima →</button>
+<span class="progress" id="progress"></span>
+</div>
+<div class="pills" id="pills"></div>
+<div class="card" id="card"></div>
+<footer>Fontes: CF arts. 97/102/103 · Leis 9.868/99 e 9.882/99 · Lei 14.133/2021 · SV 10 · caderno Semana 4 — Quinta.</footer>
+</div>
+<script>
+const PONTOS={"CON": {"titulo": "Controle de Constitucionalidade e Lei 14.133/2021", "questoes": [{"area": "Direito Constitucional", "tempo": 300, "enunciado": "Candidato, distinga o <b>controle difuso</b> do <b>controle concentrado</b> de constitucionalidade quanto a competência, via, efeitos subjetivos e temporais.", "topico": "CF arts. 97, 102 e 52, X", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Difuso</b>: exercido por <b>qualquer juiz/tribunal</b>, de forma <b>incidental</b> (causa de pedir), efeitos <b>inter partes</b> e, em regra, <b>ex tunc</b>. O <span class='lei'>Senado</span> pode suspender a lei (art. 52, X) para efeito geral.</li><li><b>Concentrado</b>: perante o <b>STF</b> (em face da CF, art. 102) ou <b>TJ</b> (em face da Constituição Estadual), via <b>ação direta</b> (objeto principal), efeitos <b>erga omnes</b> e <b>vinculantes</b>.</li><li>Atualmente discute-se a <b>abstrativização</b> do controle difuso (mutação do art. 52, X).</li></ul>", "aprofundamento": [{"pergunta": "Qual o papel do Senado no art. 52, X?", "resposta": "Suspender a execução de lei declarada inconstitucional <b>incidentalmente</b> pelo STF, conferindo <b>efeito erga omnes</b>. Há tese de <b>mutação constitucional</b> (STF apenas comunica), mas o texto mantém competência do Senado."}, {"pergunta": "O controle difuso admite modulação de efeitos?", "resposta": "Sim. O STF tem admitido <b>modulação</b> também no difuso, por segurança jurídica/interesse social, aplicando por analogia o art. 27 da Lei 9.868/99."}, {"pergunta": "Cabe controle concentrado de lei municipal?", "resposta": "Perante o STF não cabe ADI de lei municipal em face da CF; cabe <b>ADPF</b>. Perante o <b>TJ</b>, cabe representação de inconstitucionalidade de lei municipal frente à <b>Constituição Estadual</b>."}]}, {"area": "Direito Constitucional", "tempo": 300, "enunciado": "Diferencie as ações do controle concentrado: <b>ADI</b>, <b>ADC</b>, <b>ADO</b> e <b>ADPF</b>. Aponte objeto e base legal de cada uma.", "topico": "CF art. 102/103 · Leis 9.868/99 e 9.882/99", "padrao": "<h4>Resposta esperada</h4><ul><li><b>ADI</b> (Lei 9.868/99): impugna lei/ato normativo <b>federal ou estadual</b> pós-88 incompatível com a CF.</li><li><b>ADC</b> (Lei 9.868/99): declara a <b>constitucionalidade</b> de lei <b>federal</b>, exigindo <b>controvérsia judicial relevante</b>.</li><li><b>ADO</b> (<span class='lei'>art. 103, §2º</span>): combate a <b>omissão</b> inconstitucional (norma de eficácia limitada não regulamentada).</li><li><b>ADPF</b> (Lei 9.882/99): protege <b>preceito fundamental</b>; <b>subsidiária</b>; alcança lei <b>municipal</b> e direito <b>pré-constitucional</b>.</li></ul>", "aprofundamento": [{"pergunta": "O que é o princípio da subsidiariedade da ADPF?", "resposta": "<span class='lei'>Art. 4º, §1º, Lei 9.882/99</span>: a ADPF só cabe quando <b>não houver outro meio eficaz</b> de sanar a lesividade. Por isso alcança hipóteses não cobertas por ADI (lei municipal, pré-88)."}, {"pergunta": "ADC cabe contra lei estadual?", "resposta": "Não. A <b>ADC</b> só tem por objeto <b>lei ou ato normativo federal</b> (art. 102, I, 'a'). Lei estadual pode ser objeto de ADI, não de ADC."}, {"pergunta": "Qual o efeito da procedência da ADO?", "resposta": "Reconhecida a mora, dá-se ciência ao <b>Poder competente</b> para suprir a omissão; em se tratando de <b>órgão administrativo</b>, fixa-se prazo de <b>30 dias</b> (art. 103, §2º)."}]}, {"area": "Direito Constitucional", "tempo": 300, "enunciado": "Disserte sobre a <b>cláusula de reserva de plenário</b> (art. 97) e a <b>Súmula Vinculante 10</b>. Qual a sua relação com o controle difuso nos tribunais?", "topico": "CF art. 97 · SV 10 · full bench", "padrao": "<h4>Resposta esperada</h4><ul><li><span class='lei'>Art. 97</span>: a inconstitucionalidade de lei só pode ser declarada pela <b>maioria absoluta</b> do <b>pleno</b> ou do <b>órgão especial</b> do tribunal (<b>full bench</b>).</li><li><span class='lei'>SV 10</span>: viola a reserva de plenário a decisão de <b>órgão fracionário</b> que, embora sem declarar expressamente, <b>afasta a incidência</b> de lei no todo ou em parte.</li><li>Exceções: já havendo pronunciamento do <b>plenário</b> do tribunal ou do <b>STF</b>, o órgão fracionário pode aplicar (art. 949, §único, CPC).</li></ul>", "aprofundamento": [{"pergunta": "A reserva de plenário aplica-se a juiz singular?", "resposta": "Não. O <b>juiz de primeiro grau</b> exerce controle difuso <b>sem</b> reserva de plenário. A cláusula incide apenas em <b>tribunais</b> (órgãos colegiados)."}, {"pergunta": "Interpretação conforme exige reserva de plenário?", "resposta": "A <b>interpretação conforme</b> e a <b>declaração parcial sem redução de texto</b> equivalem a afastar sentido inconstitucional; segundo a SV 10, atraem a <b>reserva de plenário</b>."}, {"pergunta": "E quando o tribunal apenas deixa de aplicar norma já julgada inconstitucional pelo STF?", "resposta": "Não há violação: o art. 949, §único, CPC <b>dispensa</b> a reserva quando há decisão do <b>plenário do STF</b> sobre a questão."}]}, {"area": "Direito Administrativo", "tempo": 300, "enunciado": "Sobre a <b>Lei 14.133/2021</b>, enumere as <b>modalidades de licitação</b> e indique quais foram <b>extintas</b> em relação à Lei 8.666/93. O que é o <b>diálogo competitivo</b>?", "topico": "Lei 14.133/2021 art. 28 · novas modalidades", "padrao": "<h4>Resposta esperada</h4><ul><li><span class='lei'>Art. 28</span> — modalidades: <b>pregão, concorrência, concurso, leilão e diálogo competitivo</b>.</li><li><b>Extintas</b> em relação à Lei 8.666/93: <b>tomada de preços</b> e <b>convite</b>.</li><li><b>Diálogo competitivo</b> (art. 32): modalidade <b>nova</b>, para objetos de <b>inovação técnica/tecnológica</b> ou complexos, em que a Administração <b>dialoga</b> com licitantes pré-selecionados para desenvolver soluções, e só depois apresenta proposta.</li></ul>", "aprofundamento": [{"pergunta": "O que mudou nos critérios de julgamento?", "resposta": "<span class='lei'>Art. 33</span>: menor preço, maior desconto, melhor técnica/conteúdo artístico, técnica e preço, maior lance (leilão) e <b>maior retorno econômico</b> (novidade, para contratos de eficiência)."}, {"pergunta": "Como funciona a inversão de fases?", "resposta": "A regra é <b>habilitação após o julgamento</b> das propostas (art. 17), acelerando o certame; a fase de habilitação pode anteceder por <b>ato motivado</b> e previsão no edital."}, {"pergunta": "A nova lei revogou de imediato a 8.666/93?", "resposta": "Houve período de <b>convivência</b>: a Lei 8.666/93, 10.520/02 e o RDC foram <b>revogados</b> após o prazo de transição (encerrado em 30/12/2023). Hoje vigora a 14.133/21."}]}, {"area": "Direito Administrativo", "tempo": 300, "enunciado": "Diferencie <b>dispensa</b> (art. 75) e <b>inexigibilidade</b> (art. 74) de licitação na Lei 14.133/2021. A enumeração de cada uma é taxativa ou exemplificativa?", "topico": "Lei 14.133/2021 arts. 74-75 · contratação direta", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Dispensa</b> (<span class='lei'>art. 75</span>): a competição é <b>possível</b>, mas a lei <b>autoriza</b> não licitar (ex.: pequeno valor, emergência, calamidade). Rol <b>taxativo</b>.</li><li><b>Inexigibilidade</b> (<span class='lei'>art. 74</span>): a competição é <b>inviável</b> (fornecedor exclusivo, serviço técnico singular com profissional de notória especialização, artista consagrado). Rol <b>exemplificativo</b> (caput: 'em especial').</li><li>Ambas são <b>contratação direta</b>, exigindo <b>processo de justificação</b> (art. 72).</li></ul>", "aprofundamento": [{"pergunta": "Quais os limites de valor para dispensa?", "resposta": "<span class='lei'>Art. 75, I e II</span>: obras/serviços de engenharia até determinado valor e demais compras/serviços até outro patamar (atualizados por decreto). São hipóteses de <b>dispensa em razão do valor</b>."}, {"pergunta": "O que exige a inexigibilidade por notória especialização?", "resposta": "Serviço técnico <b>singular</b> + profissional/empresa de <b>notória especialização</b> (art. 74, III). Vedada para serviços de publicidade. Exige inviabilidade real de competição."}, {"pergunta": "A contratação direta dispensa formalidades?", "resposta": "Não. O <span class='lei'>art. 72</span> exige <b>processo</b> com justificativa de preço, razão da escolha, ato de ratificação e demais documentos — sob pena de responsabilização."}]}]}};
+const STORE='oral_quinta_sem4_';
+
+const QS=[]; Object.keys(PONTOS).forEach(k=>{(PONTOS[k].questoes||[]).forEach(q=>{q._k=k;QS.push(q);});});
+let cur=0, t=0, running=false, timerId=null;
+const $=s=>document.querySelector(s);
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function renderPills(){
+  const p=$('#pills');p.innerHTML='';
+  QS.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='pill'+(i===cur?' active':'')+(localStorage.getItem(STORE+'done_'+i)?' done':'');
+    d.textContent=(i+1);d.onclick=()=>{cur=i;render();};p.appendChild(d);
+  });
+}
+function tick(){
+  t++;const el=$('#timer');el.textContent=fmt(t);
+  const lim=QS[cur].tempo||0;
+  el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
+}
+function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
+function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
+function resetTimer(){pauseTimer();t=0;$('#timer').textContent='00:00';$('#timer').className='timer';}
+function toggleAp(j){
+  const q=$('#apq'+j),a=$('#apa'+j);
+  q.classList.toggle('open');a.classList.toggle('open');
+}
+function expandAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.add('open');$('#apa'+j).classList.add('open');});}
+function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.remove('open');$('#apa'+j).classList.remove('open');});}
+function togglePadrao(){$('#padrao').classList.toggle('open');
+  const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
+function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();}
+function render(){
+  resetTimer();
+  const q=QS[cur];
+  const ap=q.aprofundamento.map((a,j)=>
+    '<div class="aprow"><div class="apq" id="apq'+j+'" onclick="toggleAp('+j+')"><span class="tri">▶</span><span>'+a.pergunta+'</span></div><div class="apa" id="apa'+j+'">'+a.resposta+'</div></div>'
+  ).join('');
+  $('#card').innerHTML=
+    '<div class="qhead"><span class="area">'+q.area+'</span>'+
+    '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
+    '<button class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<div class="enun">'+q.enunciado+'</div>'+
+    '<div class="topico">'+q.topico+'</div>'+
+    '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
+    '<textarea id="resp" placeholder="Esboce os tópicos da sua resposta..."></textarea>'+
+    '<button class="btn solid" id="bpad" onclick="togglePadrao()" style="margin-top:14px">Revelar padrão de resposta da banca</button>'+
+    '<div class="padrao" id="padrao">'+q.padrao+'</div>'+
+    '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
+    '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
+    '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
+    '<div class="nav"><button class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button class="btn" onclick="go(1)">Próxima →</button></div>';
+  const ta=$('#resp');
+  ta.value=localStorage.getItem(STORE+cur)||'';
+  ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
+  $('#progress').textContent='Questão '+(cur+1)+' de '+QS.length;
+  renderPills();
+}
+$('#sortear').onclick=()=>{cur=Math.floor(Math.random()*QS.length);render();};
+$('#prev').onclick=()=>go(-1);
+$('#next').onclick=()=>go(1);
+render();
+
+</script></body></html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado Oral — Concurso de Crimes e Dosimetria</title>
+<style>
+:root{
+  --bg:#050b18; --card:#0b1828; --border:#16365a; --text:#e9f0f8;
+  --muted:#90a6c0; --soft:#b9c8dc; --accent:var(--amber);
+  --red:#e05555; --green:#27c06a; --amber:#f5a623; --blue:#4e8ef7;
+  --cyan:#38bdf8; --purple:#b06bf2; --teal:#2dd4bf;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.top{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:8px 0 6px;font-size:26px;line-height:1.2}
+.ribbon{display:inline-block;background:var(--accent);color:#04101f;font-weight:800;
+  padding:4px 12px;border-radius:999px;font-size:12.5px;letter-spacing:.04em}
+.sub{color:var(--soft);font-size:14px;margin-top:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.solid{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.pill{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--soft);
+  font-size:13px;cursor:pointer;font-weight:700}
+.pill.active{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pill.done{border-color:var(--green);color:var(--green)}
+.pill.done.active{background:var(--accent);color:#04101f}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:16px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.area{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;color:var(--soft)}
+.timer.warn{color:var(--amber)}
+.timer.over{color:var(--red)}
+.tcontrols{display:flex;gap:6px;align-items:center}
+.tbtn{background:#04101f;border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.tbtn:hover{border-color:var(--accent)}
+.enun{margin:16px 0 6px;font-size:16.5px;line-height:1.6}
+.topico{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;margin-top:10px}
+textarea{width:100%;min-height:120px;margin-top:10px;background:#04101f;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14.5px;
+  font-family:inherit;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.label{font-size:12px;color:var(--muted);margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.padrao{display:none;margin-top:12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 16px;background:#071426}
+.padrao.open{display:block}
+.padrao h4{margin:6px 0 8px;color:var(--accent);font-size:14px}
+.padrao ul{margin:6px 0;padding-left:20px}
+.padrao li{margin:5px 0}
+.lei{color:var(--amber);font-weight:600}
+.aprof{margin-top:16px}
+.aprtools{display:flex;gap:8px;margin-bottom:8px}
+.aprow{border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.apq{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;background:#071426;font-weight:600}
+.apq:hover{background:#0a1a30}
+.apq .tri{color:var(--accent);transition:transform .15s;display:inline-block}
+.apq.open .tri{transform:rotate(90deg)}
+.apa{display:none;padding:0 14px 14px 36px;color:var(--soft);font-size:14.5px;line-height:1.6}
+.apa.open{display:block;padding-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nota{background:#071426;border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+  margin:18px 0 4px;color:var(--soft);font-size:13.5px}
+.nota b{color:var(--accent)}
+.progress{color:var(--muted);font-size:12.5px;margin-top:6px}
+footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+<div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 4 — Quarta</div>
+<h1>Simulado Oral — Concurso de Crimes e Dosimetria</h1>
+<span class="ribbon">Bloco C · Direito Penal</span>
+<div class="sub">Banca virtual · 5 questões · resposta livre · padrão de resposta revelável</div>
+</header>
+<div class="nota"><b>Postura na banca:</b> nomeie o instituto, cite o artigo e o sistema (cúmulo/exasperação) e amarre com as súmulas. Em dosimetria, percorra as três fases na ordem.</div>
+<div class="controls">
+<button class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button class="btn" id="prev">← Anterior</button>
+<button class="btn" id="next">Próxima →</button>
+<span class="progress" id="progress"></span>
+</div>
+<div class="pills" id="pills"></div>
+<div class="card" id="card"></div>
+<footer>Fontes: CP (Decreto-Lei 2.848/40, arts. 59, 65-71, 75) · Lei 13.964/2019 · Súmulas 231/241/444/545/715 · caderno Semana 4 — Quarta.</footer>
+</div>
+<script>
+const PONTOS={"PEN": {"titulo": "Concurso de Crimes e Dosimetria da Pena", "questoes": [{"area": "Direito Penal", "tempo": 300, "enunciado": "Candidato, distinga <b>concurso material</b>, <b>concurso formal</b> e <b>crime continuado</b>. Aponte os artigos e os sistemas de aplicação da pena.", "topico": "CP arts. 69, 70 e 71 · cúmulo × exasperação", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Concurso material</b> (<span class='lei'>art. 69</span>): várias condutas, vários crimes — sistema do <b>cúmulo material</b> (somam-se as penas).</li><li><b>Concurso formal</b> (<span class='lei'>art. 70</span>): uma só conduta, vários crimes — sistema da <b>exasperação</b> (pena mais grave aumentada de 1/6 a 1/2) no formal <b>próprio</b>.</li><li><b>Crime continuado</b> (<span class='lei'>art. 71</span>): vários crimes da mesma espécie, mesmas condições de tempo/lugar/modo, fictamente tratados como continuação — exasperação de <b>1/6 a 2/3</b>.</li></ul>", "aprofundamento": [{"pergunta": "O que diferencia o concurso formal próprio do impróprio?", "resposta": "No <b>próprio</b> há unidade de desígnio (exasperação). No <b>impróprio</b> (art. 70, 2ª parte) há <b>desígnios autônomos</b> — o agente quer cada resultado — e aplica-se o <b>cúmulo material</b> (soma)."}, {"pergunta": "O que é concurso material benéfico?", "resposta": "<span class='lei'>Art. 70, parágrafo único</span>: a pena do concurso formal não pode superar a que resultaria do <b>cúmulo material</b>. Se a exasperação for mais gravosa, aplica-se a soma (mais benéfica)."}, {"pergunta": "Crime continuado exige mesma vítima?", "resposta": "Não no genérico. Mas o <b>continuado específico</b> (art. 71, §único — crimes dolosos contra vítimas diferentes com violência/grave ameaça) permite aumento <b>até o triplo</b>, observada a proporcionalidade."}]}, {"area": "Direito Penal", "tempo": 300, "enunciado": "Disserte sobre a <b>dosimetria trifásica</b> da pena (art. 68). Quem foi seu idealizador e o que se aprecia em cada fase?", "topico": "CP art. 68 · sistema Nelson Hungria", "padrao": "<h4>Resposta esperada</h4><ul><li>O Brasil adota o <b>sistema trifásico</b> de <b>Nelson Hungria</b> (<span class='lei'>art. 68</span>).</li><li><b>1ª fase</b> — pena-base pelas <b>circunstâncias judiciais</b> do <span class='lei'>art. 59</span> (culpabilidade, antecedentes, conduta social, personalidade, motivos, circunstâncias, consequências, comportamento da vítima).</li><li><b>2ª fase</b> — <b>agravantes e atenuantes</b> (arts. 61-66).</li><li><b>3ª fase</b> — <b>causas de aumento e diminuição</b> (frações previstas na Parte Especial e Geral).</li></ul>", "aprofundamento": [{"pergunta": "A pena-base pode ficar abaixo do mínimo na 2ª fase?", "resposta": "Não. <span class='lei'>Súmula 231 STJ</span>: a incidência de <b>atenuante não pode reduzir a pena abaixo do mínimo</b> legal. A limitação é só nas fases 1ª e 2ª; na 3ª as causas podem ultrapassar os limites."}, {"pergunta": "Inquéritos e ações em curso valem como maus antecedentes?", "resposta": "Não. <span class='lei'>Súmula 444 STJ</span>: é vedado usar <b>inquéritos e ações penais em curso</b> para agravar a pena-base. Exige-se trânsito em julgado (presunção de inocência)."}, {"pergunta": "Como se valora a reincidência?", "resposta": "É <b>agravante</b> (2ª fase, art. 61, I). <span class='lei'>Súmula 241 STJ</span>: a mesma condenação <b>não pode</b> ser usada simultaneamente como maus antecedentes e reincidência (bis in idem)."}]}, {"area": "Direito Penal", "tempo": 300, "enunciado": "O agente, em uma única ação, atinge culposamente três vítimas. Qual o concurso aplicável e o sistema de pena? E se houvesse desígnios autônomos?", "topico": "CP art. 70 · formal próprio × impróprio", "padrao": "<h4>Resposta esperada</h4><ul><li>Uma conduta + vários resultados culposos = <b>concurso formal próprio</b> (<span class='lei'>art. 70, 1ª parte</span>): aplica-se a pena de um dos crimes (a mais grave) aumentada de <b>1/6 a 1/2</b>.</li><li>O número de vítimas/resultados orienta a <b>fração de aumento</b> (quanto mais resultados, maior a fração).</li><li>Se houver <b>desígnios autônomos</b> (dolo dirigido a cada resultado) = concurso formal <b>impróprio</b> (2ª parte) → <b>cúmulo material</b> (soma).</li></ul>", "aprofundamento": [{"pergunta": "Como a jurisprudência fixa a fração no formal próprio?", "resposta": "Pelo <b>número de crimes</b>: critério escalonado (2 crimes→1/6; 3→1/5; 4→1/4; 5→1/3; 6 ou mais→1/2), conforme orientação consolidada do STJ."}, {"pergunta": "Cabe aplicar o concurso material benéfico aqui?", "resposta": "Sim, se a soma (cúmulo) resultar pena <b>menor</b> que a exasperação. O <span class='lei'>art. 70, §único</span> impede que o formal seja mais gravoso que o material."}, {"pergunta": "Crime culposo admite concurso formal impróprio?", "resposta": "Não. O impróprio exige <b>desígnios autônomos</b> (dolo). No crime <b>culposo</b> não há desígnio dirigido a cada resultado, logo só cabe o formal <b>próprio</b>."}]}, {"area": "Direito Penal", "tempo": 300, "enunciado": "Disserte sobre o <b>limite máximo de cumprimento da pena privativa de liberdade</b> (art. 75) após a Lei 13.964/2019. Esse limite altera a pena para outros fins?", "topico": "CP art. 75 · Lei 13.964/2019 · Súmula 715 STF", "padrao": "<h4>Resposta esperada</h4><ul><li>O <span class='lei'>art. 75</span>, com redação da <b>Lei 13.964/2019 (Pacote Anticrime)</b>, fixou o limite de cumprimento em <b>40 anos</b> (antes 30).</li><li>É limite de <b>cumprimento</b>, não de <b>cálculo</b>: a pena imposta pode ser maior.</li><li><span class='lei'>Súmula 715 STF</span>: o limite do art. 75 <b>não</b> é considerado para concessão de benefícios (livramento condicional, progressão) — estes incidem sobre a <b>pena total</b> aplicada.</li></ul>", "aprofundamento": [{"pergunta": "O limite de 40 anos aplica-se a fatos anteriores à Lei 13.964/19?", "resposta": "Não. Por ser <b>mais gravoso</b>, não retroage. A fatos anteriores aplica-se o limite de <b>30 anos</b> (irretroatividade da lei penal mais severa, art. 5º, XL, CF)."}, {"pergunta": "Sobrevindo nova condenação durante o cumprimento, como fica?", "resposta": "<span class='lei'>Art. 75, §2º</span>: sobrevindo condenação por fato posterior ao início do cumprimento, faz-se <b>nova unificação</b>, desprezando-se o período já cumprido para fim do novo limite."}, {"pergunta": "Por que os benefícios incidem sobre a pena total?", "resposta": "Para evitar que o teto de cumprimento esvazie a individualização: progressão e livramento calculam-se sobre a <b>pena efetivamente imposta</b> (Súmula 715 STF), não sobre os 40 anos."}]}, {"area": "Direito Penal", "tempo": 300, "enunciado": "Sobre a 1ª fase: a <b>confissão espontânea</b> e a <b>menoridade relativa</b> podem reduzir a pena abaixo do mínimo? E como se relacionam pena-base e circunstâncias preponderantes?", "topico": "CP arts. 59, 65 e 67 · Súmula 231 STJ · Súmula 545 STJ", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Confissão</b> (art. 65, III, 'd') e <b>menoridade relativa</b> (art. 65, I) são <b>atenuantes</b> (2ª fase) — <span class='lei'>não reduzem abaixo do mínimo</span> (Súmula 231 STJ).</li><li><span class='lei'>Súmula 545 STJ</span>: a confissão usada para fundamentar a condenação <b>gera direito</b> à atenuante, ainda que parcial ou retratada.</li><li><b>Preponderância</b> (<span class='lei'>art. 67</span>): no concurso de agravantes e atenuantes, prevalecem as de <b>motivos determinantes, personalidade e reincidência</b>; a <b>menoridade</b> é considerada circunstância preponderante pela jurisprudência.</li></ul>", "aprofundamento": [{"pergunta": "A menoridade relativa prevalece sobre a reincidência?", "resposta": "Sim. A jurisprudência reconhece a <b>menoridade (menor de 21 na data do fato)</b> como atenuante <b>preponderante</b>, podendo até superar a reincidência na compensação."}, {"pergunta": "Confissão e reincidência podem ser compensadas?", "resposta": "Sim. O STJ admite a <b>compensação integral</b> entre a atenuante da <b>confissão</b> e a agravante da <b>reincidência</b>, por serem igualmente preponderantes (salvo multirreincidência)."}, {"pergunta": "A pena-base deve ser fundamentada concretamente?", "resposta": "Sim. <span class='lei'>Súmula 444 STJ</span> e jurisprudência exigem <b>motivação concreta</b> para exasperar circunstâncias do art. 59; vedada a fundamentação genérica/abstrata."}]}]}};
+const STORE='oral_quarta_sem4_';
+
+const QS=[]; Object.keys(PONTOS).forEach(k=>{(PONTOS[k].questoes||[]).forEach(q=>{q._k=k;QS.push(q);});});
+let cur=0, t=0, running=false, timerId=null;
+const $=s=>document.querySelector(s);
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function renderPills(){
+  const p=$('#pills');p.innerHTML='';
+  QS.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='pill'+(i===cur?' active':'')+(localStorage.getItem(STORE+'done_'+i)?' done':'');
+    d.textContent=(i+1);d.onclick=()=>{cur=i;render();};p.appendChild(d);
+  });
+}
+function tick(){
+  t++;const el=$('#timer');el.textContent=fmt(t);
+  const lim=QS[cur].tempo||0;
+  el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
+}
+function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
+function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
+function resetTimer(){pauseTimer();t=0;$('#timer').textContent='00:00';$('#timer').className='timer';}
+function toggleAp(j){
+  const q=$('#apq'+j),a=$('#apa'+j);
+  q.classList.toggle('open');a.classList.toggle('open');
+}
+function expandAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.add('open');$('#apa'+j).classList.add('open');});}
+function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.remove('open');$('#apa'+j).classList.remove('open');});}
+function togglePadrao(){$('#padrao').classList.toggle('open');
+  const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
+function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();}
+function render(){
+  resetTimer();
+  const q=QS[cur];
+  const ap=q.aprofundamento.map((a,j)=>
+    '<div class="aprow"><div class="apq" id="apq'+j+'" onclick="toggleAp('+j+')"><span class="tri">▶</span><span>'+a.pergunta+'</span></div><div class="apa" id="apa'+j+'">'+a.resposta+'</div></div>'
+  ).join('');
+  $('#card').innerHTML=
+    '<div class="qhead"><span class="area">'+q.area+'</span>'+
+    '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
+    '<button class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<div class="enun">'+q.enunciado+'</div>'+
+    '<div class="topico">'+q.topico+'</div>'+
+    '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
+    '<textarea id="resp" placeholder="Esboce os tópicos da sua resposta..."></textarea>'+
+    '<button class="btn solid" id="bpad" onclick="togglePadrao()" style="margin-top:14px">Revelar padrão de resposta da banca</button>'+
+    '<div class="padrao" id="padrao">'+q.padrao+'</div>'+
+    '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
+    '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
+    '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
+    '<div class="nav"><button class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button class="btn" onclick="go(1)">Próxima →</button></div>';
+  const ta=$('#resp');
+  ta.value=localStorage.getItem(STORE+cur)||'';
+  ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
+  $('#progress').textContent='Questão '+(cur+1)+' de '+QS.length;
+  renderPills();
+}
+$('#sortear').onclick=()=>{cur=Math.floor(Math.random()*QS.length);render();};
+$('#prev').onclick=()=>go(-1);
+$('#next').onclick=()=>go(1);
+render();
+
+</script></body></html>

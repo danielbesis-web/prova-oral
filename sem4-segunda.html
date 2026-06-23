@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seg · Sem 4 — Dúvida Registral</title>
+<style>
+:root{
+  --bg:#050b18;--card:#0b1828;--border:#16365a;
+  --text:#e9f0f8;--muted:#90a6c0;--soft:#b9c8dc;
+  --red:#e05555;--redb:#7a2020;--redbg:#1a0505;
+  --cyan:#38bdf8;--cyanb:#155a72;--cyanbg:#06212e;
+  --green:#27c06a;--greenb:#1c5e3a;--greenbg:#0a2016;
+  --amber:#f5a623;--amberb:#6a4a14;--amberbg:#241a08;
+  --blue:#4e8ef7;--blueb:#1e3a7a;--bluebg:#070f28;
+  --purple:#b06bf2;--purpleb:#432a6e;--purplebg:#190f2c;
+  --teal:#2dd4bf;--tealb:#0d5e55;--tealbg:#051a18;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  color:var(--text);min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+
+/* ── HEADER ── */
+.header{
+  background:linear-gradient(135deg,#0a1828 0%,#060f1c 100%);
+  border-bottom:1px solid var(--border);padding:20px 20px 0;
+}
+.header-inner{max-width:820px;margin:0 auto}
+.breadcrumb{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
+.breadcrumb span{color:var(--red);font-weight:700}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.badge-a{background:var(--redbg);border:1px solid var(--redb);color:var(--red)}
+.badge-s{background:var(--amberbg);border:1px solid var(--amberb);color:var(--amber)}
+.badge-t{background:var(--cyanbg);border:1px solid var(--cyanb);color:var(--cyan)}
+.header h1{font-size:20px;font-weight:800;margin-bottom:4px}
+.header h1 em{font-style:normal;color:var(--red)}
+.header p{font-size:13px;color:var(--muted);margin-bottom:16px}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{
+  padding:12px 18px;font-size:13px;font-weight:700;border:none;
+  background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;transition:.14s;flex-shrink:0;
+}
+.tab-btn.active{color:var(--red);border-bottom-color:var(--red)}
+.tab-btn:hover:not(.active){color:var(--soft)}
+
+/* ── CONTENT ── */
+.content{max-width:820px;margin:0 auto;padding:24px 16px 80px}
+.panel{display:none}.panel.active{display:block}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;margin-bottom:16px}
+.sec-title{font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.sec-title .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-red{background:var(--red)}
+.dot-cyan{background:var(--cyan)}
+.dot-green{background:var(--green)}
+.dot-amber{background:var(--amber)}
+.dot-purple{background:var(--purple)}
+.dot-blue{background:var(--blue)}
+.dot-teal{background:var(--teal)}
+
+/* ── SÍNTESE CONCEITUAL ── */
+.conceito{
+  background:#060f1c;border-left:3px solid var(--red);border-radius:0 10px 10px 0;
+  padding:14px 16px;margin-bottom:12px;
+}
+.conceito strong{color:var(--text);font-size:13px}
+.conceito p{font-size:13px;color:var(--soft);margin-top:6px;line-height:1.7}
+mark.c{background:rgba(56,189,248,.2);color:var(--cyan);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.a{background:rgba(245,166,35,.18);color:var(--amber);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.g{background:rgba(39,192,106,.18);color:var(--green);border-radius:3px;padding:1px 5px;font-weight:700}
+mark.r{background:rgba(224,85,85,.18);color:var(--red);border-radius:3px;padding:1px 5px;font-weight:700}
+
+/* ── TABELA COMPARATIVA ── */
+.comp-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;font-size:13px}
+.comp-table th{background:#0a1a2e;padding:10px 14px;text-align:left;font-size:10px;
+  font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.comp-table td{padding:11px 14px;border-top:1px solid rgba(255,255,255,.05)}
+.comp-table tr.row-blue td{background:rgba(78,142,247,.08);border-left:3px solid var(--blue)}
+.comp-table tr.row-teal td{background:rgba(45,212,191,.08);border-left:3px solid var(--teal)}
+.comp-table tr.row-purple td{background:rgba(176,107,242,.08);border-left:3px solid var(--purple)}
+.comp-table tr.row-amber td{background:rgba(245,166,35,.08);border-left:3px solid var(--amber)}
+.comp-table td:first-child{font-weight:800;color:var(--text)}
+.comp-table td:nth-child(2){color:var(--soft)}
+.comp-table td:nth-child(3){color:var(--cyan);font-weight:700;font-size:12px}
+
+/* ── LETRA DA LEI ── */
+.lei-box{
+  background:#060e1c;border:1px solid #1e3a6a;border-left:4px solid var(--cyan);
+  border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px;
+}
+.lei-box .lei-ref{font-size:11px;font-weight:800;color:var(--cyan);letter-spacing:.6px;
+  text-transform:uppercase;margin-bottom:6px}
+.lei-box p{font-size:13px;color:var(--soft);line-height:1.7;font-style:italic}
+.sumula-note{background:#080f1a;border:1px dashed var(--border);border-radius:8px;
+  padding:10px 14px;font-size:12px;color:var(--muted);margin-top:8px}
+
+/* ── PEGADINHAS ── */
+.peg-card{
+  background:var(--redbg);
+  border:1px solid var(--redb);border-radius:14px;padding:20px;
+  background-image:repeating-linear-gradient(
+    45deg,rgba(255,255,255,.012) 0px,rgba(255,255,255,.012) 1px,
+    transparent 1px,transparent 8px
+  );
+}
+.peg-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.peg-header .icon{font-size:22px}
+.peg-header h3{font-size:13px;font-weight:800;color:var(--red);letter-spacing:.5px}
+.peg-item{
+  display:flex;gap:12px;align-items:flex-start;padding:10px 12px;margin-bottom:6px;
+  background:rgba(224,85,85,.08);border-radius:8px;border:1px solid rgba(224,85,85,.15);
+}
+.peg-item:last-child{margin-bottom:0}
+.peg-num{
+  width:22px;height:22px;border-radius:50%;background:var(--red);
+  color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.peg-item p{font-size:13px;color:var(--soft);line-height:1.6}
+.peg-item strong{color:var(--red)}
+
+/* ── JURISPRUDÊNCIA ── */
+.juri-card{
+  background:var(--greenbg);border:1px solid var(--greenb);border-radius:14px;padding:20px;
+}
+.dizer-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#0d2e18;border:1px solid var(--greenb);border-radius:6px;
+  padding:4px 12px;font-size:11px;font-weight:800;color:var(--green);
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;
+}
+.juri-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;color:var(--soft);line-height:1.7}
+.juri-item:last-child{border-bottom:none}
+.juri-item strong{color:var(--green)}
+
+/* ── COMPLEMENTO ── */
+.comp-box{
+  background:#060f1a;border:1px solid #1c3a5a;border-radius:14px;
+  padding:20px;margin-bottom:14px;
+}
+.comp-tipo{display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.tipo-pill{
+  flex:1;min-width:200px;background:#0a1828;border-radius:10px;padding:12px 14px;
+  border:1px solid var(--border);
+}
+.tipo-pill .t-label{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.tipo-pill.ex .t-label{color:var(--red)}
+.tipo-pill.ne .t-label{color:var(--blue)}
+.tipo-pill p{font-size:12px;color:var(--soft);line-height:1.6}
+.excecao{background:#070e1d;border-left:3px solid var(--amber);border-radius:0 8px 8px 0;
+  padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--soft)}
+.excecao strong{color:var(--amber)}
+
+/* ── ACTIVE RECALL ── */
+.ar-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:0;margin-bottom:10px;overflow:hidden;}
+.ar-q{
+  display:flex;gap:12px;align-items:center;padding:15px 18px;cursor:pointer;
+  transition:.14s;user-select:none;
+}
+.ar-q:hover{background:rgba(255,255,255,.03)}
+.ar-num{
+  width:28px;height:28px;border-radius:8px;background:var(--cyanbg);
+  border:1px solid var(--cyanb);color:var(--cyan);
+  font-size:12px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;
+}
+.ar-num.mic{background:var(--redbg);border-color:var(--redb);color:var(--red)}
+.ar-text{flex:1;font-size:14px;color:var(--soft);font-weight:600}
+.ar-arrow{color:var(--muted);font-size:12px;transition:.2s;flex-shrink:0}
+.ar-item.open .ar-arrow{transform:rotate(90deg)}
+.ar-answer{
+  max-height:0;overflow:hidden;transition:max-height .3s ease;
+  background:#060f1c;border-top:1px solid transparent;
+}
+.ar-item.open .ar-answer{max-height:300px;border-top-color:var(--border)}
+.ar-answer-inner{padding:14px 18px 16px;font-size:13px;color:var(--soft);line-height:1.8}
+.ar-answer-inner strong{color:var(--cyan)}
+
+/* ── FLASHCARDS ── */
+.fc-wrap{max-width:480px;margin:0 auto}
+.fc-counter{text-align:center;font-size:12px;color:var(--muted);margin-bottom:16px;font-weight:700}
+.fc-scene{perspective:1000px;height:200px;margin-bottom:20px;cursor:pointer}
+.fc-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:.5s}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{
+  position:absolute;width:100%;height:100%;backface-visibility:hidden;
+  border-radius:14px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:24px;text-align:center;
+}
+.fc-front{
+  background:var(--card);border:1px solid var(--border);
+}
+.fc-back{
+  background:#070f20;border:1px solid var(--cyanb);
+  transform:rotateY(180deg);
+}
+.fc-hint{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px}
+.fc-front .fc-hint{color:var(--muted)}
+.fc-back .fc-hint{color:var(--cyan)}
+.fc-face p{font-size:17px;font-weight:800;line-height:1.4}
+.fc-front p{color:var(--text)}
+.fc-back p{color:var(--cyan)}
+.fc-tip{font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px}
+.fc-nav{display:flex;align-items:center;justify-content:center;gap:12px}
+.fc-btn{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  color:var(--muted);font-size:13px;font-weight:700;padding:9px 20px;cursor:pointer;
+  transition:.14s;
+}
+.fc-btn:hover:not(:disabled){border-color:var(--cyanb);color:var(--cyan)}
+.fc-btn:disabled{opacity:.3;cursor:not-allowed}
+.fc-dots{display:flex;gap:6px}
+.fc-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:.14s}
+.fc-dot.active{background:var(--cyan)}
+.fc-flip-btn{
+  width:100%;padding:11px;border-radius:9px;border:none;cursor:pointer;
+  background:var(--cyanbg);border:1px solid var(--cyanb);
+  color:var(--cyan);font-size:14px;font-weight:700;margin-bottom:12px;transition:.14s;
+}
+.fc-flip-btn:hover{background:rgba(56,189,248,.12)}
+
+/* ── QUESTÕES ── */
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;margin-bottom:14px;overflow:hidden}
+.q-header{display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.q-code{font-size:13px;font-weight:800;color:var(--text)}
+.q-banca{font-size:11px;color:var(--muted)}
+.q-tag{
+  display:inline-flex;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;
+}
+.q-tag-mc{background:var(--cyanbg);border:1px solid var(--cyanb);color:var(--cyan)}
+.q-tag-ce{background:var(--amberbg);border:1px solid var(--amberb);color:var(--amber)}
+.icol-row{display:flex;gap:8px;align-items:flex-start;padding:8px 12px;
+  background:#060f1c;border-radius:8px;margin-bottom:6px;font-size:13px}
+.icol-label{
+  width:20px;height:20px;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;
+}
+.icol-I .icol-label{background:var(--purplebg);color:var(--purple)}
+.icol-C .icol-label{background:var(--cyanbg);color:var(--cyan)}
+.icol-O .icol-label{background:var(--greenbg);color:var(--green)}
+.icol-L .icol-label{background:var(--amberbg);color:var(--amber)}
+.icol-row p{color:var(--soft);line-height:1.6}
+.gab-btn{
+  width:100%;margin-top:12px;padding:9px;border-radius:8px;border:none;cursor:pointer;
+  background:#060f1c;border:1px solid var(--border);
+  color:var(--muted);font-size:12px;font-weight:700;transition:.14s;
+}
+.gab-btn:hover{border-color:var(--greenb);color:var(--green)}
+.gab-reveal{
+  display:none;margin-top:10px;background:var(--greenbg);border:1px solid var(--greenb);
+  border-radius:8px;padding:12px 14px;font-size:13px;color:var(--green);font-weight:700;
+}
+
+/* ── CHECKLIST ── */
+.cl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cl-header h2{font-size:16px;font-weight:800}
+.cl-pct{font-size:13px;color:var(--green);font-weight:800}
+.cl-bar{height:6px;background:rgba(255,255,255,.06);border-radius:6px;
+  margin-bottom:24px;overflow:hidden}
+.cl-fill{height:6px;background:var(--green);border-radius:6px;transition:.3s}
+.cl-item{
+  display:flex;gap:14px;align-items:flex-start;padding:14px 16px;
+  background:var(--card);border:1px solid var(--border);border-radius:11px;
+  margin-bottom:8px;cursor:pointer;transition:.14s;user-select:none;
+}
+.cl-item:hover{border-color:var(--greenb)}
+.cl-item.done{border-color:var(--greenb);background:var(--greenbg)}
+.cl-check{
+  width:22px;height:22px;border-radius:6px;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:.14s;margin-top:1px;
+}
+.cl-item.done .cl-check{background:var(--green);border-color:var(--green)}
+.cl-check svg{display:none}
+.cl-item.done .cl-check svg{display:block}
+.cl-item p{font-size:13px;color:var(--soft);line-height:1.5}
+.cl-item.done p{color:var(--green)}
+.cl-reset{
+  width:100%;margin-top:16px;padding:9px;border-radius:8px;border:none;cursor:pointer;
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  font-size:12px;font-weight:700;transition:.14s;
+}
+.cl-reset:hover{border-color:var(--redb);color:var(--red)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="breadcrumb">
+      Prova Oral · 2ª fase <span>›</span> Cadernos <span>›</span> Bloco A — Notarial/Registral
+    </div>
+    <div class="badges">
+      <span class="badge badge-a">🅰 Bloco A</span>
+      <span class="badge badge-s">Semana 4</span>
+      <span class="badge badge-s">Segunda-feira</span>
+      <span class="badge badge-t">TJSC</span>
+    </div>
+    <h1>Dúvida <em>Registral</em></h1>
+    <p>Notarial · Registral — Responda em voz alta antes de conferir</p>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('sintese',this)">📖 Síntese</button>
+    <button class="tab-btn" onclick="showTab('recall',this)">🎙️ Active Recall</button>
+    <button class="tab-btn" onclick="showTab('flash',this)">🃏 Flashcards</button>
+    <button class="tab-btn" onclick="showTab('questoes',this)">📝 Questões</button>
+    <button class="tab-btn" onclick="showTab('checklist',this)">✅ Checklist</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══ SÍNTESE ══ -->
+<div id="panel-sintese" class="panel active">
+
+  <!-- SÍNTESE CONCEITUAL -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-red"></div> Síntese Conceitual</div>
+
+    <div class="conceito">
+      <strong>Conceito e iniciativa</strong>
+      <p>Dúvida é o <mark class="c">pedido do oficial ao juízo competente</mark> para que decida sobre a legitimidade de <mark class="a">exigência</mark> que o interessado se recusa a cumprir ou não pode satisfazer. Quem <mark class="c">suscita é o oficial</mark>; o interessado apenas <mark class="r">requer</mark> a suscitação (LRP art. 198). O oficial <mark class="r">não pode recusar-se</mark> a suscitar.</p>
+    </div>
+
+    <div class="conceito">
+      <strong>Procedimento (arts. 198–201)</strong>
+      <p>Exigência por escrito → não cumprida, o interessado requer → o oficial anota a ocorrência <mark class="c">à margem da prenotação</mark>, certifica no título e dá <mark class="c">ciência ao apresentante</mark> para impugnar em <mark class="a">15 dias</mark> (red. <mark class="a">Lei 14.382/2022</mark>) → remete ao juízo → <mark class="c">MP</mark> em <mark class="a">10 dias</mark> → decisão em <mark class="a">15 dias</mark>.</p>
+    </div>
+
+    <div class="conceito">
+      <strong>Recurso — apelação (art. 202)</strong>
+      <p>Da sentença cabe <mark class="c">apelação</mark>, com efeitos <mark class="a">devolutivo e suspensivo</mark>. Legitimados: <mark class="c">interessado, Ministério Público e terceiro prejudicado</mark>. O <mark class="r">oficial não tem legitimidade</mark> para apelar (é suscitante, não parte).</p>
+    </div>
+
+    <div class="conceito">
+      <strong>Desfecho (art. 203)</strong>
+      <p>Dúvida <mark class="r">procedente</mark> = exigência mantida, <mark class="r">não se registra</mark>, devolvem-se os documentos e <mark class="r">cancela-se a prenotação</mark>. Dúvida <mark class="g">improcedente</mark> = o oficial errou, <mark class="g">procede-se ao registro</mark>.</p>
+    </div>
+
+    <div class="conceito">
+      <strong>Natureza administrativa (art. 204)</strong>
+      <p>A decisão da dúvida tem <mark class="c">natureza administrativa</mark> e <mark class="g">não impede o uso do processo contencioso</mark> competente. Logo: <mark class="r">não faz coisa julgada material</mark>; a "sentença" é ato administrativo e a "apelação", recurso administrativo; <mark class="r">sem custas nem honorários</mark>.</p>
+    </div>
+
+    <div class="conceito">
+      <strong>Dúvida inversa</strong>
+      <p>Suscitada <mark class="c">diretamente pelo interessado</mark> ao juiz quando o oficial se omite ou recusa. <mark class="r">Não tem previsão legal expressa</mark> na LRP — é construção <mark class="a">doutrinária e jurisprudencial</mark>, admitida por <mark class="g">economia processual</mark>.</p>
+    </div>
+  </div>
+
+  <!-- TABELA COMPARATIVA -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-blue"></div> Tabela Comparativa</div>
+    <div style="overflow-x:auto">
+      <table class="comp-table">
+        <tr>
+          <th>Fase</th>
+          <th>O que é</th>
+          <th>Prazo / Quem</th>
+        </tr>
+        <tr class="row-blue">
+          <td>Suscitação</td>
+          <td>Oficial remete título + declaração ao juízo (art. 198)</td>
+          <td>A requerimento do interessado</td>
+        </tr>
+        <tr class="row-teal">
+          <td>Impugnação</td>
+          <td>Apresentante contesta a dúvida no juízo</td>
+          <td>15 dias úteis</td>
+        </tr>
+        <tr class="row-purple">
+          <td>Ministério Público</td>
+          <td>Parecer obrigatório (art. 200)</td>
+          <td>10 dias</td>
+        </tr>
+        <tr class="row-amber">
+          <td>Decisão / Apelação</td>
+          <td>"Sentença" administrativa · recurso (art. 202)</td>
+          <td>Interessado · MP · terceiro</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- COMPLEMENTO -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-cyan"></div> Complemento — Espécies e Desfechos</div>
+    <div class="comp-tipo">
+      <div class="tipo-pill ex">
+        <div class="t-label">Dúvida (direta / comum)</div>
+        <p>Suscitada <strong>pelo oficial</strong>, a requerimento do interessado. É a única expressamente prevista na LRP (arts. 198 e ss.). O oficial é obrigado a suscitar quando provocado.</p>
+      </div>
+      <div class="tipo-pill ne">
+        <div class="t-label">Dúvida Inversa</div>
+        <p>Suscitada <strong>diretamente pelo interessado</strong> ao juiz, sem prévia recusa formal do oficial. Sem previsão legal — criação <strong>jurisprudencial</strong>, aceita por economia processual.</p>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:10px;font-weight:800;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Desfecho da dúvida (art. 203)</div>
+    <div class="excecao"><strong>Procedente</strong> — a exigência do oficial era legítima: o registro <strong>NÃO</strong> se realiza, os documentos são devolvidos e a prenotação é <strong>cancelada</strong>.</div>
+    <div class="excecao"><strong>Improcedente</strong> — o oficial errou: o interessado reapresenta os documentos com a certidão/mandado e <strong>procede-se ao registro</strong>.</div>
+    <div class="excecao"><strong>Oficial não apela</strong> — só interessado, MP e terceiro prejudicado têm legitimidade recursal (art. 202).</div>
+  </div>
+
+  <!-- LETRA DA LEI -->
+  <div class="card">
+    <div class="sec-title"><div class="dot dot-cyan"></div> Letra da Lei &amp; Normas</div>
+
+    <div class="lei-box">
+      <div class="lei-ref">LRP · Art. 198 (red. Lei 14.382/2022)</div>
+      <p>Havendo exigência a ser satisfeita, o oficial a indicará por escrito. Não se conformando o apresentante, ou não a podendo satisfazer, o título será, a seu requerimento e com a declaração de dúvida, remetido ao juízo competente; dada ciência ao apresentante, este poderá impugná-la no prazo de 15 (quinze) dias.</p>
+    </div>
+
+    <div class="lei-box" style="border-left-color:var(--amber)">
+      <div class="lei-ref" style="color:var(--amber)">LRP · Art. 202</div>
+      <p>Da sentença, poderão interpor apelação, com os efeitos devolutivo e suspensivo, o interessado, o Ministério Público e o terceiro prejudicado.</p>
+    </div>
+
+    <div class="lei-box" style="border-left-color:var(--green)">
+      <div class="lei-ref" style="color:var(--green)">LRP · Art. 203</div>
+      <p>Transitada em julgado: I — se procedente a dúvida, os documentos são restituídos à parte e cancela-se a prenotação; II — se improcedente, o interessado reapresenta os documentos para que se proceda ao registro.</p>
+    </div>
+
+    <div class="lei-box" style="border-left-color:var(--purple)">
+      <div class="lei-ref" style="color:var(--purple)">LRP · Art. 204</div>
+      <p>A decisão da dúvida tem natureza administrativa e não impede o uso do processo contencioso competente.</p>
+    </div>
+
+    <div class="sumula-note">📌 Sem súmula específica STF/STJ sobre o rito da dúvida — ancorar em <strong>LRP arts. 198–204 + Lei 14.382/2022 + CNN (Prov. CNJ 149/2023)</strong>. A dúvida inversa é admitida pela jurisprudência administrativa (CSM/CGJ), sem texto legal.</div>
+  </div>
+
+  <!-- PEGADINHAS -->
+  <div class="peg-card">
+    <div class="peg-header">
+      <span class="icon">⚠️</span>
+      <h3>PEGADINHAS — ZONA DE ATAQUE</h3>
+    </div>
+    <div class="peg-item">
+      <div class="peg-num">1</div>
+      <p>Quem <strong>suscita</strong> a dúvida é o <strong>OFICIAL</strong> — o interessado apenas requer. Banca inverte.</p>
+    </div>
+    <div class="peg-item">
+      <div class="peg-num">2</div>
+      <p>Dúvida <strong>procedente = exigência mantida, NÃO registra</strong>. O candidato confunde o sentido.</p>
+    </div>
+    <div class="peg-item">
+      <div class="peg-num">3</div>
+      <p>Dúvida <strong>improcedente = registra</strong> (o oficial errou). É o espelho do item anterior.</p>
+    </div>
+    <div class="peg-item">
+      <div class="peg-num">4</div>
+      <p>A apelação tem efeito <strong>devolutivo E suspensivo</strong> (art. 202) — não é só devolutivo.</p>
+    </div>
+    <div class="peg-item">
+      <div class="peg-num">5</div>
+      <p>O <strong>oficial NÃO pode apelar</strong> — legitimados: interessado, MP e terceiro prejudicado.</p>
+    </div>
+    <div class="peg-item">
+      <div class="peg-num">6</div>
+      <p>Natureza <strong>administrativa</strong> (art. 204): não faz coisa julgada material, não impede a via contenciosa, sem custas/honorários.</p>
+    </div>
+    <div class="peg-item">
+      <div class="peg-num">7</div>
+      <p>Dúvida <strong>inversa não tem previsão legal expressa</strong> — é construção jurisprudencial admitida por economia.</p>
+    </div>
+    <div class="peg-item">
+      <div class="peg-num">8</div>
+      <p>Enquanto pende a dúvida, a <strong>prenotação prorroga-se</strong> — o prazo dos 20 dias úteis não corre.</p>
+    </div>
+  </div>
+
+  <!-- JURISPRUDÊNCIA -->
+  <div class="juri-card" style="margin-top:16px">
+    <div class="sec-title" style="margin-bottom:10px"><div class="dot dot-green"></div> Jurisprudência / Normas</div>
+    <div class="dizer-badge">📗 Dizer o Direito</div>
+    <div class="juri-item">
+      <strong>Base normativa principal:</strong> <strong>LRP (Lei 6.015/73) arts. 198–204</strong> — rito da suscitação de dúvida, da exigência à decisão e à apelação.
+    </div>
+    <div class="juri-item">
+      <strong>Lei 14.382/2022</strong> — atualizou o procedimento: prazo de impugnação de <strong>15 dias</strong> e integração ao SERP (Sistema Eletrônico dos Registros Públicos).
+    </div>
+    <div class="juri-item">
+      <strong>CNN — Prov. CNJ 149/2023</strong> — Código Nacional de Normas consolida o rito da dúvida; referência normativa para questões atuais.
+    </div>
+    <div class="juri-item">
+      <strong>Natureza administrativa (art. 204)</strong> — jurisprudência administrativa (CSM/CGJ): a decisão não faz coisa julgada material; competência recursal do Conselho da Magistratura / Corregedoria.
+    </div>
+    <div class="juri-item">
+      <strong>Dúvida inversa</strong> — admitida pela jurisprudência por economia processual, embora sem previsão expressa na LRP.
+    </div>
+  </div>
+
+</div><!-- /panel-sintese -->
+
+<!-- ══ ACTIVE RECALL ══ -->
+<div id="panel-recall" class="panel">
+  <div id="ar-list"></div>
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="panel-flash" class="panel">
+  <div class="fc-wrap">
+    <div class="fc-counter" id="fc-counter">1 / 7</div>
+    <div class="fc-scene" onclick="flipCard()">
+      <div class="fc-card" id="fc-card">
+        <div class="fc-face fc-front">
+          <div class="fc-hint">Frente — toque para virar</div>
+          <p id="fc-front-text"></p>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-hint">Verso</div>
+          <p id="fc-back-text"></p>
+        </div>
+      </div>
+    </div>
+    <div class="fc-tip">Toque no card para ver a resposta</div>
+    <button class="fc-flip-btn" onclick="flipCard()">🔄 Virar card</button>
+    <div class="fc-nav">
+      <button class="fc-btn" id="fc-prev" onclick="fcNav(-1)">← Anterior</button>
+      <div class="fc-dots" id="fc-dots"></div>
+      <button class="fc-btn" id="fc-next" onclick="fcNav(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ QUESTÕES ══ -->
+<div id="panel-questoes" class="panel">
+  <div id="q-list"></div>
+</div>
+
+<!-- ══ CHECKLIST ══ -->
+<div id="panel-checklist" class="panel">
+  <div class="cl-header">
+    <h2>✅ Checklist de Domínio</h2>
+    <span class="cl-pct" id="cl-pct">0%</span>
+  </div>
+  <div class="cl-bar"><div class="cl-fill" id="cl-fill" style="width:0%"></div></div>
+  <div id="cl-items"></div>
+  <button class="cl-reset" onclick="clReset()">Reiniciar checklist</button>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ═══════════════ TABS ═══════════════
+function showTab(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='flash') renderFC();
+}
+
+// ═══════════════ ACTIVE RECALL ═══════════════
+const AR = [
+  {
+    q:'🎙️ O que é a dúvida registral? Quem a suscita e quem a requer?',
+    mic:true,
+    a:'<strong>Dúvida</strong> é o pedido do <strong>oficial</strong> ao juízo competente para que decida sobre a legitimidade de exigência que o interessado se recusa a cumprir ou não pode satisfazer (LRP art. 198).<br><br>Quem <strong>suscita é o oficial</strong>; o interessado apenas <strong>requer</strong> a suscitação. O oficial não pode recusar-se a suscitar quando provocado.'
+  },
+  {
+    q:'🎙️ Descreva o procedimento da dúvida, do requerimento à decisão, com os prazos.',
+    mic:true,
+    a:'1) Exigência por escrito não cumprida → o interessado <strong>requer</strong> a suscitação.<br>2) O oficial anota a ocorrência <strong>à margem da prenotação</strong>, certifica no título e dá ciência ao apresentante para <strong>impugnar em 15 dias</strong> (Lei 14.382/2022).<br>3) Remete ao juízo → <strong>MP em 10 dias</strong> (art. 200) → <strong>decisão em 15 dias</strong> (art. 201).'
+  },
+  {
+    q:'Quem pode apelar da sentença de dúvida e quais os efeitos?',
+    mic:false,
+    a:'Legitimados (art. 202): <strong>interessado, Ministério Público e terceiro prejudicado</strong>. Efeitos: <strong>devolutivo e suspensivo</strong>. O <strong>oficial não tem legitimidade</strong> para apelar.'
+  },
+  {
+    q:'Dúvida julgada procedente x improcedente — o que acontece com o registro?',
+    mic:false,
+    a:'<strong>Procedente</strong> (art. 203, I): a exigência era legítima → <strong>não se registra</strong>, devolvem-se os documentos e <strong>cancela-se a prenotação</strong>.<br><br><strong>Improcedente</strong> (art. 203, II): o oficial errou → o interessado reapresenta os documentos e <strong>procede-se ao registro</strong>.'
+  },
+  {
+    q:'Qual a natureza jurídica da decisão da dúvida e suas consequências?',
+    mic:false,
+    a:'<strong>Natureza administrativa</strong> (art. 204). Consequências: <strong>não faz coisa julgada material</strong>; <strong>não impede</strong> o uso do processo contencioso competente; a "sentença" é ato administrativo e a "apelação", recurso administrativo; <strong>sem custas nem honorários</strong>.'
+  },
+  {
+    q:'O que é dúvida inversa? Tem previsão legal?',
+    mic:false,
+    a:'É a dúvida suscitada <strong>diretamente pelo interessado</strong> ao juiz, quando o oficial se omite ou recusa a suscitação. <strong>Não tem previsão legal expressa</strong> na LRP — é construção <strong>doutrinária e jurisprudencial</strong>, admitida por economia processual.'
+  }
+];
+
+function buildAR(){
+  const c = document.getElementById('ar-list');
+  c.innerHTML = AR.map((item,i)=>`
+    <div class="ar-item" id="ar-${i}">
+      <div class="ar-q" onclick="toggleAR(${i})">
+        <div class="ar-num ${item.mic?'mic':''}">${i+1}</div>
+        <div class="ar-text">${item.q}</div>
+        <span class="ar-arrow">›</span>
+      </div>
+      <div class="ar-answer">
+        <div class="ar-answer-inner">${item.a}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleAR(i){
+  const el = document.getElementById('ar-'+i);
+  el.classList.toggle('open');
+}
+
+buildAR();
+
+// ═══════════════ FLASHCARDS ═══════════════
+const FC = [
+  {f:'Quem suscita a dúvida',              b:'O oficial — a requerimento do interessado · LRP art. 198'},
+  {f:'Prazo de impugnação',               b:'15 dias (red. Lei 14.382/2022)'},
+  {f:'MP na dúvida',                      b:'Ouvido em 10 dias · LRP art. 200'},
+  {f:'Apelação — legitimados',            b:'Interessado, MP e terceiro prejudicado · art. 202'},
+  {f:'Efeitos da apelação',               b:'Devolutivo e suspensivo'},
+  {f:'Dúvida procedente',                 b:'Exigência mantida · não registra · cancela prenotação (art. 203, I)'},
+  {f:'Natureza da decisão',               b:'Administrativa · não impede via contenciosa (art. 204)'},
+];
+
+let fcIdx=0, fcFlipped=false;
+
+function renderFC(){
+  fcFlipped=false;
+  document.getElementById('fc-card').classList.remove('flipped');
+  document.getElementById('fc-front-text').textContent=FC[fcIdx].f;
+  document.getElementById('fc-back-text').textContent=FC[fcIdx].b;
+  document.getElementById('fc-counter').textContent=(fcIdx+1)+' / '+FC.length;
+  document.getElementById('fc-prev').disabled=fcIdx===0;
+  document.getElementById('fc-next').disabled=fcIdx===FC.length-1;
+  const dots=document.getElementById('fc-dots');
+  dots.innerHTML=FC.map((_,i)=>`<div class="fc-dot ${i===fcIdx?'active':''}"></div>`).join('');
+}
+
+function flipCard(){
+  fcFlipped=!fcFlipped;
+  document.getElementById('fc-card').classList.toggle('flipped',fcFlipped);
+}
+
+function fcNav(dir){
+  fcIdx=Math.max(0,Math.min(FC.length-1,fcIdx+dir));
+  renderFC();
+}
+
+renderFC();
+
+// ═══════════════ QUESTÕES ═══════════════
+const QS = [
+  {
+    code:'Q1690877',banca:'IESES 2024',cargo:'TJ-SC · Titular de Cartório',tag:'mc',
+    I:'Procedimento de suscitação de dúvida na Lei de Registros Públicos.',
+    C:'Assinalar a alternativa correta.',
+    O:'<strong>Gab. C</strong> — A dúvida é suscitada pelo oficial, a requerimento do interessado; dada ciência, o apresentante pode impugná-la no prazo de 15 dias (LRP art. 198, red. Lei 14.382/2022).',
+    L:'LRP arts. 198 e 200.'
+  },
+  {
+    code:'Q1755302',banca:'FGV 2023',cargo:'TJ · Serviços Notariais e de Registro',tag:'mc',
+    I:'Desfecho da dúvida julgada procedente.',
+    C:'Indicar a consequência jurídica.',
+    O:'<strong>Gab. D</strong> — Julgada procedente a dúvida, a exigência é mantida: não se realiza o registro, os documentos são devolvidos e a prenotação é cancelada (LRP art. 203, I).',
+    L:'LRP art. 203, I.'
+  },
+  {
+    code:'Q1820445',banca:'CEBRASPE 2023',cargo:'Cartório · Provimento',tag:'ce',
+    I:'Natureza jurídica da decisão da dúvida e legitimidade recursal.',
+    C:'Julgar o item como Certo ou Errado: "A decisão da dúvida tem natureza administrativa e dela pode o próprio oficial registrador interpor apelação."',
+    O:'<strong>ERRADO</strong> — A natureza é administrativa (art. 204), mas o oficial NÃO tem legitimidade para apelar; legitimados são o interessado, o MP e o terceiro prejudicado (art. 202).',
+    L:'LRP arts. 202 e 204.'
+  }
+];
+
+function buildQ(){
+  const c=document.getElementById('q-list');
+  c.innerHTML=QS.map((q,i)=>`
+    <div class="q-card">
+      <div class="q-header">
+        <div>
+          <div class="q-code">${q.code}</div>
+          <div class="q-banca">${q.banca} · ${q.cargo}</div>
+        </div>
+        <span class="q-tag ${q.tag==='ce'?'q-tag-ce':'q-tag-mc'}">${q.tag==='ce'?'C/E':'Múltipla Escolha'}</span>
+      </div>
+      <div class="icol-row icol-I">
+        <div class="icol-label">I</div>
+        <p>${q.I}</p>
+      </div>
+      <div class="icol-row icol-C">
+        <div class="icol-label">C</div>
+        <p>${q.C}</p>
+      </div>
+      <div class="icol-row icol-L">
+        <div class="icol-label">L</div>
+        <p>${q.L}</p>
+      </div>
+      <button class="gab-btn" onclick="toggleGab(${i})">Ver gabarito</button>
+      <div class="gab-reveal" id="gab-${i}">
+        <div class="icol-row icol-O" style="background:var(--greenbg);border-radius:8px">
+          <div class="icol-label" style="background:var(--greenbg);color:var(--green)">O</div>
+          <p style="color:var(--green)">${q.O}</p>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleGab(i){
+  const el=document.getElementById('gab-'+i);
+  const btn=el.previousElementSibling;
+  if(el.style.display==='block'){
+    el.style.display='none'; btn.textContent='Ver gabarito';
+  } else {
+    el.style.display='block'; btn.textContent='Ocultar gabarito';
+  }
+}
+
+buildQ();
+
+// ═══════════════ CHECKLIST ═══════════════
+const CL_KEY = 'oral_seg_sem4_duvida_registral_cl';
+const CL_ITEMS = [
+  'Conceituo dúvida e sei que quem suscita é o oficial (interessado só requer) — art. 198.',
+  'Descrevo o procedimento e os prazos: impugnação 15 dias, MP 10 dias, decisão 15 dias.',
+  'Sei os legitimados para apelar (interessado, MP, terceiro) e os efeitos (devolutivo + suspensivo) — art. 202.',
+  'Distingo dúvida procedente (não registra) × improcedente (registra) — art. 203.',
+  'Domino a natureza administrativa e suas consequências — art. 204.',
+  'Explico a dúvida inversa e que não tem previsão legal expressa.',
+  'Fiz o micro-treino gravado (perguntas 🎙️ do Active Recall).'
+];
+
+function clLoad(){ return JSON.parse(localStorage.getItem(CL_KEY)||'[]'); }
+function clSave(s){ localStorage.setItem(CL_KEY,JSON.stringify(s)); }
+
+function buildCL(){
+  const state=clLoad();
+  const c=document.getElementById('cl-items');
+  c.innerHTML=CL_ITEMS.map((txt,i)=>`
+    <div class="cl-item ${state.includes(i)?'done':''}" onclick="clToggle(${i})">
+      <div class="cl-check">
+        <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+          <path d="M1 5l3.5 3.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p>${txt}</p>
+    </div>
+  `).join('');
+  const pct=Math.round((state.length/CL_ITEMS.length)*100);
+  document.getElementById('cl-pct').textContent=pct+'%';
+  document.getElementById('cl-fill').style.width=pct+'%';
+}
+
+function clToggle(i){
+  let s=clLoad();
+  s.includes(i)?s=s.filter(x=>x!==i):s.push(i);
+  clSave(s); buildCL();
+}
+
+function clReset(){ clSave([]); buildCL(); }
+
+buildCL();
+</script>
+</body>
+</html>

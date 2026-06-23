@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado Oral — Extinção dos Contratos</title>
+<style>
+:root{
+  --bg:#050b18; --card:#0b1828; --border:#16365a; --text:#e9f0f8;
+  --muted:#90a6c0; --soft:#b9c8dc; --accent:var(--green);
+  --red:#e05555; --green:#27c06a; --amber:#f5a623; --blue:#4e8ef7;
+  --cyan:#38bdf8; --purple:#b06bf2; --teal:#2dd4bf;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.top{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:8px 0 6px;font-size:26px;line-height:1.2}
+.ribbon{display:inline-block;background:var(--accent);color:#04101f;font-weight:800;
+  padding:4px 12px;border-radius:999px;font-size:12.5px;letter-spacing:.04em}
+.sub{color:var(--soft);font-size:14px;margin-top:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.solid{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.pill{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--soft);
+  font-size:13px;cursor:pointer;font-weight:700}
+.pill.active{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pill.done{border-color:var(--green);color:var(--green)}
+.pill.done.active{background:var(--accent);color:#04101f}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:16px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.area{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;color:var(--soft)}
+.timer.warn{color:var(--amber)}
+.timer.over{color:var(--red)}
+.tcontrols{display:flex;gap:6px;align-items:center}
+.tbtn{background:#04101f;border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.tbtn:hover{border-color:var(--accent)}
+.enun{margin:16px 0 6px;font-size:16.5px;line-height:1.6}
+.topico{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;margin-top:10px}
+textarea{width:100%;min-height:120px;margin-top:10px;background:#04101f;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14.5px;
+  font-family:inherit;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.label{font-size:12px;color:var(--muted);margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.padrao{display:none;margin-top:12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 16px;background:#071426}
+.padrao.open{display:block}
+.padrao h4{margin:6px 0 8px;color:var(--accent);font-size:14px}
+.padrao ul{margin:6px 0;padding-left:20px}
+.padrao li{margin:5px 0}
+.lei{color:var(--amber);font-weight:600}
+.aprof{margin-top:16px}
+.aprtools{display:flex;gap:8px;margin-bottom:8px}
+.aprow{border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.apq{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;background:#071426;font-weight:600}
+.apq:hover{background:#0a1a30}
+.apq .tri{color:var(--accent);transition:transform .15s;display:inline-block}
+.apq.open .tri{transform:rotate(90deg)}
+.apa{display:none;padding:0 14px 14px 36px;color:var(--soft);font-size:14.5px;line-height:1.6}
+.apa.open{display:block;padding-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nota{background:#071426;border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+  margin:18px 0 4px;color:var(--soft);font-size:13.5px}
+.nota b{color:var(--accent)}
+.progress{color:var(--muted);font-size:12.5px;margin-top:6px}
+footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+<div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 4 — Terça</div>
+<h1>Simulado Oral — Extinção dos Contratos</h1>
+<span class="ribbon">Bloco B · Direito Civil</span>
+<div class="sub">Banca virtual · 5 questões · resposta livre · padrão de resposta revelável</div>
+</header>
+<div class="nota"><b>Postura na banca:</b> use a tríade resilição/resolução/rescisão como espinha dorsal e ancore cada resposta no artigo do Código Civil. Cite o efeito temporal (ex tunc/ex nunc).</div>
+<div class="controls">
+<button class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button class="btn" id="prev">← Anterior</button>
+<button class="btn" id="next">Próxima →</button>
+<span class="progress" id="progress"></span>
+</div>
+<div class="pills" id="pills"></div>
+<div class="card" id="card"></div>
+<footer>Fontes: CC (Lei 10.406/2002, arts. 472-480) · CDC art. 6º,V · STJ REsp 1.622.555/MG · caderno Semana 4 — Terça.</footer>
+</div>
+<script>
+const PONTOS={"EXT": {"titulo": "Extinção dos Contratos", "questoes": [{"area": "Direito Civil", "tempo": 300, "enunciado": "Candidato, distinga <b>resilição</b>, <b>resolução</b> e <b>rescisão</b> contratual. Aponte os fundamentos legais e os efeitos temporais de cada uma.", "topico": "CC arts. 472-475 · ex tunc × ex nunc", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Resilição</b> — extinção por <b>vontade</b> das partes, sem inadimplemento. <b>Bilateral = distrato</b> (<span class='lei'>art. 472</span>, mesma forma do contrato) ou <b>unilateral = denúncia</b> (<span class='lei'>art. 473</span>). Efeito <b>ex nunc</b>.</li><li><b>Resolução</b> — extinção por <b>inadimplemento</b> ou <b>onerosidade excessiva</b> (<span class='lei'>arts. 474, 475 e 478</span>). Efeito em regra <b>ex tunc</b>.</li><li><b>Rescisão</b> — termo ligado a <b>vício na formação</b> do contrato (lesão, art. 157; estado de perigo, art. 156). Causa contemporânea ao ajuste; gera invalidação.</li></ul>", "aprofundamento": [{"pergunta": "O distrato exige a mesma forma do contrato?", "resposta": "Sim, em regra: o <span class='lei'>art. 472</span> exige que o distrato observe a <b>mesma forma</b> exigida para o contrato. Para contratos não solenes, admite-se forma livre."}, {"pergunta": "Rescisão é sinônimo técnico de resolução?", "resposta": "Na prática legislativa há imprecisão, mas <b>tecnicamente não</b>: rescisão liga-se a <b>vício de formação</b> (lesão/estado de perigo), enquanto a resolução decorre de causa <b>superveniente</b> (inadimplemento/onerosidade)."}, {"pergunta": "A resolução sempre retroage?", "resposta": "Em regra <b>ex tunc</b>, repondo as partes ao estado anterior. Em contratos de <b>execução continuada</b>, as prestações já cumpridas podem ser preservadas (efeito ex nunc relativo)."}]}, {"area": "Direito Civil", "tempo": 300, "enunciado": "Diferencie a <b>cláusula resolutiva expressa</b> da <b>tácita</b>. Em qual delas é necessária a interpelação judicial e qual a base legal?", "topico": "CC art. 474 · resolução por inadimplemento", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Cláusula resolutiva expressa</b>: opera <b>de pleno direito</b> com o inadimplemento (<span class='lei'>art. 474, 1ª parte</span>), independentemente de pronunciamento judicial.</li><li><b>Cláusula resolutiva tácita</b>: presente em todo contrato bilateral; depende de <b>interpelação judicial</b> (<span class='lei'>art. 474, 2ª parte</span>) para constituir em mora e resolver.</li><li><span class='lei'>Art. 475</span>: o lesado pode pedir a <b>resolução</b> ou exigir o <b>cumprimento</b>, cabendo em ambos <b>perdas e danos</b>.</li></ul>", "aprofundamento": [{"pergunta": "A notificação extrajudicial supre a interpelação judicial?", "resposta": "Para a resolutiva <b>tácita</b>, o art. 474 fala em interpelação <b>judicial</b>; parte da doutrina/STJ admite a <b>notificação extrajudicial</b> para constituir em mora em certos contratos (ex.: alienação fiduciária)."}, {"pergunta": "A parte pode cumular resolução com perdas e danos?", "resposta": "Sim. O <span class='lei'>art. 475</span> assegura ao credor optar entre resolução ou cumprimento, <b>em ambos os casos com perdas e danos</b>."}, {"pergunta": "Mora do credor afasta a resolução?", "resposta": "Quem está em mora não pode exigir a resolução por inadimplemento da outra parte. Aplica-se a <b>exceção do contrato não cumprido</b> (art. 476)."}]}, {"area": "Direito Civil", "tempo": 300, "enunciado": "Disserte sobre a <b>resilição unilateral</b> e o <b>art. 473, parágrafo único</b>: o que ocorre quando uma parte fez <b>investimentos consideráveis</b> para a execução do contrato?", "topico": "CC art. 473 · denúncia · prazo de pré-aviso", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Resilição unilateral (denúncia)</b>: cabível quando a lei expressa ou implicitamente permite; opera por <b>notificação</b> à outra parte (art. 473, caput), com efeito <b>ex nunc</b>.</li><li><b>Parágrafo único</b>: se uma das partes houver feito <b>investimentos consideráveis</b> para a execução, a denúncia unilateral <b>só produz efeito após prazo compatível</b> com a natureza e o vulto dos investimentos.</li><li>Tutela a <b>confiança</b> e a <b>boa-fé objetiva</b> (art. 422), evitando rompimento abrupto e lesivo.</li></ul>", "aprofundamento": [{"pergunta": "Quem define o 'prazo compatível'?", "resposta": "Não há prazo fixo; é aferido no <b>caso concreto</b> pela proporção entre os investimentos e o tempo necessário à sua amortização, segundo a boa-fé objetiva. O juiz pode arbitrá-lo."}, {"pergunta": "A denúncia sem o prazo gera dever de indenizar?", "resposta": "Sim. Denúncia abrupta que frustra investimentos pode caracterizar <b>abuso de direito</b> (art. 187) e gerar <b>perdas e danos</b>, mesmo sendo lícita a resilição em tese."}, {"pergunta": "Aplica-se a contratos de distribuição/agência?", "resposta": "Tipicamente sim — são os contratos em que o distribuidor faz investimentos relevantes. A jurisprudência exige <b>pré-aviso razoável</b> antes do rompimento."}]}, {"area": "Direito Civil", "tempo": 300, "enunciado": "Explique a <b>resolução por onerosidade excessiva</b> (art. 478). Quais são os requisitos e a partir de quando opera a resolução?", "topico": "CC arts. 478-480 · teoria da imprevisão", "padrao": "<h4>Resposta esperada</h4><ul><li><span class='lei'>Art. 478</span> — nos contratos de <b>execução continuada ou diferida</b>, se a prestação se tornar <b>excessivamente onerosa</b> para uma parte, com <b>extrema vantagem</b> para a outra, em razão de acontecimento <b>extraordinário e imprevisível</b>, pode-se pedir a <b>resolução</b>.</li><li>Efeito: a sentença de resolução <b>retroage à data da citação</b>.</li><li><span class='lei'>Art. 479</span>: o réu pode <b>evitar a resolução</b> oferecendo modificação equitativa das condições. <span class='lei'>Art. 480</span>: contratos unilaterais admitem redução/alteração.</li></ul>", "aprofundamento": [{"pergunta": "Onerosidade excessiva exige enriquecimento da outra parte?", "resposta": "O art. 478 exige <b>extrema vantagem para a outra parte</b>. Parte da doutrina critica o requisito, mas é o texto legal. O CDC (art. 6º, V) dispensa imprevisibilidade (teoria da base objetiva)."}, {"pergunta": "Qual a diferença para a teoria da imprevisão do CDC?", "resposta": "O CC adota a <b>teoria da imprevisão</b> (exige fato extraordinário/imprevisível); o <span class='lei'>CDC, art. 6º, V</span> adota a <b>base objetiva</b>: basta a onerosidade superveniente, sem imprevisibilidade — favorável ao consumidor."}, {"pergunta": "Cabe revisão em vez de resolução?", "resposta": "Sim. Pela função social e conservação do contrato, admite-se a <b>revisão</b> (modificação equitativa, art. 479/480), preferindo-se manter o vínculo a extingui-lo."}]}, {"area": "Direito Civil", "tempo": 300, "enunciado": "Disserte sobre a <b>teoria do adimplemento substancial</b>. Ela se aplica à <b>alienação fiduciária</b> regida pelo Decreto-Lei 911/69? Cite o entendimento do STJ.", "topico": "CC arts. 421-422 · STJ REsp 1.622.555/MG", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Adimplemento substancial</b>: quando o devedor cumpre <b>parcela expressiva</b> da obrigação, veda-se a resolução por inadimplemento mínimo, com base na <span class='lei'>boa-fé objetiva (art. 422)</span> e na <span class='lei'>função social do contrato (art. 421)</span>; resta ao credor cobrar o saldo.</li><li>Na <b>alienação fiduciária (DL 911/69)</b>, o <b>STJ afastou</b> a teoria (REsp 1.622.555/MG, 2ª Seção): há regime próprio que permite a busca e apreensão ainda que pago grande parte, garantindo a purgação da mora pela quitação integral.</li><li>Razão: lei especial e segurança do crédito prevalecem sobre a aplicação genérica da teoria.</li></ul>", "aprofundamento": [{"pergunta": "Qual o percentual que caracteriza adimplemento substancial?", "resposta": "Não há percentual fixo; avalia-se <b>no caso concreto</b> a proporção do cumprimento e a gravidade do descumprimento. A jurisprudência costuma exigir parcela <b>muito expressiva</b> paga."}, {"pergunta": "Por que o STJ afastou a teoria na fiduciária?", "resposta": "Porque o <b>DL 911/69</b> tem disciplina <b>específica</b> (busca e apreensão, purgação pela integralidade) e a aplicação da teoria geraria insegurança ao crédito e desvirtuaria o regime especial."}, {"pergunta": "A exceção do contrato não cumprido se relaciona com o tema?", "resposta": "Sim. O <span class='lei'>art. 476</span> (exceptio non adimpleti contractus) permite recusar a prestação enquanto a outra não cumpre. É instituto correlato de tutela do sinalagma, distinto do adimplemento substancial."}]}]}};
+const STORE='oral_terca_sem4_';
+
+const QS=[]; Object.keys(PONTOS).forEach(k=>{(PONTOS[k].questoes||[]).forEach(q=>{q._k=k;QS.push(q);});});
+let cur=0, t=0, running=false, timerId=null;
+const $=s=>document.querySelector(s);
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function renderPills(){
+  const p=$('#pills');p.innerHTML='';
+  QS.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='pill'+(i===cur?' active':'')+(localStorage.getItem(STORE+'done_'+i)?' done':'');
+    d.textContent=(i+1);d.onclick=()=>{cur=i;render();};p.appendChild(d);
+  });
+}
+function tick(){
+  t++;const el=$('#timer');el.textContent=fmt(t);
+  const lim=QS[cur].tempo||0;
+  el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
+}
+function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
+function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
+function resetTimer(){pauseTimer();t=0;$('#timer').textContent='00:00';$('#timer').className='timer';}
+function toggleAp(j){
+  const q=$('#apq'+j),a=$('#apa'+j);
+  q.classList.toggle('open');a.classList.toggle('open');
+}
+function expandAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.add('open');$('#apa'+j).classList.add('open');});}
+function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.remove('open');$('#apa'+j).classList.remove('open');});}
+function togglePadrao(){$('#padrao').classList.toggle('open');
+  const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
+function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();}
+function render(){
+  resetTimer();
+  const q=QS[cur];
+  const ap=q.aprofundamento.map((a,j)=>
+    '<div class="aprow"><div class="apq" id="apq'+j+'" onclick="toggleAp('+j+')"><span class="tri">▶</span><span>'+a.pergunta+'</span></div><div class="apa" id="apa'+j+'">'+a.resposta+'</div></div>'
+  ).join('');
+  $('#card').innerHTML=
+    '<div class="qhead"><span class="area">'+q.area+'</span>'+
+    '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
+    '<button class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<div class="enun">'+q.enunciado+'</div>'+
+    '<div class="topico">'+q.topico+'</div>'+
+    '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
+    '<textarea id="resp" placeholder="Esboce os tópicos da sua resposta..."></textarea>'+
+    '<button class="btn solid" id="bpad" onclick="togglePadrao()" style="margin-top:14px">Revelar padrão de resposta da banca</button>'+
+    '<div class="padrao" id="padrao">'+q.padrao+'</div>'+
+    '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
+    '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
+    '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
+    '<div class="nav"><button class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button class="btn" onclick="go(1)">Próxima →</button></div>';
+  const ta=$('#resp');
+  ta.value=localStorage.getItem(STORE+cur)||'';
+  ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
+  $('#progress').textContent='Questão '+(cur+1)+' de '+QS.length;
+  renderPills();
+}
+$('#sortear').onclick=()=>{cur=Math.floor(Math.random()*QS.length);render();};
+$('#prev').onclick=()=>go(-1);
+$('#next').onclick=()=>go(1);
+render();
+
+</script></body></html>
