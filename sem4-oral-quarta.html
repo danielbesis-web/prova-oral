@@ -83,9 +83,9 @@ footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color
 </header>
 <div class="nota"><b>Postura na banca:</b> nomeie o instituto, cite o artigo e o sistema (cúmulo/exasperação) e amarre com as súmulas. Em dosimetria, percorra as três fases na ordem.</div>
 <div class="controls">
-<button class="btn solid" id="sortear">🎲 Sortear questão</button>
-<button class="btn" id="prev">← Anterior</button>
-<button class="btn" id="next">Próxima →</button>
+<button type="button" class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button type="button" class="btn" id="prev">← Anterior</button>
+<button type="button" class="btn" id="next">Próxima →</button>
 <span class="progress" id="progress"></span>
 </div>
 <div class="pills" id="pills"></div>
@@ -125,7 +125,7 @@ function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classL
 function togglePadrao(){$('#padrao').classList.toggle('open');
   const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
 function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
-function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();window.scrollTo({top:0,behavior:"smooth"});}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();requestAnimationFrame(()=>window.scrollTo(0,0));}
 function render(){
   resetTimer();
   const q=QS[cur];
@@ -135,9 +135,9 @@ function render(){
   $('#card').innerHTML=
     '<div class="qhead"><span class="area">'+q.area+'</span>'+
     '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
-    '<button class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
-    '<button class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
-    '<button class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<button type="button" class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button type="button" class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button type="button" class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
     '<div class="enun">'+q.enunciado+'</div>'+
     '<div class="topico">'+q.topico+'</div>'+
     '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
@@ -147,9 +147,9 @@ function render(){
     '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
     '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
     '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
-    '<div class="nav"><button class="btn" onclick="go(-1)">← Anterior</button>'+
-    '<button class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
-    '<button class="btn" onclick="go(1)">Próxima →</button></div>';
+    '<div class="nav"><button type="button" class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button type="button" class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button type="button" class="btn" onclick="go(1)">Próxima →</button></div>';
   const ta=$('#resp');
   ta.value=localStorage.getItem(STORE+cur)||'';
   ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
