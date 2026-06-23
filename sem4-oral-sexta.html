@@ -125,7 +125,7 @@ function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classL
 function togglePadrao(){$('#padrao').classList.toggle('open');
   const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
 function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
-function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();window.scrollTo({top:0,behavior:"smooth"});}
 function render(){
   resetTimer();
   const q=QS[cur];
