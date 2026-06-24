@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  TEMPLATE PADRÃO — Simulado de questões objetivas (modelo Meta 16 Empresarial)
+  ----------------------------------------------------------------------------
+  COMO GERAR UM NOVO SIMULADO:
+   1) Edite o CONFIG mínimo:
+        - <title> e <h1>:  "Meta XX · Disciplina — Parte X"
+        - <footer>:        "Meta XX · Disciplina · <tema do bloco> · Parte X"
+        - STORE_KEY:       "concurso_metaXX_disciplina_parteX_v1"
+                           (chave do localStorage onde este simulado guarda o progresso)
+   2) Preencha o array QUESTOES (15 questões por parte). Um objeto por questão:
+        id:'q1'..'q15' -> POSIÇÃO no simulado (NUNCA o nº da banca)
+        materia,banca  -> proveniência (banca/tribunal/ano PODE aparecer)
+        enunciado      -> HTML, aceita <br> e assertivas I, II, III
+        alternativas   -> [{letra,texto}]
+        correta:'A'    -> LETRA do GABARITO OFICIAL do material (não palpite)
+        comentario     -> HTML com os rótulos padrão
+   3) Salve como:  MetaXX-Disciplina-ParteX.html   (SEM Qxxx no nome)
+
+  A tela mostra "Questão X de N" (posição), nunca o nº da banca.
+  Recursos prontos: timer, stats, revisão espaçada, caderno de erros, modo por
+  tema/aleatório, anotações por questão, exportar/importar progresso (JSON).
+  ============================================================================
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado · Constitucional — Intertemporal + Hermenêutica</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050b18;color:#c9d6e8;font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;min-height:100vh}
+a{color:#38bdf8}
+button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;border:none;outline:none;font-family:inherit}
+.banner-save{background:#0d2040;border-bottom:1px solid #16365a;padding:8px 14px;font-size:12px;color:#7aa3cc;text-align:center;position:sticky;top:0;z-index:100}
+.banner-iframe{background:#1a1200;border-bottom:1px solid #4a3200;padding:8px 14px;font-size:12px;color:#d4a84b;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.banner-iframe button{background:none;color:#d4a84b;font-size:16px;line-height:1;padding:0 4px;border:none;cursor:pointer}
+.header{padding:16px 14px 0}
+.header h1{font-size:18px;font-weight:700;color:#e8f0fb;margin-bottom:12px}
+.timer-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#7aa3cc;margin-bottom:12px}
+.timer-bar span.time-val{color:#38bdf8;font-variant-numeric:tabular-nums;font-weight:600}
+.timer-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:3px 10px;border-radius:6px;font-size:12px}
+.timer-btn:hover{border-color:#38bdf8;color:#38bdf8}
+.stats-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.stat-chip{background:#0b1828;border:1px solid #16365a;border-radius:8px;padding:5px 11px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.stat-chip .sv{font-size:18px;font-weight:700;line-height:1.1}
+.stat-chip .sl{font-size:10px;color:#55738e;text-transform:uppercase;letter-spacing:.5px}
+.sv.green{color:#27c06a}.sv.red{color:#f25555}.sv.amber{color:#f5a623}.sv.cyan{color:#38bdf8}
+.progress-wrap{margin-bottom:14px}
+.progress-bar{height:5px;background:#0b1828;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#27c06a,#38bdf8);border-radius:3px;transition:width .4s}
+.progress-label{font-size:11px;color:#55738e;margin-top:3px}
+.mode-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.mode-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:20px;font-size:12px;transition:all .2s}
+.mode-btn.active{background:#16365a;border-color:#38bdf8;color:#38bdf8;font-weight:600}
+.mode-btn:hover:not(.active){border-color:#38bdf8;color:#c9d6e8}
+.materia-select{background:#0b1828;border:1px solid #16365a;color:#c9d6e8;padding:5px 10px;border-radius:20px;font-size:12px;outline:none}
+.materia-select:focus{border-color:#38bdf8}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.btn-sm{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-sm:hover{border-color:#38bdf8;color:#c9d6e8}
+.btn-danger{border-color:#f25555;color:#f25555}
+.btn-danger:hover{background:#2a0808}
+.card{background:#0b1828;border:1px solid #16365a;border-radius:14px;padding:20px;margin:0 0 12px}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.4px}
+.badge-materia{background:#0d2040;color:#7aa3cc;border:1px solid #16365a}
+.badge-banca{background:#1a0d28;color:#c59bf2;border:1px solid #34204e}
+.review-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
+.review-today{background:#2a1e00;color:#f5a623}
+.review-future{background:#0b1828;color:#55738e;border:1px solid #16365a}
+.enunciado{font-size:15px;line-height:1.6;color:#d8e8f8;margin-bottom:16px}
+.nav-counter{text-align:right;font-size:12px;color:#55738e;margin-bottom:8px}
+.alts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.alt-btn{background:#050b18;border:1.5px solid #16365a;color:#b8cce0;padding:11px 14px;border-radius:10px;text-align:left;font-size:14px;line-height:1.4;transition:all .15s;display:flex;gap:10px;align-items:flex-start;width:100%}
+.alt-btn .alt-letra{font-weight:700;min-width:18px;color:#38bdf8;flex-shrink:0}
+.alt-btn:hover:not(:disabled){border-color:#38bdf8;background:#0b1828}
+.alt-btn.selected{border-color:#b06bf2;background:#1a0d28}
+.alt-btn.correct{border-color:#27c06a!important;background:#0a2018!important;color:#7fffa8!important}
+.alt-btn.wrong{border-color:#f25555!important;background:#200a0a!important;color:#ffaaaa!important}
+.alt-btn.reveal-correct{border-color:#27c06a;background:#0a2018;color:#7fffa8}
+.alt-btn:disabled{cursor:default;opacity:.85}
+.alt-letra.correct{color:#27c06a!important}
+.alt-letra.wrong{color:#f25555!important}
+.alt-letra.reveal-correct{color:#27c06a}
+.btn-confirm{width:100%;padding:12px;border-radius:10px;font-size:15px;font-weight:700;background:#16365a;color:#e8f0fb;border:1.5px solid #2a5a8a;transition:all .2s;margin-bottom:10px}
+.btn-confirm:hover:not(:disabled){background:#1e4a7a;border-color:#38bdf8}
+.btn-confirm:disabled{opacity:.4;cursor:default}
+.result-banner{padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;margin-bottom:12px}
+.result-banner.correct{background:#0a2018;border:1.5px solid #27c06a;color:#7fffa8}
+.result-banner.wrong{background:#200a0a;border:1.5px solid #f25555;color:#ffaaaa}
+.comment-wrap{margin-bottom:12px}
+.comment-toggle{background:#0d1e32;border:1px solid #16365a;color:#7aa3cc;padding:8px 14px;border-radius:8px;font-size:13px;width:100%;text-align:left;transition:all .2s}
+.comment-toggle:hover{border-color:#38bdf8;color:#c9d6e8}
+.comment-body{background:#040c1c;border:1px solid #16365a;border-top:none;border-radius:0 0 8px 8px;padding:14px;font-size:13px;line-height:1.7;color:#b8cce0;display:none}
+.comment-body.open{display:block}
+.sched-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.sched-label{font-size:11px;color:#55738e;margin-right:2px}
+.sched-btn{padding:5px 11px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #4a3200;color:#f5a623;background:#1a1200;transition:all .2s}
+.sched-btn:hover{background:#2a1e00;border-color:#f5a623}
+.sched-btn.remove{border-color:#16365a;color:#55738e;background:#050b18}
+.sched-btn.remove:hover{border-color:#f25555;color:#f25555}
+.star-btn{padding:6px 13px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #16365a;color:#55738e;background:#050b18;transition:all .2s}
+.star-btn.active{border-color:#b06bf2;color:#b06bf2;background:#160d24}
+.star-btn:hover{border-color:#b06bf2;color:#b06bf2}
+.nav-row{display:flex;justify-content:space-between;gap:8px;margin-top:4px}
+.nav-btn{flex:1;padding:10px;border-radius:10px;font-size:14px;font-weight:600;background:#0b1828;border:1.5px solid #16365a;color:#7aa3cc;transition:all .2s;max-width:48%}
+.nav-btn:hover:not(:disabled){border-color:#38bdf8;color:#c9d6e8}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.empty-state{text-align:center;padding:48px 20px;color:#55738e;font-size:14px}
+.empty-state .icon{font-size:40px;margin-bottom:12px}
+.io-row{display:flex;gap:6px;flex-wrap:wrap}
+.btn-io{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:6px 13px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-io:hover{border-color:#38bdf8;color:#c9d6e8}
+#fileInput{display:none}
+footer{padding:16px 14px 28px;text-align:center;font-size:11px;color:#2a4060}
+@media(max-width:480px){.stats-bar{gap:6px}.stat-chip{padding:4px 8px}.stat-chip .sv{font-size:16px}}
+.notas-wrap{margin-top:14px;border-top:1px dashed #1b3550;padding-top:12px}
+.notas-label{font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:7px}
+.notas-area{width:100%;min-height:70px;resize:vertical;background:#0b1828;border:1px solid #16365a;border-radius:10px;color:#dbe7f5;font-size:13.5px;font-family:inherit;line-height:1.5;padding:10px 12px;outline:none;transition:border .2s}
+.notas-area:focus{border-color:#fbbf24;box-shadow:0 0 0 2px rgba(251,191,36,.18)}
+.notas-area::placeholder{color:#3a5474}
+.claude-qbtn{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:#38bdf8;border-radius:6px;padding:3px 9px;font-size:13px;opacity:.45;transition:.15s;-webkit-tap-highlight-color:transparent;}
+.claude-qbtn:hover,.claude-qbtn:active{opacity:1;background:rgba(56,189,248,.2)}
+</style>
+</head>
+<body>
+<div class="banner-save">💾 Seu progresso é salvo automaticamente neste aparelho. Cada pessoa tem o seu.</div>
+<div class="banner-iframe" id="bannerIframe">
+  <span>⚠️ Abra sempre por link direto, não embutido em iframe (Notion/etc.), ou o progresso pode não ser salvo.</span>
+  <button onclick="dismissIframeBanner()" title="Fechar">✕</button>
+</div>
+<div class="header">
+  <h1>Simulado · Constitucional — Intertemporal + Hermenêutica</h1>
+  <div class="timer-bar">
+    <span>⏱ <span class="time-val" id="timerQ">00:00</span></span><span>|</span>
+    <span>Sessão: <span class="time-val" id="timerS">00:00</span></span>
+    <button class="timer-btn" id="btnPause" onclick="togglePause()">Pausar</button>
+  </div>
+  <div class="stats-bar" id="statsBar"></div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel"></div>
+  </div>
+  <div class="mode-bar">
+    <button class="mode-btn" data-modo="todas" onclick="setModo('todas')">Todas</button>
+    <button class="mode-btn" data-modo="hoje" onclick="setModo('hoje')">Revisar hoje</button>
+    <button class="mode-btn" data-modo="caderno" onclick="setModo('caderno')">Caderno de erros</button>
+    <button class="mode-btn" data-modo="materia" onclick="setModo('materia')">Por tema</button>
+    <button class="mode-btn" data-modo="aleatorio" onclick="setModo('aleatorio')">Aleatório</button>
+    <select class="materia-select" id="materiaSelect" style="display:none" onchange="setMateriaFiltro(this.value)">
+      <option value="">— Escolha —</option>
+    </select>
+  </div>
+  <div class="action-row">
+    <div class="io-row">
+      <button class="btn-io" onclick="exportarProgresso()">⬇ Exportar</button>
+      <button class="btn-io" onclick="document.getElementById('fileInput').click()">⬆ Importar</button>
+      <input type="file" id="fileInput" accept=".json" onchange="importarProgresso(event)">
+      <button class="btn-io" onclick="exportarNotas()">📝 Baixar anotações (.txt)</button>
+    </div>
+    <button class="btn-sm btn-danger" onclick="recomecar()">🔄 Recomeçar</button>
+  </div>
+</div>
+<div style="padding:0 14px" id="mainContent"></div>
+<footer>Constitucional · Direito Intertemporal &amp; Hermenêutica · Como as bancas cobram — Aula 01</footer>
+<script>
+const STORE_KEY = 'concurso_constitucional_intertemporal_hermeneutica_v1';   // chave do localStorage deste simulado
+const SLUG = STORE_KEY.replace(/^concurso_/,'');   // usado nos nomes dos arquivos de exportação
+const QUESTOES = [
+ {
+  "id": "q1",
+  "materia": "Recepção",
+  "banca": "CESPE · Polícia Federal · Delegado de Polícia",
+  "tipo": "multipla",
+  "enunciado": "A CF contempla hipótese configuradora do denominado fenômeno da recepção material das normas constitucionais, que consiste na possibilidade de a norma de uma constituição anterior ser recepcionada pela nova constituição, com status de norma constitucional.",
+  "alternativas": [
+   {
+    "letra": "C",
+    "texto": "Certo"
+   },
+   {
+    "letra": "E",
+    "texto": "Errado"
+   }
+  ],
+  "correta": "C",
+  "comentario": "<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> A recepção material de normas constitucionais é o fenômeno pelo qual normas de uma Constituição anterior continuam válidas, com status de norma constitucional, desde que materialmente compatíveis com a nova Constituição. No Brasil, porém, isso só é admitido quando houver previsão EXPRESSA no novo texto. O ADCT, art. 34, traz exemplo disso ao manter, temporariamente, o sistema tributário da Constituição anterior.<br><br><b>⚠️ Pegadinha:</b> Não confunda recepção material (norma constitucional anterior mantida COM status constitucional, exige previsão expressa) com recepção comum (lei infraconstitucional anterior, que é tácita). A questão fala em status de norma constitucional e a CF realmente prevê essa hipótese expressamente.<br><br><b>📌 Fundamento:</b> ADCT, art. 34, da CF/88.<br><br><b>⚖️ Jurisprudência:</b> N/A — letra de norma e teoria constitucional.<br><br>"
+ },
+ {
+  "id": "q2",
+  "materia": "Recepção / Repristinação / Desconstitucionalização",
+  "banca": "FUNDEP · Câmara de Patrocínio-MG · Advogado",
+  "tipo": "multipla",
+  "enunciado": "No estudo do processo legislativo, os conceitos de repristinação, recepção e desconstitucionalização são importantes para entender os efeitos da elaboração de novas espécies normativas. A esse respeito, numere a COLUNA II de acordo com a COLUNA I, relacionando os referidos conceitos à sua definição.<br><br><b>COLUNA I</b><br>1. Desconstitucionalização<br>2. Repristinação<br>3. Recepção<br><br><b>COLUNA II</b><br>( ) Consiste no acolhimento que uma nova Constituição posta em vigor dá às leis e aos atos normativos editados sob a égide da Carta anterior, desde que compatíveis consigo.<br>( ) Fenômeno que ocorre quando uma norma revogadora de outra anterior, que, por sua vez, tivesse revogado uma mais antiga, recoloca esta última novamente em estado de produção de efeitos.<br>( ) É o nome técnico que se dá à manutenção em vigor, perante uma nova ordem jurídica, da Constituição anterior, que perde, porém, sua hierarquia constitucional para operar como legislação comum.<br><br>Assinale a sequência correta.",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "2 3 1"
+   },
+   {
+    "letra": "B",
+    "texto": "1 2 3"
+   },
+   {
+    "letra": "C",
+    "texto": "3 1 2"
+   },
+   {
+    "letra": "D",
+    "texto": "3 2 1"
+   }
+  ],
+  "correta": "D",
+  "comentario": "<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> A 1ª definição (acolhimento de leis anteriores compatíveis) é RECEPÇÃO (3); a 2ª (norma revogadora perde vigência e a mais antiga volta a produzir efeitos) é REPRISTINAÇÃO (2); a 3ª (Constituição anterior mantida com status de legislação comum) é DESCONSTITUCIONALIZAÇÃO (1). Logo, a sequência é 3 2 1.<br><br><b>⚠️ Pegadinha:</b> É fácil trocar recepção por desconstitucionalização. Lembre: desconstitucionalização rebaixa a CONSTITUIÇÃO anterior a status infraconstitucional; recepção trata de leis comuns mantidas. A repristinação envolve sempre TRÊS normas em cadeia.<br><br><b>📌 Fundamento:</b> LINDB, art. 2º, §3º (repristinação); teoria da recepção e desconstitucionalização.<br><br><b>⚖️ Jurisprudência:</b> N/A — teoria constitucional.<br><br>"
+ },
+ {
+  "id": "q3",
+  "materia": "Recepção / Desconstitucionalização / Repristinação",
+  "banca": "Instituto AOCP · Prefeitura de Pinhais-PR · Procurador",
+  "tipo": "multipla",
+  "enunciado": "Relacione as colunas e assinale a alternativa com a sequência correta.<br><br>1. Desconstitucionalização. 2. Recepção. 3. Repristinação Tácita. 4. Mutação Constitucional.<br><br>( ) Fenômeno pelo qual as normas da Constituição anterior, desde que compatíveis com a nova ordem, permanecem em vigor, mas com o status de lei infraconstitucional.<br>( ) Consiste na restauração automática da vigência de norma efetivamente revogada.<br>( ) Ocorre quando a norma infraconstitucional anterior é materialmente compatível com o novo texto constitucional.<br>( ) Processo informal de alteração do conteúdo da Constituição sem a modificação de seu texto.",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "1 – 2 – 3 – 4."
+   },
+   {
+    "letra": "B",
+    "texto": "2 – 4 – 1 – 3."
+   },
+   {
+    "letra": "C",
+    "texto": "2 – 3 – 1 – 4."
+   },
+   {
+    "letra": "D",
+    "texto": "3 – 4 – 2 – 1."
+   },
+   {
+    "letra": "E",
+    "texto": "1 – 3 – 2 – 4."
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> A 1ª (normas da Constituição anterior mantidas com status infraconstitucional) é DESCONSTITUCIONALIZAÇÃO (1); a 2ª (restauração automática de norma revogada) é REPRISTINAÇÃO TÁCITA (3); a 3ª (lei infraconstitucional anterior materialmente compatível) é RECEPÇÃO (2); a 4ª (alteração informal do conteúdo sem mudar o texto) é MUTAÇÃO CONSTITUCIONAL (4). Sequência: 1 3 2 4.<br><br><b>⚠️ Pegadinha:</b> Atenção à expressão repristinação tácita = restauração AUTOMÁTICA, que não é admitida no Brasil (LINDB art. 2º, §3º). A definição descreve o conceito, ainda que o fenômeno não seja aceito sem previsão expressa.<br><br><b>📌 Fundamento:</b> LINDB, art. 2º, §3º; teorias da recepção, desconstitucionalização e mutação constitucional.<br><br><b>⚖️ Jurisprudência:</b> N/A — teoria constitucional.<br><br>"
+ },
+ {
+  "id": "q4",
+  "materia": "Não recepção",
+  "banca": "TRF-3ª Região · Juiz Substituto",
+  "tipo": "multipla",
+  "enunciado": "No Brasil, os fenômenos da inconstitucionalidade e da não-recepção têm semelhanças, mas apresentam regime jurídico diverso, especialmente porque a inconstitucionalidade exige, sempre,",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "para o controle de atos normativos, que estes tenham sido editados posteriormente à entrada em vigor da Constituição-parâmetro, enquanto a não-recepção opera como juízo de inexistência de atos normativos editados anteriormente à Constituição-parâmetro em vigor e com conteúdo incompatível com esta."
+   },
+   {
+    "letra": "B",
+    "texto": "um controle judicial, pela via de alguma das ações específicas, diferentemente da não-recepção, que pode ser reconhecida por qualquer agente público."
+   },
+   {
+    "letra": "C",
+    "texto": "um juízo comparativo entre lei ou ato normativo, de uma parte, e Constituição em vigor, de outra parte, diferentemente da não-recepção, que só pode operar entre ato administrativo anteriormente editado em comparação com a Constituição-parâmetro em vigor."
+   },
+   {
+    "letra": "D",
+    "texto": "um juízo comparativo entre qualquer lei em vigor e Constituição, podendo ser esta a atual ou a anterior, enquanto que adota-se a não-recepção apenas para estabelecer a ilegitimidade de leis publicadas anteriormente à Constituição em vigor, perante a Constituição anterior"
+   }
+  ],
+  "correta": "A",
+  "comentario": "<b>✅ Gabarito: LETRA A</b><br><br><b>⚖️ Por quê:</b> A inconstitucionalidade pressupõe vício de origem: a norma deve ser POSTERIOR à Constituição-parâmetro e com ela incompatível. Já a não-recepção é juízo que recai sobre normas ANTERIORES à Constituição em vigor, incompatíveis materialmente com ela — não se fala em inconstitucionalidade superveniente, mas em revogação/não recepção. A letra A descreve exatamente essa diferença de marco temporal.<br><br><b>⚠️ Pegadinha:</b> O Brasil NÃO admite inconstitucionalidade superveniente: lei pré-constitucional incompatível não é inconstitucional, é não recepcionada (revogada). Por isso a não-recepção sempre olha para a norma editada ANTES da Constituição-parâmetro.<br><br><b>📌 Fundamento:</b> Teoria da recepção e não recepção; inadmissão da inconstitucionalidade superveniente.<br><br><b>⚖️ Jurisprudência:</b> O STF entende que lei anterior incompatível com a nova Constituição é caso de revogação/não recepção, não de inconstitucionalidade superveniente.<br><br>"
+ },
+ {
+  "id": "q5",
+  "materia": "Recepção",
+  "banca": "Quadrix · CREFITO-8ª Região (PR) · Procurador Jurídico",
+  "tipo": "multipla",
+  "enunciado": "O quórum qualificado de julgamento para controle concentrado de constitucionalidade pelo STF não se aplica à análise de recepção ou não de norma pré-constitucional.",
+  "alternativas": [
+   {
+    "letra": "C",
+    "texto": "Certo"
+   },
+   {
+    "letra": "E",
+    "texto": "Errado"
+   }
+  ],
+  "correta": "C",
+  "comentario": "<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> O juízo de recepção (ou não recepção) de norma pré-constitucional não é juízo de constitucionalidade, mas de mera compatibilidade material com revogação. Por isso as exigências próprias do controle de constitucionalidade — como a cláusula de reserva de plenário e o quórum qualificado — não se aplicam a essa análise.<br><br><b>⚠️ Pegadinha:</b> A banca quer que você confunda recepção com controle de constitucionalidade. Como não há declaração de inconstitucionalidade na não recepção, dispensam-se reserva de plenário e quórum qualificado.<br><br><b>📌 Fundamento:</b> Teoria da recepção; cláusula de reserva de plenário (CF, art. 97) — inaplicável ao juízo de recepção.<br><br><b>⚖️ Jurisprudência:</b> O STF entende que a reserva de plenário e o quórum qualificado não incidem sobre o juízo de recepção/não recepção de norma anterior à Constituição.<br><br>"
+ },
+ {
+  "id": "q6",
+  "materia": "Recepção",
+  "banca": "CESPE · TC-DF · Procurador",
+  "tipo": "multipla",
+  "enunciado": "Para que uma norma infraconstitucional anterior à Constituição vigente seja recepcionada, exige-se, de acordo com a tradição constitucional brasileira prevalecente, que tal recepção seja expressa.",
+  "alternativas": [
+   {
+    "letra": "C",
+    "texto": "Certo"
+   },
+   {
+    "letra": "E",
+    "texto": "Errado"
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> A recepção de normas infraconstitucionais anteriores é TÁCITA no Brasil: basta a compatibilidade material com a nova Constituição, sem necessidade de previsão expressa. Por isso a afirmação está errada.<br><br><b>⚠️ Pegadinha:</b> Cuidado: a exigência de previsão EXPRESSA vale para a recepção MATERIAL de normas constitucionais anteriores (com status constitucional). Para as leis infraconstitucionais comuns, a recepção é tácita.<br><br><b>📌 Fundamento:</b> Teoria da recepção — análise material e tácita das normas infraconstitucionais.<br><br><b>⚖️ Jurisprudência:</b> N/A — teoria constitucional.<br><br>"
+ },
+ {
+  "id": "q7",
+  "materia": "Recepção",
+  "banca": "CESPE · Prefeitura de Boa Vista-RR · Auditor Fiscal do Município",
+  "tipo": "multipla",
+  "enunciado": "A matéria tributária tratada pela legislação infraconstitucional anterior ao STN previsto na Constituição Federal foi recepcionada pela compatibilidade material com a nova ordem. Assim, ainda que a Constituição de 1988 exija lei complementar, é válida a recepção daquela matéria veiculada por lei.",
+  "alternativas": [
+   {
+    "letra": "C",
+    "texto": "Certo"
+   },
+   {
+    "letra": "E",
+    "texto": "Errado"
+   }
+  ],
+  "correta": "C",
+  "comentario": "<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> A recepção analisa apenas o CONTEÚDO (compatibilidade material), não a forma. Se a lei anterior era materialmente compatível, ela é recepcionada mesmo que a CF/88 passe a exigir lei complementar para a matéria — a norma é recepcionada com o status (força) de lei complementar. É exatamente o caso do Código Tributário Nacional, lei ordinária recepcionada como lei complementar.<br><br><b>⚠️ Pegadinha:</b> A banca testa se você acha que a mudança de espécie normativa exigida (lei ordinária → lei complementar) impede a recepção. Não impede: a recepção independe da espécie normativa, recepcionando-se a matéria com o status da espécie nova exigida.<br><br><b>📌 Fundamento:</b> Teoria da recepção (análise material); CTN recepcionado como lei complementar.<br><br><b>⚖️ Jurisprudência:</b> O STF entende que o Código Tributário Nacional, editado como lei ordinária, foi recepcionado com força de lei complementar pela CF/88.<br><br>"
+ },
+ {
+  "id": "q8",
+  "materia": "Recepção",
+  "banca": "CESPE · PGE-RR · Procurador do Estado Substituto",
+  "tipo": "multipla",
+  "enunciado": "Se determinada matéria é disciplinada por espécie normativa diferente daquela exigida por nova Constituição, não ocorre o fenômeno da recepção, e a norma anterior deve ser considerada revogada ou não recepcionada.",
+  "alternativas": [
+   {
+    "letra": "C",
+    "texto": "Certo"
+   },
+   {
+    "letra": "E",
+    "texto": "Errado"
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> A recepção é juízo MATERIAL, e não formal: analisa-se só o conteúdo. Se a matéria era compatível, a norma é recepcionada mesmo que a nova Constituição passe a exigir espécie normativa diferente (ex.: lei ordinária recepcionada como lei complementar). Logo, a diferença de espécie não impede a recepção, e a afirmação está errada.<br><br><b>⚠️ Pegadinha:</b> É o espelho da questão do CTN: a mudança da espécie exigida NÃO impede a recepção; a norma é recepcionada com o status da nova espécie. Por isso o item, ao afirmar a não recepção, está incorreto.<br><br><b>📌 Fundamento:</b> Teoria da recepção — análise material, independente da espécie normativa.<br><br><b>⚖️ Jurisprudência:</b> O STF admite a recepção de lei ordinária com status de lei complementar quando a nova Constituição passa a exigir essa espécie para a matéria.<br><br>"
+ },
+ {
+  "id": "q9",
+  "materia": "Recepção / Desconstitucionalização / Repristinação",
+  "banca": "CESPE · MPE-SE · Promotor de Justiça Substituto",
+  "tipo": "multipla",
+  "enunciado": "Acerca do direito constitucional intertemporal, julgue os itens a seguir.<br><br>I Segundo a teoria da recepção, uma nova Constituição revoga toda a legislação anterior com ela incompatível.<br>II O fenômeno da desconstitucionalização significa que as normas constitucionais de uma Constituição revogada permanecem no mundo jurídico como normas ordinárias.<br>III A repristinação não é admitida no direito brasileiro.<br><br>Assinale a opção correta.",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "Apenas o item II está certo."
+   },
+   {
+    "letra": "B",
+    "texto": "Apenas o item III está certo."
+   },
+   {
+    "letra": "C",
+    "texto": "Apenas os itens I e II estão certos."
+   },
+   {
+    "letra": "D",
+    "texto": "Apenas os itens II e III estão certos."
+   },
+   {
+    "letra": "E",
+    "texto": "Todos os itens estão certos."
+   }
+  ],
+  "correta": "C",
+  "comentario": "<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> Item I correto: a recepção mantém o compatível e revoga (não recepciona) o incompatível. Item II correto: a desconstitucionalização rebaixa normas constitucionais anteriores ao status de normas ordinárias. Item III ERRADO: a repristinação não é proibida em absoluto — ela não é AUTOMÁTICA, mas é admitida quando houver previsão expressa (LINDB, art. 2º, §3º). Logo, apenas I e II estão certos.<br><br><b>⚠️ Pegadinha:</b> O item III é a armadilha: dizer que a repristinação não é admitida é falso. O correto é que ela não é automática, ocorrendo só com previsão expressa.<br><br><b>📌 Fundamento:</b> LINDB, art. 2º, §3º; teorias da recepção e desconstitucionalização.<br><br><b>⚖️ Jurisprudência:</b> N/A — teoria constitucional e letra de norma.<br><br>"
+ },
+ {
+  "id": "q10",
+  "materia": "Não recepção",
+  "banca": "CESPE · Câmara dos Deputados · Analista Legislativo",
+  "tipo": "multipla",
+  "enunciado": "Ocorre o fenômeno da não recepção de lei ordinária quando, a despeito da compatibilidade material, a nova ordem constitucional exige que a matéria por ela regulada seja disciplinada por lei complementar.",
+  "alternativas": [
+   {
+    "letra": "C",
+    "texto": "Certo"
+   },
+   {
+    "letra": "E",
+    "texto": "Errado"
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> Havendo compatibilidade material, a lei ordinária anterior É recepcionada, ainda que a nova Constituição passe a exigir lei complementar — recepciona-se com força de lei complementar. A recepção é material, não formal. Por isso a afirmação de que ocorreria não recepção está errada.<br><br><b>⚠️ Pegadinha:</b> A banca explora justamente o critério formal: a exigência superveniente de lei complementar NÃO afasta a recepção quando o conteúdo é compatível. É o caso clássico do CTN.<br><br><b>📌 Fundamento:</b> Teoria da recepção (análise material).<br><br><b>⚖️ Jurisprudência:</b> O STF entende que a lei ordinária compatível é recepcionada com status de lei complementar quando a nova Constituição passa a exigir essa espécie.<br><br>"
+ },
+ {
+  "id": "q11",
+  "materia": "Não recepção",
+  "banca": "FURG · Prefeitura de Rodeio-SC · Procurador Jurídico",
+  "tipo": "multipla",
+  "enunciado": "Em 1975, o Estado X editou a Lei Estadual n.º Y/75, que limitava a realização de manifestações públicas, condicionando-as à autorização prévia da Secretaria de Segurança. Após a Constituição Federal de 1988, movimentos sociais passaram a sustentar que a lei seria incompatível com o ordenamento jurídico, que assegura o direito de reunião. Um partido político pretende propor Ação Direta de Inconstitucionalidade (ADI) no STF para declarar a inconstitucionalidade da lei de 1975. Já uma associação de direitos humanos estuda ajuizar ADPF, pedindo que o STF reconheça a não recepção da norma pré-constitucional. Com base no caso apresentado, assinale a alternativa correta:",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "A lei de 1975 pode ser objeto de ADI no STF, porque o parâmetro de constitucionalidade é a Constituição vigente no momento do ajuizamento e não a Constituição da época da edição da lei."
+   },
+   {
+    "letra": "B",
+    "texto": "Como há dúvida sobre a recepção da lei, a ação adequada é a ADI interventiva, prevista no art. 36, III, da Constituição Federal."
+   },
+   {
+    "letra": "C",
+    "texto": "A ADPF não é cabível para impugnar leis anteriores à Constituição, pois seu objeto se restringe a atos normativos posteriores à ordem constitucional vigente."
+   },
+   {
+    "letra": "D",
+    "texto": "O reconhecimento de não recepção de lei pré-constitucional só pode ser feito pelo STF, nunca por juízes ou tribunais, pois envolve controle concentrado de constitucionalidade."
+   },
+   {
+    "letra": "E",
+    "texto": "A lei pré-constitucional não pode ser objeto de ADI, pois, sendo anterior à CF, não pode ser \"inconstitucional\"; pode, contudo, ser objeto de ADPF, que permite o reconhecimento, com efeitos erga omnes , de sua não recepção pela Constituição de 1988."
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> Lei anterior à Constituição não pode ser inconstitucional perante ela (o Brasil não admite inconstitucionalidade superveniente): é caso de revogação/não recepção. Por isso não cabe ADI contra lei pré-constitucional, mas cabe ADPF, que permite reconhecer, com eficácia erga omnes e efeito vinculante, a não recepção da norma. A letra E descreve corretamente.<br><br><b>⚠️ Pegadinha:</b> A letra A erra ao admitir ADI; a C erra ao negar ADPF (que é justamente o instrumento cabível); a D erra ao afirmar que só o STF pode reconhecer a não recepção — qualquer juiz pode, na via difusa, deixar de aplicar lei não recepcionada.<br><br><b>📌 Fundamento:</b> Lei 9.882/1999 (ADPF); CF, art. 102, §1º. Inadmissão da inconstitucionalidade superveniente.<br><br><b>⚖️ Jurisprudência:</b> O STF entende que lei pré-constitucional incompatível não é objeto de ADI, sendo caso de não recepção, que pode ser declarada por meio de ADPF com efeitos erga omnes.<br><br>"
+ },
+ {
+  "id": "q12",
+  "materia": "Recepção / Desconstitucionalização / Repristinação",
+  "banca": "FEPESE · CIASC · Advogado",
+  "tipo": "multipla",
+  "enunciado": "É correto afirmar sobre o poder constituinte:<br><br>1. A legislação infraconstitucional vigente numa ordem constitucional anterior que não contrariar os dispositivos de uma nova Constituição recém-promulgada continuará a ter validade, sendo, portanto, recepcionada pelo novo ordenamento jurídico constitucional.<br>2. A legislação infraconstitucional que perdeu sua eficácia diante de um texto constitucional anterior se restaura pelo surgimento de uma nova Constituição.<br>3. Quando a legislação infraconstitucional vigente numa ordem constitucional anterior é incompatível com o ordenamento estabelecido por uma nova Constituição, ela é automaticamente revogada pela ausência de recepção.<br>4. Ocorre a desconstitucionalização quando normas constitucionais de uma ordem anterior permanecem válidas na vigência de uma nova Constituição, contudo com o status de normas infraconstitucionais.<br><br>Assinale a alternativa que indica todas as afirmativas corretas.",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "São corretas apenas as afirmativas 1 e 4."
+   },
+   {
+    "letra": "B",
+    "texto": "São corretas apenas as afirmativas 3 e 4."
+   },
+   {
+    "letra": "C",
+    "texto": "São corretas apenas as afirmativas 1, 2 e 3."
+   },
+   {
+    "letra": "D",
+    "texto": "São corretas apenas as afirmativas 1, 3 e 4"
+   },
+   {
+    "letra": "E",
+    "texto": "São corretas apenas as afirmativas 2, 3 e 4."
+   }
+  ],
+  "correta": "D",
+  "comentario": "<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> Afirmativa 1 correta (recepção da lei compatível); afirmativa 3 correta (lei incompatível é revogada/não recepcionada); afirmativa 4 correta (definição de desconstitucionalização). A afirmativa 2 é FALSA: a lei que perdeu eficácia não se restaura automaticamente pelo surgimento de nova Constituição — isso seria repristinação, que não é automática (LINDB, art. 2º, §3º). Logo, corretas 1, 3 e 4.<br><br><b>⚠️ Pegadinha:</b> A pegadinha está na afirmativa 2, que descreve repristinação automática. Como a repristinação só ocorre com previsão expressa, o item é falso, eliminando as alternativas que o incluem.<br><br><b>📌 Fundamento:</b> LINDB, art. 2º, §3º; teorias da recepção e desconstitucionalização.<br><br><b>⚖️ Jurisprudência:</b> N/A — teoria constitucional e letra de norma.<br><br>"
+ },
+ {
+  "id": "q13",
+  "materia": "Recepção / Retroatividade mínima",
+  "banca": "PUC-PR · Prefeitura de Maringá-PR · Procurador Municipal",
+  "tipo": "multipla",
+  "enunciado": "\"A relação entre a constituição e as normas jurídicas (constitucionais ou infraconstitucionais) anteriores é complexa e não pode ser reduzida a um único fenômeno, além de implicar importantes e diferentes efeitos\". Em relação à entrada em vigor da Constituição Federal de 1988, analise as seguintes proposições:<br><br>I. O instituto de repristinação foi previsto na Constituição de 1988 como regra geral.<br>II. As normas da Constituição de 1967 (com a redação dada pela Emenda Constitucional n. 1, de 1969, e as posteriores alterações que lhe integravam o texto) foram desconstitucionalizadas com a entrada em vigor da Constituição de 1988.<br>III. Pelo instituto da recepção, a Constituição de 1988 tornou-se suporte de validade de determinadas normas infraconstitucionais editadas sob a égide de Constituições anteriores.<br>IV. Não é possível que lei infraconstitucional restrinja a eficácia de normas constitucionais.<br>V. Os Atos das Disposições Constitucionais Transitórias possuem, em regra, retroatividade mínima.<br><br>Estão CORRETAS apenas as proposições:",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "III e V."
+   },
+   {
+    "letra": "B",
+    "texto": "I e II."
+   },
+   {
+    "letra": "C",
+    "texto": "II e IV."
+   },
+   {
+    "letra": "D",
+    "texto": "II, IV e V."
+   },
+   {
+    "letra": "E",
+    "texto": "III, IV e V."
+   }
+  ],
+  "correta": "A",
+  "comentario": "<b>✅ Gabarito: LETRA A</b><br><br><b>⚖️ Por quê:</b> Proposição III correta: pela recepção, a CF/88 passou a ser suporte de validade das normas infraconstitucionais anteriores compatíveis. Proposição V correta: as normas constitucionais (e o ADCT) têm, em regra, aplicação imediata sobre efeitos futuros de situações pretéritas — retroatividade mínima. A I é falsa (a repristinação não foi adotada como regra geral; não é automática). A II é falsa (o Brasil não fez desconstitucionalização). A IV é falsa (é possível, em certos casos, que a lei restrinja a eficácia de normas constitucionais de eficácia limitada/contida).<br><br><b>⚠️ Pegadinha:</b> As proposições I e II são as armadilhas clássicas: repristinação NÃO é regra geral e desconstitucionalização NÃO ocorreu no Brasil. Marcá-las leva a erro.<br><br><b>📌 Fundamento:</b> LINDB, art. 2º, §3º; teoria da recepção; teoria da retroatividade mínima; ADCT.<br><br><b>⚖️ Jurisprudência:</b> O STF adota a teoria da retroatividade mínima: a nova Constituição alcança os efeitos futuros de situações jurídicas constituídas antes de sua vigência.<br><br>"
+ },
+ {
+  "id": "q14",
+  "materia": "Lógica do razoável",
+  "banca": "FGV · MPE-ES · 2025",
+  "tipo": "multipla",
+  "enunciado": "O órgão de execução, com atribuição no âmbito do Ministério Público, instaurou inquérito civil para apurar deficiências estruturais em uma política pública de caráter prestacional. Durante as tratativas para uma solução consensual, argumentou-se, junto ao representante do ente federativo responsável pela política pública, que, em razão da natureza da matéria, o significado a ser atribuído ao significante constitucional interpretado era influenciado por referenciais axiológicos oriundos do contexto sociopolítico, os quais são essencialmente mutáveis. Esses referenciais, divergentes em alguns aspectos, exigiam a resolução das conflitualidades de ordem valorativa, de modo a definir o significado mais adequado da norma constitucional.<br><br>Na situação descrita, é correto afirmar que",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "são prestigiados os alicerces estruturais do originalismo."
+   },
+   {
+    "letra": "B",
+    "texto": "é adotada como alicerce argumentativo a jurisprudência dos conceitos."
+   },
+   {
+    "letra": "C",
+    "texto": "há o reconhecimento implícito de que se está perante uma Constituição dogmática."
+   },
+   {
+    "letra": "D",
+    "texto": "é empregada uma linha argumentativa que distancia o intérprete do momento de criação normativa."
+   },
+   {
+    "letra": "E",
+    "texto": "é utilizada uma linha argumentativa compatível com o método de intepretação da lógica do razoável."
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> o enunciado fala em resolver conflitualidades VALORATIVAS, com referenciais axiológicos mutáveis do contexto sociopolítico, para chegar ao significado mais ADEQUADO. Isso é exatamente a LÓGICA DO RAZOÁVEL: o Direito lida com problemas humanos e valorativos, e a decisão deve ser razoável, prudente e adequada ao caso concreto, não puramente dedutiva.<br><br><b>⚠️ Pegadinha:</b> a banca jogou 'originalismo' e 'jurisprudência de conceitos' como iscas — ambos são lógicos/estáticos e fixam o sentido, o oposto de 'referenciais mutáveis'. Quem vê 'valores mutáveis + caso concreto' já elimina escola estática.<br><br><b>📌 Fundamento:</b> Lógica do razoável (solução razoável e adequada para conflitos axiológicos).<br><br><b>🎙️ Da prova oral:</b> 'Diferencie lógica do razoável da lógica formal subsuntiva na interpretação constitucional.'<br><br><b>🔁 Revisar:</b> conflito de VALORES + solução adequada ao caso = lógica do razoável."
+ },
+ {
+  "id": "q15",
+  "materia": "Realismo jurídico",
+  "banca": "FGV · DPE-PE · 2025",
+  "tipo": "multipla",
+  "enunciado": "Um elevado número de pessoas carentes, que ocupa há mais de uma década um prédio abandonado na região central do Município Alfa, pertencente a uma sociedade de economia mista estadual que encerrou informalmente suas atividades, é defendido pela Defensoria Pública estadual.<br><br>No processo judicial, o Poder Executivo municipal requer a desocupação do imóvel invocando a incidência de normas constitucionais. Na ocasião, o Defensor Público sustentou que, no processo de interpretação constitucional, o intérprete deve partir da premissa de que as normas constitucionais não estão necessariamente conectadas a referenciais semióticos, cabendo ao magistrado, à luz dos aspectos circunstanciais do problema concreto, delinear o padrão deôntico que possa realizar a justiça social.<br><br>É correto afirmar que a linha argumentativa do Defensor Público em relação à interpretação constitucional é compatível com",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "a lógica subsuntiva."
+   },
+   {
+    "letra": "B",
+    "texto": "o realismo jurídico."
+   },
+   {
+    "letra": "C",
+    "texto": "as teorias procedimentais."
+   },
+   {
+    "letra": "D",
+    "texto": "as concepções de ordem originalista."
+   },
+   {
+    "letra": "E",
+    "texto": "os métodos de interpretação preconizados por Savigny."
+   }
+  ],
+  "correta": "B",
+  "comentario": "<b>✅ Gabarito: LETRA B</b><br><br><b>⚖️ Por quê:</b> dizer que a norma NÃO está presa a referenciais semióticos (ao texto) e que o magistrado, à luz do problema concreto, delineia o padrão deôntico para realizar justiça social é a marca do REALISMO JURÍDICO: o Direito é o que o tribunal efetivamente decide, o intérprete transcende/cria a norma e é sensível ao caso concreto.<br><br><b>⚠️ Pegadinha:</b> 'lógica subsuntiva' e 'originalismo' são fidelidade ao texto (descartados na hora); Savigny remete aos métodos clássicos (gramatical, lógico, histórico, sistemático), também presos ao texto. A chave é 'desconectado do texto + justiça do caso concreto'.<br><br><b>📌 Fundamento:</b> Realismo jurídico (direito como aplicação pelos tribunais).<br><br><b>🎙️ Da prova oral:</b> 'O realismo jurídico nasceu para refutar qual escola, e por quê?' (refuta o formalismo).<br><br><b>🔁 Revisar:</b> intérprete que se desprende do texto e cria a norma no caso = realismo."
+ },
+ {
+  "id": "q16",
+  "materia": "Tópica / Pensamento problemático",
+  "banca": "FGV · TJ-SE · 2025",
+  "tipo": "multipla",
+  "enunciado": "Em uma relação processual, o juiz de direito competente, ao receber os autos conclusos para sentença, constatou que a causa de pedir versava sobre a interpretação do Art. X da Constituição da República. Ao delinear o conteúdo normativo desse preceito, o magistrado observou que as peculiaridades do caso concreto conferiam maior importância a determinados valores e não a outros, embora todos estivessem albergados pela Constituição brasileira, de natureza compromissória. Ao prestigiar os valores de maior importância, por ocasião da resolução das conflitualidades intrínsecas identificadas no curso do processo de interpretação, o magistrado atribuiu ao significante interpretado um significado distinto daquele defendido pelas partes.<br><br>Na situação descrita na narrativa, é correto afirmar que:",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "ao atribuir preeminência a alguns valores em detrimento de outros, o magistrado aderiu ao realismo jurídico, distanciando-se da tópica;"
+   },
+   {
+    "letra": "B",
+    "texto": "o proceder do magistrado aproximou os momentos de criação e de aplicação do direito, distanciando-se do originalismo e se mostrando sensível ao pensamento problemático;"
+   },
+   {
+    "letra": "C",
+    "texto": "ao levar em consideração referenciais axiológicos para o delineamento de um padrão deontológico, o magistrado se distanciou da denominada interpretação constitucional;"
+   },
+   {
+    "letra": "D",
+    "texto": "é traço fundamental de uma constituição compromissória que haja equidistância entre as ideologias e os referenciais axiológicos que alberga, de modo que o magistrado não poderia prestigiar alguns em detrimento de outros;"
+   },
+   {
+    "letra": "E",
+    "texto": "apesar de o significado normativo apresentar uma relação de sobreposição com o significante interpretado, a dissociação entre ambos é admitida apenas em relação à oscilação dos valores, não em razão de aspectos do problema concreto."
+   }
+  ],
+  "correta": "B",
+  "comentario": "<b>✅ Gabarito: LETRA B</b><br><br><b>⚖️ Por quê:</b> ao decidir a partir das peculiaridades do CASO concreto e atribuir significado distinto do texto, o juiz APROXIMOU criação e aplicação do direito (afasta-se do originalismo, que separa esses momentos) e se mostrou sensível ao PENSAMENTO PROBLEMÁTICO/tópica — que parte do problema, não do sistema fechado.<br><br><b>⚠️ Pegadinha:</b> a letra A confunde, pois também há valoração; mas ela erra ao dizer que o juiz se 'distanciou da tópica' — ao contrário, a postura é tópica. A letra D inverte: constituição compromissória NÃO exige equidistância imutável; o intérprete pode preponderar valores no caso.<br><br><b>📌 Fundamento:</b> Tópica/pensamento problemático (parte-se do problema e relativiza-se o texto).<br><br><b>🎙️ Da prova oral:</b> 'O que aproxima/separa criação e aplicação do direito nas escolas estática e problemática?'<br><br><b>🔁 Revisar:</b> partir do problema = tópica; aproximar criar e aplicar = afastar originalismo."
+ },
+ {
+  "id": "q17",
+  "materia": "Realismo jurídico",
+  "banca": "FGV · PC-MG · 2025",
+  "tipo": "multipla",
+  "enunciado": "Ao prestar informações com o objetivo de trancar um inquérito policial conduzido pela Polícia Civil, no qual se alegava o descumprimento de norma constitucional, o Delegado de Polícia, para sustentar a juridicidade das investigações, esclareceu que o significado a ser atribuído ao significante interpretado apresentava vicissitudes conforme a alteração dos circunstancialismos subjacentes à sua aplicação, não se harmonizando com uma lógica estática de argumentação jurídica.<br><br>Nesse caso, as informações apresentadas pelo Delegado de Polícia",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "se harmonizam com a concepção de que o intérprete, ao resolver as conflitualidades intrínsecas que se apresentam durante a interpretação, deve ser sensível ao contexto, mas sem participar do processo de criação normativa."
+   },
+   {
+    "letra": "B",
+    "texto": "se distanciam das construções baseadas no realismo jurídico, considerando que a identificação do real significado da norma pode não atender ao referencial de justiça subjacente ao momento de sua aplicação."
+   },
+   {
+    "letra": "C",
+    "texto": "se harmonizam com a reconstrução do iter argumentativo que direcionou a atuação do poder constituinte no delineamento do texto constitucional, de modo a preservar os objetivos almejados."
+   },
+   {
+    "letra": "D",
+    "texto": "não encampam a concepção teórica que busca justificar o desenvolvimento da interpretação constitucional a partir dos referenciais de programa da norma e âmbito da norma."
+   },
+   {
+    "letra": "E",
+    "texto": "se distanciam da lógica puramente cognitivista que permeia a atividade interpretativa conduzida a partir de premissas de ordem originalista."
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> o Delegado defende que o significado tem 'vicissitudes' conforme os circunstancialismos da aplicação (lógica dinâmica). Logo, sua tese SE DISTANCIA da lógica puramente cognitivista do ORIGINALISMO — escola em que o intérprete apenas conhece (cognosce) um sentido fixo, sem criar. A assertiva é correta porque opõe a postura dinâmica do delegado à postura estática originalista.<br><br><b>⚠️ Pegadinha:</b> a letra A descreve o originalismo ('sensível ao contexto, mas sem participar da criação') — incompatível com quem fala em significado mutável. A letra C é a definição de originalismo (reconstrução do iter do constituinte). A FGV testa se você sabe que 'vicissitudes/mutável' afasta o originalismo.<br><br><b>📌 Fundamento:</b> contraste realismo/dinamismo x originalismo cognitivista.<br><br><b>🎙️ Da prova oral:</b> 'Por que a atividade do intérprete no originalismo é cognoscitiva e não criativa?'<br><br><b>🔁 Revisar:</b> 'vicissitudes do significado' = afasta a lógica cognitivista do originalismo."
+ },
+ {
+  "id": "q18",
+  "materia": "Originalismo",
+  "banca": "FGV · SEFAZ-RS · 2025",
+  "tipo": "multipla",
+  "enunciado": "Ao analisar um processo administrativo fiscal, o auditor com competência para a matéria observou que o artigo da Constituição da República objeto de análise deveria ser compreendido em uma perspectiva unívoca, na qual o intérprete deve desenvolver uma atividade de conhecimento da norma preexistente, não se arvorando em partícipe do processo de criação normativa.<br><br>Nesse caso, é correto afirmar que as considerações do auditor",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "são refratárias ao formalismo clássico."
+   },
+   {
+    "letra": "B",
+    "texto": "se harmonizam com o processo de mutação constitucional."
+   },
+   {
+    "letra": "C",
+    "texto": "se harmonizam com as concepções teóricas lastreadas no realismo jurídico."
+   },
+   {
+    "letra": "D",
+    "texto": "reconhecem a importância da dicotomia entre programa da norma e âmbito da norma na interpretação constitucional."
+   },
+   {
+    "letra": "E",
+    "texto": "são refratárias às concepções teóricas que se valem do pensamento problemático na interpretação constitucional."
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> 'perspectiva unívoca' + 'conhecimento da norma preexistente' + 'não participa da criação' = ORIGINALISMO puro (atividade cognoscitiva, sentido fixo e imanente ao texto). Quem pensa assim é REFRATÁRIO ao pensamento problemático/tópica, que parte do caso e relativiza o texto. A assertiva E é correta justamente por essa incompatibilidade.<br><br><b>⚠️ Pegadinha:</b> A erra (originalismo é PRÓXIMO do formalismo, não refratário); B, C e D descrevem escolas dinâmicas (mutação, realismo, método concretizador com programa/âmbito da norma), todas opostas à postura do auditor. O gabarito exige enxergar que o originalismo REPELE a tópica.<br><br><b>📌 Fundamento:</b> Originalismo (sentido unívoco, atividade cognoscitiva).<br><br><b>🎙️ Da prova oral:</b> 'Originalismo e tópica são compatíveis? Justifique.' (não — um fixa o texto, o outro parte do problema).<br><br><b>🔁 Revisar:</b> 'norma preexistente + conhecer, não criar' = originalismo, que rejeita o pensamento problemático."
+ },
+ {
+  "id": "q19",
+  "materia": "Realismo jurídico",
+  "banca": "FGV · EBSERH · 2024",
+  "tipo": "multipla",
+  "enunciado": "Em mandado de segurança impetrado contra ato administrativo praticado pelo diretor de um hospital universitário federal, argumentou o impetrante que, em razão do grande lapso temporal decorrido desde a promulgação da Constituição da República, ocorreu a erosão da força normativa do seu Art. X, daí decorrendo a necessidade de se estruturar uma norma constitucional que atenda às especificidades do caso concreto e afaste as normas infraconstitucionais que colidam com ela.<br><br>Na situação descrita, é correto afirmar que o impetrante",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "apresenta uma linha argumentativa que se mostra compatível com as bases teóricas do realismo jurídico."
+   },
+   {
+    "letra": "B",
+    "texto": "descreve uma situação de mutação constitucional, que se mostra sensível às vicissitudes da realidade e às exigências do caso concreto."
+   },
+   {
+    "letra": "C",
+    "texto": "sustenta que o sentido da norma constitucional deve atender à segurança jurídica, distanciando-se do pensamento problemático."
+   },
+   {
+    "letra": "D",
+    "texto": "defende que o intérprete, a partir da resolução das conflitualidades intrínsecas no plano axiológico, decida o significado a ser atribuído ao Art. X."
+   },
+   {
+    "letra": "E",
+    "texto": "defende a sociedade aberta dos intérpretes do texto constitucional e o visualiza como uma estrutura normativa viva, sujeita a frequentes releituras conforme as nuances da realidade."
+   }
+  ],
+  "correta": "A",
+  "comentario": "<b>✅ Gabarito: LETRA A</b><br><br><b>⚖️ Por quê:</b> o impetrante quer ESTRUTURAR uma norma para atender às especificidades do caso concreto, afastando inclusive normas infraconstitucionais. Esse intérprete que cria/transcende a norma em função do caso adere ao REALISMO JURÍDICO (direito como aplicação concreta pelos tribunais).<br><br><b>⚠️ Pegadinha:</b> a B é a isca mais forte — 'erosão da força normativa' lembra mutação constitucional, MAS mutação muda só a INTERPRETAÇÃO sem alterar o texto; aqui o impetrante fala em 'estruturar uma norma' e afastar a legislação, o que extrapola a mutação e cai no realismo. A FGV separa quem 'reinterpreta o texto' (mutação) de quem 'constrói a norma no caso' (realismo).<br><br><b>📌 Fundamento:</b> Realismo jurídico x mutação constitucional.<br><br><b>🎙️ Da prova oral:</b> 'Qual a diferença entre mutação constitucional e realismo jurídico na interpretação?'<br><br><b>🔁 Revisar:</b> estruturar/criar a norma para o caso = realismo (não é mera mutação)."
+ },
+ {
+  "id": "q20",
+  "materia": "Tópica / Pensamento problemático",
+  "banca": "FGV · Pref. Cuiabá-MT · 2024",
+  "tipo": "multipla",
+  "enunciado": "Em um processo administrativo fiscal, o contribuinte, ao interpretar o preceito constitucional utilizado pela Fazenda Pública em determinada autuação, sustentou que o texto constitucional oferece um dos pontos de vista, de caráter relativo, não absoluto, que deve ser considerado pelo intérprete no delineamento da norma constitucional a ser aplicada ao caso concreto. O objetivo do intérprete é o de alcançar a justiça do caso concreto, não estando adstrito a limitadores de ordem textual.<br><br>O auditor fiscal que analisou as considerações do contribuinte concluiu corretamente que elas se harmonizam, na perspectiva interpretativa, com",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "o formalismo."
+   },
+   {
+    "letra": "B",
+    "texto": "a tópica pura."
+   },
+   {
+    "letra": "C",
+    "texto": "teorias procedimentais."
+   },
+   {
+    "letra": "D",
+    "texto": "o método concretizador."
+   },
+   {
+    "letra": "E",
+    "texto": "a mutação constitucional."
+   }
+  ],
+  "correta": "B",
+  "comentario": "<b>✅ Gabarito: LETRA B</b><br><br><b>⚖️ Por quê:</b> dizer que o texto é apenas UM ponto de vista RELATIVO, não absoluto, e que o intérprete busca a justiça do caso concreto SEM ficar adstrito a limitadores textuais é a definição de TÓPICA PURA: parte-se do problema/caso, e o texto entra como mais um topos (argumento), não como ponto de partida vinculante.<br><br><b>⚠️ Pegadinha:</b> a D (método concretizador) é a maior isca — ele também valoriza o caso, MAS mantém o PRIMADO do texto (programa da norma + âmbito da norma), não o relativiza ao ponto de torná-lo 'um dos pontos de vista'. 'Texto como ponto de vista relativo' = tópica PURA; 'texto como ponto de partida' = concretizador.<br><br><b>📌 Fundamento:</b> Tópica pura (primazia do problema sobre o texto).<br><br><b>🎙️ Da prova oral:</b> 'Diferencie tópica pura do método concretizador quanto ao papel do texto.'<br><br><b>🔁 Revisar:</b> texto = 'um dos pontos de vista relativos' → tópica pura."
+ },
+ {
+  "id": "q21",
+  "materia": "Métodos de interpretação / Discursos",
+  "banca": "FGV · TJ-PE · 2024",
+  "tipo": "multipla",
+  "enunciado": "Em determinado órgão jurisdicional colegiado, foi analisada a interpretação a ser dispensada a certo artigo da Constituição da República. Durante a prolação dos votos, a magistrada Maria sustentou que, no processo de interpretação, deve prevalecer um discurso de contornos sociológicos, em que preponderam as necessidades do ambiente sociopolítico. A magistrada Joana, por sua vez, defendeu que a preponderância deve ser atribuída ao discurso sociossemiótico, em que tanto os aspectos da linguagem como as necessidades do contexto devem influenciar no delineamento dos significados. Por fim, a magistrada Aline defendeu que o discurso semiótico deve preponderar, de modo que a linguagem direcione as conclusões do intérprete.<br><br>À luz dessas concepções do processo de interpretação, é correto afirmar, em relação às construções de Maria, Joana e Aline, que:",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "nenhuma delas se harmoniza com o formalismo;"
+   },
+   {
+    "letra": "B",
+    "texto": "apenas as de Aline se harmonizam com a tópica pura;"
+   },
+   {
+    "letra": "C",
+    "texto": "apenas as de Joana se harmonizam com o realismo jurídico;"
+   },
+   {
+    "letra": "D",
+    "texto": "apenas as de Maria se harmonizam com a Escola do Direito Livre;"
+   },
+   {
+    "letra": "E",
+    "texto": "apenas as de Joana e de Aline se harmonizam com o originalismo."
+   }
+  ],
+  "correta": "D",
+  "comentario": "<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> três discursos: Maria = SOCIOLÓGICO (preponderam as necessidades do contexto sociopolítico); Joana = SOCIOSSEMIÓTICO (linguagem + contexto); Aline = SEMIÓTICO (só a linguagem direciona). O discurso sociológico de Maria, que entrega ao intérprete a livre valoração das necessidades sociais, é o que se harmoniza com a ESCOLA DO DIREITO LIVRE — daí 'apenas as de Maria'.<br><br><b>⚠️ Pegadinha:</b> as iscas trocam os pares: B liga Aline (semiótico/linguagem) à tópica pura — falso, tópica parte do problema, não da linguagem; C liga Joana ao realismo; E liga Joana e Aline ao originalismo. O segredo é casar cada discurso à escola certa: o SOCIOLÓGICO é o livre, ligado ao Direito Livre.<br><br><b>📌 Fundamento:</b> discursos sociológico/sociossemiótico/semiótico e Escola do Direito Livre.<br><br><b>🎙️ Da prova oral:</b> 'O que diferencia o discurso semiótico do sociossemiótico na interpretação?'<br><br><b>🔁 Revisar:</b> sociológico→Direito Livre; sociossemiótico→linguagem+contexto; semiótico→só linguagem."
+ },
+ {
+  "id": "q22",
+  "materia": "Originalismo",
+  "banca": "FGV · Pref. Macaé-RJ · 2024",
+  "tipo": "multipla",
+  "enunciado": "Determinado magistrado, ao proferir seu voto em um processo objetivo de controle concentrado de constitucionalidade, afirmou que a legitimidade do poder constituinte não é compartilhada com os intérpretes da Constituição, os quais se limitam a desenvolver uma atividade cognoscitiva, não criativa, o que é essencial à preservação da segurança jurídica e à estabilidade das relações sociais.<br><br>Essa assertiva é compatível com",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "o originalismo."
+   },
+   {
+    "letra": "B",
+    "texto": "o realismo jurídico."
+   },
+   {
+    "letra": "C",
+    "texto": "a mutação constitucional."
+   },
+   {
+    "letra": "D",
+    "texto": "o pensamento problemático."
+   },
+   {
+    "letra": "E",
+    "texto": "a evolutividade da ordem constitucional."
+   }
+  ],
+  "correta": "A",
+  "comentario": "<b>✅ Gabarito: LETRA A</b><br><br><b>⚖️ Por quê:</b> questão-âncora do tema. 'Atividade COGNOSCITIVA, não criativa' + 'preservação da SEGURANÇA JURÍDICA' + 'legitimidade do constituinte não se compartilha com o intérprete' = ORIGINALISMO em estado puro: o sentido é fixo e imanente ao texto, o intérprete só conhece, não cria.<br><br><b>⚠️ Pegadinha:</b> todas as demais (realismo, mutação, pensamento problemático, evolutividade) são escolas DINÂMICAS, que admitem o intérprete criar/atualizar a norma — o exato oposto de 'cognoscitiva, não criativa'. Memorize: 'cognoscitiva + segurança jurídica' = sempre originalismo.<br><br><b>📌 Fundamento:</b> Originalismo (cognição, não criação; sentido fixo da época).<br><br><b>🎙️ Da prova oral:</b> 'Por que o originalismo é associado à segurança jurídica e à estabilidade?'<br><br><b>🔁 Revisar:</b> palavra-chave 'cognoscitiva, não criativa' = originalismo, ponto."
+ },
+ {
+  "id": "q23",
+  "materia": "Princípios de interpretação",
+  "banca": "FGV · Pref. Nova Iguaçu-RJ · 2024",
+  "tipo": "multipla",
+  "enunciado": "As normas jurídicas são dotadas de pretensão de validade e por esse motivo a Constituição adotou a cláusula de reserva de plenário.<br><br>Diante do exposto, é possível dizer que a referida cláusula é decorrente do princípio da",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "eficácia integradora."
+   },
+   {
+    "letra": "B",
+    "texto": "máxima efetividade."
+   },
+   {
+    "letra": "C",
+    "texto": "presunção de constitucionalidade."
+   },
+   {
+    "letra": "D",
+    "texto": "Unidade da Constituição."
+   },
+   {
+    "letra": "E",
+    "texto": "correção funcional."
+   }
+  ],
+  "correta": "C",
+  "comentario": "<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> a cláusula de reserva de plenário (art. 97 da CF — só pela maioria absoluta do tribunal pleno ou órgão especial se declara a inconstitucionalidade) existe porque a lei nasce com PRESUNÇÃO DE CONSTITUCIONALIDADE. Para superá-la, exige-se quórum qualificado; daí a reserva de plenário decorrer justamente desse princípio.<br><br><b>⚠️ Pegadinha:</b> os outros princípios são todos de hermenêutica constitucional clássica (integradora, máxima efetividade, unidade, correção funcional) e servem de isca, mas NENHUM fundamenta o quórum especial para afastar a lei. 'Pretensão de validade da norma' é o sinônimo que aponta para a presunção de constitucionalidade.<br><br><b>📌 Fundamento:</b> Presunção de constitucionalidade das leis (base da reserva de plenário, art. 97 CF / Súmula Vinculante 10).<br><br><b>🎙️ Da prova oral:</b> 'A reserva de plenário se aplica à interpretação conforme e à nulidade sem redução de texto? Em que medida?'<br><br><b>🔁 Revisar:</b> reserva de plenário = presunção de constitucionalidade da lei."
+ },
+ {
+  "id": "q24",
+  "materia": "Método concretizador",
+  "banca": "FGV · PGM-RJ · 2025",
+  "tipo": "multipla",
+  "enunciado": "Em determinado processo administrativo em tramitação no âmbito da Procuradoria-Geral do Município Alfa, foi defendido que, ao realizar a atividade intelectiva voltada à atribuição de significados aos significantes interpretados, constantes do texto constitucional, o intérprete deve utilizar a metódica estruturante, o que permitiria a obtenção, no caso concreto, do que foi figurativamente denominado, no âmbito do referido órgão, de \"justo contemporâneo\".<br><br>É correto afirmar que, de acordo com esses argumentos,",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "o intérprete desenvolve uma atividade essencialmente cognoscitiva, não decisória."
+   },
+   {
+    "letra": "B",
+    "texto": "a resolução das conflitualidades intrínsecas, no curso do processo de interpretação, não se estende ao plano linguístico."
+   },
+   {
+    "letra": "C",
+    "texto": "as concepções originalistas, em razão do seu fundacionalismo, não devem direcionar a atividade interpretativa."
+   },
+   {
+    "letra": "D",
+    "texto": "a mutação constitucional é fruto do processo de interpretação, mas não a declaração de nulidade sem redução de texto."
+   },
+   {
+    "letra": "E",
+    "texto": "em razão das oscilações do âmbito da norma, não se deve considerá-lo no processo de interpretação, sob pena de esvaziamento da segurança jurídica."
+   }
+  ],
+  "correta": "C",
+  "comentario": "<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> a 'metódica estruturante' é o MÉTODO CONCRETIZADOR (programa da norma + âmbito da norma; a norma se estrutura no caso concreto, num círculo hermenêutico). Sendo método dinâmico que busca o 'justo contemporâneo', ele REPELE o originalismo e seu fundacionalismo (sentido fixo da época) — por isso a C é correta: as concepções originalistas não devem direcionar a atividade.<br><br><b>⚠️ Pegadinha:</b> A descreve o originalismo (cognoscitiva, não decisória) — incompatível; E inverte a metódica estruturante, pois o ÂMBITO da norma é ELEMENTO ESSENCIAL dela (não se pode descartá-lo); B nega o plano linguístico, que também integra a concretização. A chave é saber que metódica estruturante = concretizador, oposto do originalismo.<br><br><b>📌 Fundamento:</b> Método concretizador / metódica estruturante (programa + âmbito da norma).<br><br><b>🎙️ Da prova oral:</b> 'Explique programa da norma e âmbito da norma na metódica estruturante.'<br><br><b>🔁 Revisar:</b> 'metódica estruturante' = método concretizador, que afasta o fundacionalismo originalista."
+ }
+];
+function defaultState(){return{respostas:{},revisao:{},caderno:{},revisarDepois:{},posicao:0,modo:'todas',materiaFiltro:'',notas:{}};}
+let state=defaultState(),lista=[],paused=false,qSecs=0,sSecs=0,timerInterval=null,commentOpen={};
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}catch(e){}}
+function loadState(){try{var raw=localStorage.getItem(STORE_KEY);if(raw){state=Object.assign(defaultState(),JSON.parse(raw));}}catch(e){state=defaultState();}}
+function today(){return new Date().toISOString().split('T')[0];}
+function addDays(d,n){var dt=new Date(d+'T12:00:00');dt.setDate(dt.getDate()+n);return dt.toISOString().split('T')[0];}
+function fmtDate(iso){if(!iso)return'';var p=iso.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function buildLista(){var t=today(),ids;if(state.modo==='todas'){ids=QUESTOES.map(function(q){return q.id;});}else if(state.modo==='hoje'){ids=QUESTOES.filter(function(q){var r=state.revisao[q.id];return r&&r.nextDate&&r.nextDate<=t;}).map(function(q){return q.id;});}else if(state.modo==='caderno'){ids=QUESTOES.filter(function(q){return state.caderno[q.id]||state.revisarDepois[q.id];}).map(function(q){return q.id;});}else if(state.modo==='materia'){var m=state.materiaFiltro;ids=QUESTOES.filter(function(q){return !m||q.materia===m;}).map(function(q){return q.id;});}else if(state.modo==='aleatorio'){ids=shuffle(QUESTOES.map(function(q){return q.id;}));}else{ids=QUESTOES.map(function(q){return q.id;});}return ids;}
+function computeStats(){var total=QUESTOES.length,acertos=0,erros=0,t=today(),revisadasHoje=0;QUESTOES.forEach(function(q){var r=state.respostas[q.id];if(r){if(r===q.correta)acertos++;else erros++;}var rev=state.revisao[q.id];if(rev&&rev.lastAnswered===t)revisadasHoje++;});var respondidas=acertos+erros,pendentes=total-respondidas,pct=total>0?Math.round(respondidas/total*100):0;return{total:total,acertos:acertos,erros:erros,pendentes:pendentes,revisadasHoje:revisadasHoje,respondidas:respondidas,pct:pct};}
+function renderStats(){var s=computeStats();document.getElementById('statsBar').innerHTML='<div class="stat-chip"><span class="sv green">'+s.acertos+'</span><span class="sl">Acertos</span></div><div class="stat-chip"><span class="sv red">'+s.erros+'</span><span class="sl">Erros</span></div><div class="stat-chip"><span class="sv amber">'+s.pendentes+'</span><span class="sl">Pendentes</span></div><div class="stat-chip"><span class="sv cyan">'+s.revisadasHoje+'</span><span class="sl">Revisadas hoje</span></div>';var fill=document.getElementById('progressFill'),lbl=document.getElementById('progressLabel');if(fill)fill.style.width=s.pct+'%';if(lbl)lbl.textContent=s.respondidas+'/'+s.total+' respondidas ('+s.pct+'%)';}
+function fmtTime(secs){return String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function startTimers(){if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(function(){if(!paused){qSecs++;sSecs++;}var q=document.getElementById('timerQ'),s=document.getElementById('timerS');if(q)q.textContent=fmtTime(qSecs);if(s)s.textContent=fmtTime(sSecs);},1000);}
+function resetQTimer(){qSecs=0;var q=document.getElementById('timerQ');if(q)q.textContent='00:00';}
+function togglePause(){paused=!paused;var b=document.getElementById('btnPause');if(b)b.textContent=paused?'Retomar':'Pausar';}
+function scheduleNext(id,acertou){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:1,acertos:0,lastAnswered:null};rv.lastAnswered=t;if(acertou){rv.acertos=(rv.acertos||0)+1;rv.interval=rv.acertos===1?1:rv.acertos===2?7:30;}else{rv.acertos=0;rv.interval=1;}rv.nextDate=addDays(t,rv.interval);state.revisao[id]=rv;}
+function scheduleManual(id,days){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:days,acertos:0,lastAnswered:t};rv.nextDate=days===0?null:addDays(t,days);rv.interval=days;state.revisao[id]=rv;saveState();renderCard();}
+function reviewBadgeHTML(id){var rv=state.revisao[id];if(!rv||!rv.nextDate)return'';if(rv.nextDate<=today())return'<span class="review-badge review-today">revisar hoje ⏰</span>';return'<span class="review-badge review-future">📅 '+fmtDate(rv.nextDate)+'</span>';}
+function schedRowHTML(id){return'<div class="sched-row"><span class="sched-label">Agendar:</span><button class="sched-btn" onclick="scheduleManual(\''+id+'\',1)">1 dia</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',7)">7 dias</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',30)">30 dias</button><button class="sched-btn remove" onclick="scheduleManual(\''+id+'\',0)">remover</button></div>';}
+function starBtnHTML(id){var active=state.revisarDepois[id]?' active':'',label=state.revisarDepois[id]?'⭐ No caderno':'☆ Revisar depois';return'<button class="star-btn'+active+'" onclick="toggleStar(\''+id+'\')">'+label+'</button>';}
+function toggleStar(id){if(state.revisarDepois[id])delete state.revisarDepois[id];else state.revisarDepois[id]=true;saveState();renderCard();renderStats();}
+function selecionarAlternativa(id,letra){if(state.respostas[id])return;document.querySelectorAll('.alt-btn[data-id="'+id+'"]').forEach(function(b){b.classList.remove('selected');});var btn=document.querySelector('.alt-btn[data-id="'+id+'"][data-letra="'+letra+'"]');if(btn)btn.classList.add('selected');var c=document.getElementById('confirm-'+id);if(c)c.disabled=false;}
+function confirmar(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var sel=document.querySelector('.alt-btn[data-id="'+id+'"].selected');if(!sel)return;var letra=sel.dataset.letra;state.respostas[id]=letra;var acertou=letra===q.correta;scheduleNext(id,acertou);if(!acertou)state.caderno[id]=true;saveState();renderCard();renderStats();}
+function toggleComment(id){commentOpen[id]=!commentOpen[id];var body=document.getElementById('comment-body-'+id),tog=document.getElementById('comment-toggle-'+id);if(body)body.classList.toggle('open',!!commentOpen[id]);if(tog)tog.textContent=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';}
+function salvarNota(id,txt){if(!state.notas)state.notas={};state.notas[id]=txt;saveState();}
+function renderCard(){var cont=document.getElementById('mainContent');if(!lista.length){cont.innerHTML='<div class="empty-state"><div class="icon">📭</div><div>Nenhuma questão neste filtro.</div></div>';return;}var pos=Math.min(Math.max(state.posicao,0),lista.length-1);state.posicao=pos;var id=lista[pos],q=QUESTOES.find(function(x){return x.id===id;});if(!q){cont.innerHTML='';return;}var resposta=state.respostas[id],respondida=!!resposta,acertou=respondida&&resposta===q.correta;var resultHTML='';if(respondida){resultHTML=acertou?'<div class="result-banner correct">✅ Correto! Resposta: '+resposta+'</div>':'<div class="result-banner wrong">❌ Incorreto. Sua resposta: '+resposta+' | Gabarito: '+q.correta+'</div>';}var altsHTML='<div class="alts">';q.alternativas.forEach(function(alt){var btnCls='alt-btn',letraCls='alt-letra',disabled=respondida?'disabled':'';if(respondida){if(alt.letra===q.correta&&alt.letra===resposta){btnCls='alt-btn correct';letraCls='alt-letra correct';}else if(alt.letra===q.correta){btnCls='alt-btn reveal-correct';letraCls='alt-letra reveal-correct';}else if(alt.letra===resposta){btnCls='alt-btn wrong';letraCls='alt-letra wrong';}}altsHTML+='<button class="'+btnCls+'" data-id="'+id+'" data-letra="'+alt.letra+'" '+disabled+' onclick="selecionarAlternativa(\''+id+'\',\''+alt.letra+'\')"><span class="'+letraCls+'">'+alt.letra+'</span><span>'+alt.texto+'</span></button>';});altsHTML+='</div>';var confirmHTML=respondida?'':'<button class="btn-confirm" id="confirm-'+id+'" onclick="confirmar(\''+id+'\')" disabled>Confirmar</button>';var cOpen=commentOpen[id]?' open':'',cLabel=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';var commentHTML=respondida?'<div class="comment-wrap"><button class="comment-toggle" id="comment-toggle-'+id+'" onclick="toggleComment(\''+id+'\')">'+cLabel+'</button><div class="comment-body'+cOpen+'" id="comment-body-'+id+'">'+q.comentario+'</div></div>':'';var schedHTML=respondida?schedRowHTML(id):'';var notaVal=(state.notas&&state.notas[id])?state.notas[id]:'';var notasHTML='<div class="notas-wrap"><div class="notas-label">📝 Minhas anotações</div><textarea class="notas-area" placeholder="Escreva aqui suas anotações sobre esta questão…" oninput="salvarNota(\''+id+'\', this.value)">'+notaVal.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</textarea></div>';cont.innerHTML='<div class="nav-counter">Questão '+(pos+1)+' de '+lista.length+'</div><div class="card"><div class="card-meta"><span class="badge badge-banca">'+q.banca+'</span><span class="badge badge-materia">'+q.materia+'</span>'+reviewBadgeHTML(id)+starBtnHTML(id)+claudeBtnHTML(id)+'</div><div class="enunciado">'+q.enunciado+'</div>'+altsHTML+confirmHTML+resultHTML+commentHTML+schedHTML+notasHTML+'</div><div class="nav-row"><button class="nav-btn" onclick="navPrev()" '+(pos===0?'disabled':'')+'>← Anterior</button><button class="nav-btn" onclick="navNext()" '+(pos>=lista.length-1?'disabled':'')+'>Próxima →</button></div>';}
+function navPrev(){if(state.posicao>0){state.posicao--;saveState();resetQTimer();renderCard();}}
+function navNext(){if(state.posicao<lista.length-1){state.posicao++;saveState();resetQTimer();renderCard();}}
+function setModo(modo){state.modo=modo;state.posicao=0;var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=modo==='materia'?'':'none';document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===modo);});lista=buildLista();saveState();resetQTimer();renderCard();renderStats();}
+function setMateriaFiltro(val){state.materiaFiltro=val;state.posicao=0;lista=buildLista();saveState();resetQTimer();renderCard();}
+function populateMateriaSelect(){var materias=[];QUESTOES.forEach(function(q){if(materias.indexOf(q.materia)===-1)materias.push(q.materia);});materias.sort();var sel=document.getElementById('materiaSelect');if(!sel)return;sel.innerHTML='<option value="">— Escolha —</option>';materias.forEach(function(m){var o=document.createElement('option');o.value=m;o.textContent=m;if(m===state.materiaFiltro)o.selected=true;sel.appendChild(o);});}
+function recomecar(){if(confirm('Tem certeza? Todo o progresso será apagado permanentemente.')){localStorage.removeItem(STORE_KEY);location.reload();}}
+function exportarProgresso(){var blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='progresso_'+SLUG+'_'+today()+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function exportarNotas(){var txt='ANOTAÇÕES — '+document.title+'\n'+today()+'\n\n',n=0;QUESTOES.forEach(function(q){var nota=state.notas&&state.notas[q.id];if(nota&&nota.trim()){n++;txt+='【'+q.banca+' · '+q.materia+'】\n'+nota.trim()+'\n\n';}});if(!n){alert('Você ainda não tem anotações registradas.');return;}var blob=new Blob([txt],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='anotacoes_'+SLUG+'_'+today()+'.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function importarProgresso(evt){var file=evt.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{state=Object.assign(defaultState(),JSON.parse(e.target.result));saveState();lista=buildLista();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=state.modo==='materia'?'':'none';renderStats();renderCard();alert('Progresso importado com sucesso!');}catch(err){alert('Arquivo inválido ou corrompido.');}};reader.readAsText(file);evt.target.value='';}
+function dismissIframeBanner(){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';try{sessionStorage.setItem('iframe_banner_dismissed','1');}catch(e){}}
+function checkIframeBanner(){try{if(sessionStorage.getItem('iframe_banner_dismissed')==='1'){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';}}catch(e){}}
+function init(){loadState();checkIframeBanner();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel&&state.modo==='materia')sel.style.display='';lista=buildLista();renderStats();renderCard();startTimers();}
+function claudeBtnHTML(id){return '<button class="claude-qbtn" onclick="askClaude(\''+id+'\')">🤖</button>';}
+function askClaude(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var ctx=document.title+' · Questão '+id+'\nTema: '+q.materia+'\nBanca: '+(q.banca||'')+'\nConcurso: Cartório TJMT\n\nEnunciado:\n'+q.enunciado.replace(/<[^>]+>/g,'')+'\n\nTenho uma dúvida sobre esta questão:\n';navigator.clipboard.writeText(ctx).catch(function(){});window.open('https://claude.ai','_blank');}
+init();
+</script>
+</body>
+</html>
