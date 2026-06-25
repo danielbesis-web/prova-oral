@@ -3,311 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prova Oral — 2ª Fase · 16 Semanas</title>
+<title>Prova Oral — 2ª Fase · Cartório TJMT</title>
 <style>
 :root{
-  --bg:#050b18;--card:#0b1828;--border:#16365a;--glow:rgba(46,120,200,.25);
+  --bg:#050b18;--card:#0b1828;--border:#16365a;
   --text:#e9f0f8;--muted:#90a6c0;--soft:#b9c8dc;
-  --red:#e05555;--redb:#7a2020;--redbg:#1a0505;--redglow:rgba(224,85,85,.25);
-  --green:#27c06a;--greenb:#1c5e3a;--greenbg:#0a2016;--greenglow:rgba(34,197,105,.25);
-  --amber:#f5a623;--amberb:#6a4a14;--amberbg:#241a08;--amberglow:rgba(245,166,35,.25);
-  --cyan:#38bdf8;--cyanb:#155a72;--cyanbg:#06212e;
-  --purple:#b06bf2;--purpleb:#432a6e;--purplebg:#190f2c;
+  --cyan:#38bdf8;--cyanb:#155a72;--purple:#b06bf2;--purpleb:#432a6e;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{
   background:radial-gradient(1200px 700px at 50% -120px,#0c1d33 0%,var(--bg) 60%);
-  color:var(--text);min-height:100vh;padding:28px 16px 80px;
+  color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  line-height:1.5;-webkit-font-smoothing:antialiased;
+  line-height:1.5;-webkit-font-smoothing:antialiased;padding:24px;
 }
-.wrap{max-width:680px;margin:0 auto}
-
-.head{text-align:center;margin-bottom:28px}
-.head h1{font-size:22px;font-weight:800;margin-bottom:4px}
+.wrap{max-width:420px;width:100%}
+.head{text-align:center;margin-bottom:36px}
+.head .icon{font-size:40px;display:block;margin-bottom:12px}
+.head h1{font-size:22px;font-weight:800;letter-spacing:.3px;margin-bottom:4px}
 .head p{color:var(--muted);font-size:13px}
 
-.aviso{
-  background:var(--amberbg);border:1px solid var(--amberb);border-radius:13px;
-  padding:12px 16px;margin-bottom:24px;font-size:13px;color:var(--amber);
-}
-
-/* TIMELINE */
-.timeline{display:flex;flex-direction:column;gap:0}
-.titem{display:flex;gap:0;position:relative}
-.titem::before{
-  content:"";position:absolute;left:19px;top:42px;bottom:-1px;
-  width:2px;background:var(--border);z-index:0;
-}
-.titem:last-child::before{display:none}
-
-.tday{flex:0 0 40px;display:flex;flex-direction:column;align-items:center;
-  padding-top:12px;z-index:1;}
-.tball{
-  width:38px;height:38px;border-radius:50%;border:2px solid var(--border);
-  background:var(--card);display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:800;color:var(--muted);flex-shrink:0;
-}
-.tball.active{border-color:var(--red);color:var(--red);box-shadow:0 0 14px -4px var(--red)}
-.tball.done{border-color:var(--green);color:var(--green);box-shadow:0 0 14px -4px var(--greenglow)}
-
-.tcard{
-  flex:1;margin:8px 0 18px 14px;
+.cards{display:flex;flex-direction:column;gap:14px}
+.ccard{
+  display:flex;align-items:center;gap:16px;
   background:var(--card);border:1px solid var(--border);border-radius:16px;
-  padding:14px 16px;
-  box-shadow:0 0 0 1px rgba(255,255,255,.02),0 12px 32px -20px var(--glow);
+  padding:22px 24px;text-decoration:none;color:var(--soft);
+  transition:.14s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
 }
-.tcard.active{border-color:var(--redb);box-shadow:0 0 0 1px rgba(224,85,85,.06),0 12px 32px -20px var(--redglow)}
-.tcard.done{border-color:var(--greenb);box-shadow:0 0 0 1px rgba(34,197,105,.06),0 12px 32px -20px var(--greenglow)}
+.ccard:hover{border-color:var(--cyanb);background:rgba(56,189,248,.07);color:var(--text)}
+.ccard .icon{font-size:28px;flex-shrink:0}
+.ccard .info .nome{font-size:16px;font-weight:800;color:var(--text);margin-bottom:3px}
+.ccard .info .sub{font-size:12px;color:var(--muted)}
+.ccard .arrow{margin-left:auto;color:var(--muted);font-size:20px}
 
-.tsem{font-size:10px;font-weight:800;letter-spacing:1.2px;color:var(--muted);
-  text-transform:uppercase;margin-bottom:4px}
-.ttitle{font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px}
-
-/* DIAS */
-.dias{display:flex;flex-direction:column;gap:6px}
-.dia-link{
-  display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:9px 12px;
-  text-decoration:none;color:var(--soft);font-size:13px;transition:.14s;
-}
-.dia-link:hover{border-color:var(--redb);background:rgba(224,85,85,.07);color:var(--text)}
-.dia-link .dicon{font-size:15px;flex-shrink:0}
-.dia-link .dname{flex:1;font-weight:600}
-.dia-link .dtag{font-size:11px;color:var(--muted)}
-.dia-link .dtag.ok{color:var(--green);font-weight:700}
-.dia-link .dtag.cur{color:var(--red);font-weight:700}
-
-.soon{
-  display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:7px 12px;
-  color:var(--muted);font-size:12px;font-weight:600;
-}
-
-/* PROGRESSO */
-.wprog{margin:8px 0 10px;display:flex;flex-direction:column;gap:4px}
-.wprog-bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
-.wprog-fill{height:100%;border-radius:4px;background:var(--green);transition:width .4s}
-.wprog-label{font-size:10px;color:var(--muted)}
-.dprog{font-size:11px;font-weight:700;min-width:36px;text-align:right}
-.dprog.pend{color:var(--muted)}
-.dprog.prog{color:var(--amber)}
-.dprog.done{color:var(--green)}
-
-.diario-btn{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);
-  border-radius:12px;padding:12px 16px;text-decoration:none;margin-bottom:20px;
-  transition:.14s;
-}
-.diario-btn:hover{background:rgba(56,189,248,.12)}
-.diario-btn span{font-size:13px;font-weight:700;color:var(--cyan)}
-.diario-btn small{font-size:11px;color:#5a8aaa;display:block;margin-top:2px}
-
-.end{text-align:center;color:var(--muted);font-size:11px;margin-top:28px}
+.end{text-align:center;color:var(--muted);font-size:11px;margin-top:32px}
 </style>
 </head>
 <body>
 <script>
-(function(){
-  var s=localStorage.getItem('provaoral_auth');
-  if(!s){location.replace('login.html');return;}
-  try{var d=JSON.parse(s);if(!d.exp||Date.now()>d.exp){localStorage.removeItem('provaoral_auth');location.replace('login.html');}}catch(e){location.replace('login.html');}
-})();
+(function(){var s=localStorage.getItem('provaoral_auth');if(!s){location.replace('login.html');return;}try{var d=JSON.parse(s);if(!d.exp||Date.now()>d.exp){localStorage.removeItem('provaoral_auth');location.replace('login.html');}}catch(e){location.replace('login.html');}})();
 </script>
 <div style="position:fixed;top:12px;right:14px;z-index:999">
 <button onclick="localStorage.removeItem('provaoral_auth');location.replace('login.html')" style="background:#0b1828;border:1px solid #16365a;color:#90a6c0;font-size:11px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit">Sair</button>
 </div>
 
 <div class="wrap">
-
   <div class="head">
-    <h1>🎤 Prova Oral — 2ª Fase</h1>
-    <p>Cadernos de Estudo · 16 Semanas</p>
+    <span class="icon">🏛️</span>
+    <h1>Prova Oral · 2ª Fase</h1>
+    <p>Concurso Cartório · TJMT</p>
   </div>
 
-  <div class="aviso">
-    ⚠️ Abra os cadernos por esta página. Responda em voz alta antes de conferir as respostas.
-  </div>
-
-  <a class="diario-btn" href="diario.html">
-    <span style="font-size:22px">📓</span>
-    <div>
-      <span>Diário Semanal</span>
-      <small>Anotações + progresso por caderno</small>
-    </div>
-    <span style="margin-left:auto;font-size:12px;color:var(--cyan);font-weight:700">Abrir →</span>
-  </a>
-
-  <!-- METAS -->
-  <div style="margin-bottom:8px;font-size:10px;font-weight:800;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase">Banco de Questões · Metas</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-    <a href="meta13-q1q15.html" style="display:flex;align-items:center;gap:10px;background:rgba(39,192,106,.06);border:1px solid rgba(39,192,106,.2);border-radius:12px;padding:13px 16px;text-decoration:none;transition:.14s" onmouseover="this.style.background='rgba(39,192,106,.12)'" onmouseout="this.style.background='rgba(39,192,106,.06)'">
-      <span style="font-size:20px">📗</span>
-      <div>
-        <div style="font-size:13px;font-weight:800;color:#27c06a">Meta 13 · Q1–Q15</div>
-        <div style="font-size:11px;color:#4a8a64;margin-top:2px">Direito Processual Penal · 15 questões</div>
+  <div class="cards">
+    <a class="ccard" href="metas.html">
+      <span class="icon">📚</span>
+      <div class="info">
+        <div class="nome">Metas</div>
+        <div class="sub">Central de questões · Banco de metas</div>
       </div>
-      <span style="margin-left:auto;font-size:12px;color:#27c06a;font-weight:700">Abrir →</span>
+      <span class="arrow">›</span>
     </a>
-    <a href="meta13-q16q30.html" style="display:flex;align-items:center;gap:10px;background:rgba(39,192,106,.06);border:1px solid rgba(39,192,106,.2);border-radius:12px;padding:13px 16px;text-decoration:none;transition:.14s" onmouseover="this.style.background='rgba(39,192,106,.12)'" onmouseout="this.style.background='rgba(39,192,106,.06)'">
-      <span style="font-size:20px">📗</span>
-      <div>
-        <div style="font-size:13px;font-weight:800;color:#27c06a">Meta 13 · Q16–Q30</div>
-        <div style="font-size:11px;color:#4a8a64;margin-top:2px">Direito Processual Penal · 15 questões</div>
+    <a class="ccard" href="simulados.html">
+      <span class="icon">📋</span>
+      <div class="info">
+        <div class="nome">Simulados</div>
+        <div class="sub">Simulados por disciplina e semana</div>
       </div>
-      <span style="margin-left:auto;font-size:12px;color:#27c06a;font-weight:700">Abrir →</span>
-    </a>
-    <a href="meta13-q31q44.html" style="display:flex;align-items:center;gap:10px;background:rgba(39,192,106,.06);border:1px solid rgba(39,192,106,.2);border-radius:12px;padding:13px 16px;text-decoration:none;transition:.14s" onmouseover="this.style.background='rgba(39,192,106,.12)'" onmouseout="this.style.background='rgba(39,192,106,.06)'">
-      <span style="font-size:20px">📗</span>
-      <div>
-        <div style="font-size:13px;font-weight:800;color:#27c06a">Meta 13 · Q31–Q44</div>
-        <div style="font-size:11px;color:#4a8a64;margin-top:2px">Direito Processual Penal · 14 questões</div>
-      </div>
-      <span style="margin-left:auto;font-size:12px;color:#27c06a;font-weight:700">Abrir →</span>
+      <span class="arrow">›</span>
     </a>
   </div>
 
-  <a href="sem3-simulado.html" style="display:flex;align-items:center;gap:10px;background:rgba(110,126,242,.08);border:1px solid rgba(110,126,242,.25);border-radius:12px;padding:14px 16px;text-decoration:none;margin-bottom:10px;transition:.14s" onmouseover="this.style.background='rgba(110,126,242,.14)'" onmouseout="this.style.background='rgba(110,126,242,.08)'">
-    <span style="font-size:22px">🎯</span>
-    <div>
-      <div style="font-size:13px;font-weight:800;color:#7c8ef2">Simulado · Semana 3</div>
-      <div style="font-size:11px;color:#7880aa;margin-top:2px">20 questões C/E · 4 por bloco · enunciados do Banco PO TJMT</div>
-    </div>
-    <span style="margin-left:auto;font-size:12px;color:#7c8ef2;font-weight:700">Iniciar →</span>
-  </a>
-
-  <a href="sem4-simulado.html" style="display:flex;align-items:center;gap:10px;background:rgba(110,126,242,.08);border:1px solid rgba(110,126,242,.25);border-radius:12px;padding:14px 16px;text-decoration:none;margin-bottom:20px;transition:.14s" onmouseover="this.style.background='rgba(110,126,242,.14)'" onmouseout="this.style.background='rgba(110,126,242,.08)'">
-    <span style="font-size:22px">🧭</span>
-    <div>
-      <div style="font-size:13px;font-weight:800;color:#7c8ef2">Simulado · Semana 4</div>
-      <div style="font-size:11px;color:#7880aa;margin-top:2px">20 questões C/E · Notarial · Civil · Penal · Const/DH · Tributário</div>
-    </div>
-    <span style="margin-left:auto;font-size:12px;color:#7c8ef2;font-weight:700">Iniciar →</span>
-  </a>
-
-  <div class="timeline" id="timeline"></div>
-
-  <div class="end">Prova Oral · Concurso Cartório · 2ª Fase</div>
+  <div class="end">Acesso restrito · Cartório 3º Ofício de Cuiabá</div>
 </div>
-
-<script>
-const SEMANAS = [
-  {
-    sem: 1,
-    titulo: "Semana 1",
-    dias: []
-  },
-  {
-    sem: 2,
-    titulo: "Semana 2",
-    dias: []
-  },
-  {
-    sem: 3,
-    titulo: "Semana 3",
-    dias: [
-      {dia:"Segunda-feira", tema:"Prioridade + Prenotação",                        bloco:"A · Notarial/Registral", url:"sem3-segunda.html", clKey:"oral_seg_sem3_prioridade_cl",   clTotal:6},
-      {dia:"Terça-feira",   tema:"Vício Redibitório + Evicção",                   bloco:"B · Civil",              url:"sem3-terca.html",   clKey:"oral_ter_sem3_vicio_evic_cl",   clTotal:6},
-      {dia:"Quarta-feira",  tema:"Concurso de Pessoas + Emendatio × Mutatio",     bloco:"C · Penal",              url:"sem3-quarta.html",  clKey:"oral_qua_sem3_concurso_emend_cl",clTotal:6},
-      {dia:"Quinta-feira",  tema:"Eficácia das Normas + Atos Administrativos",    bloco:"D · Const/Adm",          url:"sem3-quinta.html",  clKey:"oral_qui_sem3_eficacia_atos_cl", clTotal:6},
-      {dia:"Sexta-feira",   tema:"Recuperação Judicial: Crise + Classes de Credores", bloco:"E · Empresarial",   url:"sem3-sexta.html",   clKey:"oral_sex_sem3_recup_jud_cl",    clTotal:6}
-    ]
-  },
-  {
-    sem: 4,
-    titulo: "Semana 4",
-    dias: [
-      {dia:"Segunda-feira", tema:"Retificação de Registro",                       bloco:"A · Notarial/Registral", url:"sem4-oral-segunda.html", clStore:"oral_segunda_sem4_", clTotal:5},
-      {dia:"Terça-feira",   tema:"Extinção dos Contratos",                        bloco:"B · Civil",              url:"sem4-oral-terca.html",   clStore:"oral_terca_sem4_",   clTotal:5},
-      {dia:"Quarta-feira",  tema:"Concurso de Crimes e Dosimetria",               bloco:"C · Penal",              url:"sem4-oral-quarta.html",  clStore:"oral_quarta_sem4_",  clTotal:5},
-      {dia:"Quinta-feira",  tema:"Controle de Constitucionalidade e Lei 14.133",  bloco:"D · Const/Adm",          url:"sem4-oral-quinta.html",  clStore:"oral_quinta_sem4_",  clTotal:5},
-      {dia:"Sexta-feira",   tema:"Direito Societário",                            bloco:"E · Empresarial",        url:"sem4-oral-sexta.html",   clStore:"oral_sexta_sem4_",   clTotal:5}
-    ]
-  },
-  {sem:5,  titulo:"Semana 5",  dias:[]},
-  {sem:6,  titulo:"Semana 6",  dias:[]},
-  {sem:7,  titulo:"Semana 7",  dias:[]},
-  {sem:8,  titulo:"Semana 8",  dias:[]},
-  {sem:9,  titulo:"Semana 9",  dias:[]},
-  {sem:10, titulo:"Semana 10", dias:[]},
-  {sem:11, titulo:"Semana 11", dias:[]},
-  {sem:12, titulo:"Semana 12", dias:[]},
-  {sem:13, titulo:"Semana 13", dias:[]},
-  {sem:14, titulo:"Semana 14", dias:[]},
-  {sem:15, titulo:"Semana 15", dias:[]},
-  {sem:16, titulo:"Semana 16", dias:[]}
-];
-
-function getPct(clKey, clTotal, clStore){
-  if(clStore){
-    let done=0;
-    for(let i=0;i<clTotal;i++) if(localStorage.getItem(clStore+'done_'+i)) done++;
-    return Math.round((done/clTotal)*100);
-  }
-  if(!clKey) return -1;
-  const done = JSON.parse(localStorage.getItem(clKey)||'[]');
-  return Math.round((done.length / clTotal) * 100);
-}
-
-function weekPct(dias){
-  let tot=0, done=0;
-  dias.forEach(d=>{
-    if(d.clStore){
-      tot+=d.clTotal;
-      for(let i=0;i<d.clTotal;i++) if(localStorage.getItem(d.clStore+'done_'+i)) done++;
-    } else if(d.clKey){
-      tot+=d.clTotal;
-      done+=JSON.parse(localStorage.getItem(d.clKey)||'[]').length;
-    }
-  });
-  return tot>0 ? Math.round((done/tot)*100) : 0;
-}
-
-function render(){
-  const tl = document.getElementById('timeline');
-  tl.innerHTML = SEMANAS.map(s=>{
-    const temDias = s.dias.length > 0;
-    const wp = temDias ? weekPct(s.dias) : 0;
-    const ballClass = wp===100 ? 'done' : temDias ? 'active' : '';
-    const cardClass = wp===100 ? 'done' : temDias ? 'active' : '';
-
-    let diasHTML = '';
-    if(temDias){
-      const progBar = `<div class="wprog">
-        <div class="wprog-bar"><div class="wprog-fill" style="width:${wp}%"></div></div>
-        <div class="wprog-label">${wp}% da semana concluído</div>
-      </div>`;
-      diasHTML = progBar + `<div class="dias">${s.dias.map(d=>{
-        const pct = getPct(d.clKey, d.clTotal, d.clStore);
-        const pc = pct===100?'done':pct>0?'prog':'pend';
-        const label = pct<0?d.bloco:pct===100?'✓ 100%':pct>0?pct+'%':'0%';
-        const tagCls = pct===100?'ok':pct>0?'':'';
-        return `<a class="dia-link" href="${d.url}">
-          <span class="dicon">${pct===100?'✅':'📕'}</span>
-          <span class="dname">${d.dia} — ${d.tema}</span>
-          <span class="dtag ${tagCls}">${d.bloco}</span>
-          <span class="dprog ${pc}">${label}</span>
-        </a>`;
-      }).join('')}</div>`;
-    } else {
-      diasHTML = `<span class="soon">🔒 Em breve</span>`;
-    }
-
-    return `
-    <div class="titem">
-      <div class="tday"><div class="tball ${ballClass}">${s.sem}</div></div>
-      <div class="tcard ${cardClass}">
-        <div class="tsem">Semana ${s.sem}</div>
-        <div class="ttitle">${s.titulo}</div>
-        ${diasHTML}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-render();
-</script>
 </body>
 </html>
-
