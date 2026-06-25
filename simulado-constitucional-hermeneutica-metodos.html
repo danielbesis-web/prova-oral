@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  TEMPLATE PADRÃO — Simulado de questões objetivas (modelo Meta 16 Empresarial)
+  ----------------------------------------------------------------------------
+  COMO GERAR UM NOVO SIMULADO:
+   1) Edite o CONFIG mínimo:
+        - <title> e <h1>:  "Meta XX · Disciplina — Parte X"
+        - <footer>:        "Meta XX · Disciplina · <tema do bloco> · Parte X"
+        - STORE_KEY:       "concurso_metaXX_disciplina_parteX_v1"
+                           (chave do localStorage onde este simulado guarda o progresso)
+   2) Preencha o array QUESTOES (15 questões por parte). Um objeto por questão:
+        id:'q1'..'q15' -> POSIÇÃO no simulado (NUNCA o nº da banca)
+        materia,banca  -> proveniência (banca/tribunal/ano PODE aparecer)
+        enunciado      -> HTML, aceita <br> e assertivas I, II, III
+        alternativas   -> [{letra,texto}]
+        correta:'A'    -> LETRA do GABARITO OFICIAL do material (não palpite)
+        comentario     -> HTML com os rótulos padrão
+   3) Salve como:  MetaXX-Disciplina-ParteX.html   (SEM Qxxx no nome)
+
+  A tela mostra "Questão X de N" (posição), nunca o nº da banca.
+  Recursos prontos: timer, stats, revisão espaçada, caderno de erros, modo por
+  tema/aleatório, anotações por questão, exportar/importar progresso (JSON).
+  ============================================================================
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado · Constitucional — Hermenêutica (métodos e princípios)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050b18;color:#c9d6e8;font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;min-height:100vh}
+a{color:#38bdf8}
+button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;border:none;outline:none;font-family:inherit}
+.banner-save{background:#0d2040;border-bottom:1px solid #16365a;padding:8px 14px;font-size:12px;color:#7aa3cc;text-align:center;position:sticky;top:0;z-index:100}
+.banner-iframe{background:#1a1200;border-bottom:1px solid #4a3200;padding:8px 14px;font-size:12px;color:#d4a84b;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.banner-iframe button{background:none;color:#d4a84b;font-size:16px;line-height:1;padding:0 4px;border:none;cursor:pointer}
+.header{padding:16px 14px 0}
+.header h1{font-size:18px;font-weight:700;color:#e8f0fb;margin-bottom:12px}
+.timer-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#7aa3cc;margin-bottom:12px}
+.timer-bar span.time-val{color:#38bdf8;font-variant-numeric:tabular-nums;font-weight:600}
+.timer-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:3px 10px;border-radius:6px;font-size:12px}
+.timer-btn:hover{border-color:#38bdf8;color:#38bdf8}
+.stats-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.stat-chip{background:#0b1828;border:1px solid #16365a;border-radius:8px;padding:5px 11px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.stat-chip .sv{font-size:18px;font-weight:700;line-height:1.1}
+.stat-chip .sl{font-size:10px;color:#55738e;text-transform:uppercase;letter-spacing:.5px}
+.sv.green{color:#27c06a}.sv.red{color:#f25555}.sv.amber{color:#f5a623}.sv.cyan{color:#38bdf8}
+.progress-wrap{margin-bottom:14px}
+.progress-bar{height:5px;background:#0b1828;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#27c06a,#38bdf8);border-radius:3px;transition:width .4s}
+.progress-label{font-size:11px;color:#55738e;margin-top:3px}
+.mode-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.mode-btn{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:20px;font-size:12px;transition:all .2s}
+.mode-btn.active{background:#16365a;border-color:#38bdf8;color:#38bdf8;font-weight:600}
+.mode-btn:hover:not(.active){border-color:#38bdf8;color:#c9d6e8}
+.materia-select{background:#0b1828;border:1px solid #16365a;color:#c9d6e8;padding:5px 10px;border-radius:20px;font-size:12px;outline:none}
+.materia-select:focus{border-color:#38bdf8}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.btn-sm{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:5px 12px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-sm:hover{border-color:#38bdf8;color:#c9d6e8}
+.btn-danger{border-color:#f25555;color:#f25555}
+.btn-danger:hover{background:#2a0808}
+.card{background:#0b1828;border:1px solid #16365a;border-radius:14px;padding:20px;margin:0 0 12px}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.4px}
+.badge-materia{background:#0d2040;color:#7aa3cc;border:1px solid #16365a}
+.badge-banca{background:#1a0d28;color:#c59bf2;border:1px solid #34204e}
+.review-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
+.review-today{background:#2a1e00;color:#f5a623}
+.review-future{background:#0b1828;color:#55738e;border:1px solid #16365a}
+.enunciado{font-size:15px;line-height:1.6;color:#d8e8f8;margin-bottom:16px}
+.nav-counter{text-align:right;font-size:12px;color:#55738e;margin-bottom:8px}
+.alts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.alt-btn{background:#050b18;border:1.5px solid #16365a;color:#b8cce0;padding:11px 14px;border-radius:10px;text-align:left;font-size:14px;line-height:1.4;transition:all .15s;display:flex;gap:10px;align-items:flex-start;width:100%}
+.alt-btn .alt-letra{font-weight:700;min-width:18px;color:#38bdf8;flex-shrink:0}
+.alt-btn:hover:not(:disabled){border-color:#38bdf8;background:#0b1828}
+.alt-btn.selected{border-color:#b06bf2;background:#1a0d28}
+.alt-btn.correct{border-color:#27c06a!important;background:#0a2018!important;color:#7fffa8!important}
+.alt-btn.wrong{border-color:#f25555!important;background:#200a0a!important;color:#ffaaaa!important}
+.alt-btn.reveal-correct{border-color:#27c06a;background:#0a2018;color:#7fffa8}
+.alt-btn:disabled{cursor:default;opacity:.85}
+.alt-letra.correct{color:#27c06a!important}
+.alt-letra.wrong{color:#f25555!important}
+.alt-letra.reveal-correct{color:#27c06a}
+.btn-confirm{width:100%;padding:12px;border-radius:10px;font-size:15px;font-weight:700;background:#16365a;color:#e8f0fb;border:1.5px solid #2a5a8a;transition:all .2s;margin-bottom:10px}
+.btn-confirm:hover:not(:disabled){background:#1e4a7a;border-color:#38bdf8}
+.btn-confirm:disabled{opacity:.4;cursor:default}
+.result-banner{padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;margin-bottom:12px}
+.result-banner.correct{background:#0a2018;border:1.5px solid #27c06a;color:#7fffa8}
+.result-banner.wrong{background:#200a0a;border:1.5px solid #f25555;color:#ffaaaa}
+.comment-wrap{margin-bottom:12px}
+.comment-toggle{background:#0d1e32;border:1px solid #16365a;color:#7aa3cc;padding:8px 14px;border-radius:8px;font-size:13px;width:100%;text-align:left;transition:all .2s}
+.comment-toggle:hover{border-color:#38bdf8;color:#c9d6e8}
+.comment-body{background:#040c1c;border:1px solid #16365a;border-top:none;border-radius:0 0 8px 8px;padding:14px;font-size:13px;line-height:1.7;color:#b8cce0;display:none}
+.comment-body.open{display:block}
+.sched-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.sched-label{font-size:11px;color:#55738e;margin-right:2px}
+.sched-btn{padding:5px 11px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #4a3200;color:#f5a623;background:#1a1200;transition:all .2s}
+.sched-btn:hover{background:#2a1e00;border-color:#f5a623}
+.sched-btn.remove{border-color:#16365a;color:#55738e;background:#050b18}
+.sched-btn.remove:hover{border-color:#f25555;color:#f25555}
+.star-btn{padding:6px 13px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #16365a;color:#55738e;background:#050b18;transition:all .2s}
+.star-btn.active{border-color:#b06bf2;color:#b06bf2;background:#160d24}
+.star-btn:hover{border-color:#b06bf2;color:#b06bf2}
+.nav-row{display:flex;justify-content:space-between;gap:8px;margin-top:4px}
+.nav-btn{flex:1;padding:10px;border-radius:10px;font-size:14px;font-weight:600;background:#0b1828;border:1.5px solid #16365a;color:#7aa3cc;transition:all .2s;max-width:48%}
+.nav-btn:hover:not(:disabled){border-color:#38bdf8;color:#c9d6e8}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.empty-state{text-align:center;padding:48px 20px;color:#55738e;font-size:14px}
+.empty-state .icon{font-size:40px;margin-bottom:12px}
+.io-row{display:flex;gap:6px;flex-wrap:wrap}
+.btn-io{background:#0b1828;border:1px solid #16365a;color:#7aa3cc;padding:6px 13px;border-radius:8px;font-size:12px;transition:all .2s}
+.btn-io:hover{border-color:#38bdf8;color:#c9d6e8}
+#fileInput{display:none}
+footer{padding:16px 14px 28px;text-align:center;font-size:11px;color:#2a4060}
+@media(max-width:480px){.stats-bar{gap:6px}.stat-chip{padding:4px 8px}.stat-chip .sv{font-size:16px}}
+.notas-wrap{margin-top:14px;border-top:1px dashed #1b3550;padding-top:12px}
+.notas-label{font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:7px}
+.notas-area{width:100%;min-height:70px;resize:vertical;background:#0b1828;border:1px solid #16365a;border-radius:10px;color:#dbe7f5;font-size:13.5px;font-family:inherit;line-height:1.5;padding:10px 12px;outline:none;transition:border .2s}
+.notas-area:focus{border-color:#fbbf24;box-shadow:0 0 0 2px rgba(251,191,36,.18)}
+.notas-area::placeholder{color:#3a5474}
+.claude-qbtn{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:#38bdf8;border-radius:6px;padding:3px 9px;font-size:13px;opacity:.45;transition:.15s;-webkit-tap-highlight-color:transparent;}
+.claude-qbtn:hover,.claude-qbtn:active{opacity:1;background:rgba(56,189,248,.2)}
+</style>
+</head>
+<body>
+<div class="banner-save">💾 Seu progresso é salvo automaticamente neste aparelho. Cada pessoa tem o seu.</div>
+<div class="banner-iframe" id="bannerIframe">
+  <span>⚠️ Abra sempre por link direto, não embutido em iframe (Notion/etc.), ou o progresso pode não ser salvo.</span>
+  <button onclick="dismissIframeBanner()" title="Fechar">✕</button>
+</div>
+<div class="header">
+  <h1>Simulado · Constitucional — Hermenêutica (métodos e princípios)</h1>
+  <div class="timer-bar">
+    <span>⏱ <span class="time-val" id="timerQ">00:00</span></span><span>|</span>
+    <span>Sessão: <span class="time-val" id="timerS">00:00</span></span>
+    <button class="timer-btn" id="btnPause" onclick="togglePause()">Pausar</button>
+  </div>
+  <div class="stats-bar" id="statsBar"></div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel"></div>
+  </div>
+  <div class="mode-bar">
+    <button class="mode-btn" data-modo="todas" onclick="setModo('todas')">Todas</button>
+    <button class="mode-btn" data-modo="hoje" onclick="setModo('hoje')">Revisar hoje</button>
+    <button class="mode-btn" data-modo="caderno" onclick="setModo('caderno')">Caderno de erros</button>
+    <button class="mode-btn" data-modo="materia" onclick="setModo('materia')">Por tema</button>
+    <button class="mode-btn" data-modo="aleatorio" onclick="setModo('aleatorio')">Aleatório</button>
+    <select class="materia-select" id="materiaSelect" style="display:none" onchange="setMateriaFiltro(this.value)">
+      <option value="">— Escolha —</option>
+    </select>
+  </div>
+  <div class="action-row">
+    <div class="io-row">
+      <button class="btn-io" onclick="exportarProgresso()">⬇ Exportar</button>
+      <button class="btn-io" onclick="document.getElementById('fileInput').click()">⬆ Importar</button>
+      <input type="file" id="fileInput" accept=".json" onchange="importarProgresso(event)">
+      <button class="btn-io" onclick="exportarNotas()">📝 Baixar anotações (.txt)</button>
+    </div>
+    <button class="btn-sm btn-danger" onclick="recomecar()">🔄 Recomeçar</button>
+  </div>
+</div>
+<div style="padding:0 14px" id="mainContent"></div>
+<footer>Constitucional · Hermenêutica — métodos e princípios de interpretação · Como as bancas cobram (Aula 02)</footer>
+<script>
+const STORE_KEY = 'concurso_constitucional_hermeneutica_metodos_v1';   // chave do localStorage deste simulado
+const SLUG = STORE_KEY.replace(/^concurso_/,'');   // usado nos nomes dos arquivos de exportação
+const QUESTOES = [
+ {
+  "id": "q1",
+  "materia": "Métodos de interpretação",
+  "banca": "IGEDUC · Câmara de Sertânia-PE · 2024",
+  "tipo": "multipla",
+  "enunciado": "Inexiste identidade entre norma jurídica e texto normativo, razão pela qual impõe-se a concretização da norma diante das realidades sociais. Trata-se do método hermenêutico-concretizador.",
+  "alternativas": [
+   {
+    "letra": "C",
+    "texto": "Certo"
+   },
+   {
+    "letra": "E",
+    "texto": "Errado"
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E (Errado)</b><br><br><b>⚖️ Por quê:</b> A descrição está perfeita, mas aponta o método errado. Dizer que não há identidade entre texto e norma, e que a norma se concretiza diante das realidades sociais, é a marca do método <b>normativo-estruturante</b> (Müller), que distingue o programa normativo (texto) do âmbito normativo (dados da realidade). A banca trocou o nome.<br><br><b>⚠️ Pegadinha:</b> A separação texto ≠ norma é a 'digital' do normativo-estruturante, não do concretizador. O concretizador (Hesse) parte do texto e faz o ir e vir entre norma e realidade, mas NÃO funda sua tese na cisão entre lei e norma.<br><br><b>📌 Fundamento:</b> Normativo-estruturante: norma = programa normativo (texto) + âmbito normativo (realidade).<br><br><b>🔁 Revisar:</b> Müller (estruturante) = texto não é igual à norma; Hesse (concretizador) = força normativa + máxima eficácia, com destaque ao texto."
+ },
+ {
+  "id": "q2",
+  "materia": "Métodos de interpretação",
+  "banca": "FUNDATEC · DPE-SC · 2025",
+  "tipo": "multipla",
+  "enunciado": "Acerca dos métodos de interpretação das normas constitucionais, é correto afirmar que:",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "Através do método normativo-estruturante, há um reconhecimento da existência de identidade entre a norma jurídica e o texto normativo. A literalidade da norma deve ser analisada sob a ótica da norma em sua realidade jurídica."
+   },
+   {
+    "letra": "B",
+    "texto": "O método da comparação constitucional determina a aplicação mediante comparação nos ordenamentos clássicos, não inseridos, conforme a doutrina, os ordenamentos da soft law."
+   },
+   {
+    "letra": "C",
+    "texto": "O método científico-constitucional não se fixa na literalidade da norma, mas na realidade social vivida pelos antepassados, para a projeção futurística, interpretando de forma estática as modificações da vida em sociedade."
+   },
+   {
+    "letra": "D",
+    "texto": "Pelo método hermenêutico-concretizador, a interpretação deve partir da Constituição para o problema, atentando-se aos pressupostos interpretativos objetivos e subjetivos e ao círculo hermenêutico."
+   },
+   {
+    "letra": "E",
+    "texto": "O método hermenêutico clássico dispõe que a constituição deve ser tratada como lei, valendo-se dos elementos limitados de exegese: elemento genérico, gramatical, lógico e sistemático."
+   }
+  ],
+  "correta": "D",
+  "comentario": "<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> O método hermenêutico-concretizador (Hesse) realmente parte da Constituição para o problema, valorizando as pré-compreensões do intérprete (pressupostos subjetivos e objetivos) e o círculo hermenêutico, no movimento de ir e voltar entre texto e realidade.<br><br><b>⚠️ Pegadinha:</b> A letra A inverte o estruturante (ele NEGA a identidade entre texto e norma). A letra E adultera o método clássico de Savigny, inventando 'elemento genérico' e omitindo o histórico — os elementos são gramatical, lógico, histórico e sistemático.<br><br><b>📌 Fundamento:</b> Concretizador parte da Constituição (texto) em direção ao problema; clássico de Savigny = gramatical, lógico, histórico, sistemático (+ teleológico).<br><br><b>🔁 Revisar:</b> Concretizador = primazia do texto + pré-compreensão + círculo hermenêutico; estruturante = texto ≠ norma."
+ },
+ {
+  "id": "q3",
+  "materia": "Métodos de interpretação",
+  "banca": "FUNDATEC · Prefeitura de Londrina-PR · 2024",
+  "tipo": "multipla",
+  "enunciado": "Ao interpretar determinada questão constitucional, o juiz utilizou um método de interpretação que partiu da Constituição para o problema, valendo-se de suas pré-compreensões sobre o tema para obter o sentido da norma. Considerando as características do método de interpretação utilizado, é correto assinalar que o magistrado, ao apreciar a matéria, utilizou o método de interpretação constitucional denominado:",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "Tópico-problemático."
+   },
+   {
+    "letra": "B",
+    "texto": "Hermenêutico-concretizador."
+   },
+   {
+    "letra": "C",
+    "texto": "Científico-espiritual."
+   },
+   {
+    "letra": "D",
+    "texto": "Normativo-estruturante."
+   },
+   {
+    "letra": "E",
+    "texto": "De comparação constitucional."
+   }
+  ],
+  "correta": "B",
+  "comentario": "<b>✅ Gabarito: LETRA B</b><br><br><b>⚖️ Por quê:</b> Partir da Constituição (texto) para o problema, usando as pré-compreensões do intérprete, é exatamente o método hermenêutico-concretizador (Hesse). O juiz vai até o problema, mas retorna à norma constitucional — primazia do texto.<br><br><b>⚠️ Pegadinha:</b> No tópico-problemático (Viehweg) o ponto de partida é o PROBLEMA, e a norma é mero catálogo de tópicos. Aqui o ponto de partida é a CONSTITUIÇÃO, então não é tópico.<br><br><b>📌 Fundamento:</b> Concretizador = da Constituição para o problema + pré-compreensão; tópico = do problema para a norma.<br><br><b>🔁 Revisar:</b> Memorize o sentido das setas — concretizador (texto → problema → texto); tópico (problema → norma como catálogo)."
+ },
+ {
+  "id": "q4",
+  "materia": "Métodos de interpretação",
+  "banca": "FGV · Prefeitura de Cuiabá-MT · 2024",
+  "tipo": "multipla",
+  "enunciado": "Em um processo administrativo fiscal, o contribuinte, ao interpretar o preceito constitucional utilizado pela Fazenda Pública em determinada autuação, sustentou que o texto constitucional oferece um dos pontos de vista, de caráter relativo, não absoluto, que deve ser considerado pelo intérprete no delineamento da norma constitucional a ser aplicada ao caso concreto. O objetivo do intérprete é o de alcançar a justiça do caso concreto, não estando adstrito a limitadores de ordem textual.<br>O auditor fiscal que analisou as considerações do contribuinte concluiu corretamente que elas se harmonizam, na perspectiva interpretativa, com",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "o formalismo."
+   },
+   {
+    "letra": "B",
+    "texto": "a tópica pura."
+   },
+   {
+    "letra": "C",
+    "texto": "teorias procedimentais."
+   },
+   {
+    "letra": "D",
+    "texto": "o método concretizador."
+   },
+   {
+    "letra": "E",
+    "texto": "a mutação constitucional."
+   }
+  ],
+  "correta": "B",
+  "comentario": "<b>✅ Gabarito: LETRA B</b><br><br><b>⚖️ Por quê:</b> Tratar o texto como apenas 'um ponto de vista' relativo, não absoluto, buscando a justiça do caso concreto sem se prender a limitadores textuais, é a radicalização da tópica — a tópica pura, em que o texto chega a ser descartado em favor do problema concreto.<br><br><b>⚠️ Pegadinha:</b> Não confunda tópica pura com método tópico-problemático. Na pura, o texto é quase irrelevante; o concretizador (D) jamais abandona a primazia do texto, então estaria errado dizer que o intérprete não se vincula a limitadores textuais.<br><br><b>📌 Fundamento:</b> Tópica pura = primazia absoluta do problema; texto é só mais um topos, descartável.<br><br><b>🔁 Revisar:</b> 'Não adstrito a limitadores de ordem textual' = sinal de tópica pura, nunca de concretizador."
+ },
+ {
+  "id": "q5",
+  "materia": "Teorias da interpretação",
+  "banca": "FGV · TJ-MT · 2024",
+  "tipo": "multipla",
+  "enunciado": "Em determinado processo de caráter objetivo, o autor sustentou que, na interpretação constitucional, o intérprete participa do processo de criação da norma constitucional, devendo atribuir significado ao enunciado normativo interpretado, que sofre a influência das vicissitudes da realidade. Também acresceu que, na escolha desse significado, devem ser resolvidas as conflitualidades intrínsecas da norma constitucional, pois há fatores a serem considerados, como a linguagem, que podem influir no surgimento de significados distintos, cabendo ao intérprete a respectiva decisão.<br>A linha argumentativa sustentada pelo autor",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "pode ser utilizada na mutação constitucional, mas não pode ser utilizada no controle difuso de constitucionalidade."
+   },
+   {
+    "letra": "B",
+    "texto": "é compatível com o pensamento problemático e com a técnica de decisão da declaração de nulidade sem redução de texto."
+   },
+   {
+    "letra": "C",
+    "texto": "embora esteja em harmonia com a sociedade aberta dos intérpretes da Constituição, é refratária à metódica estruturante."
+   },
+   {
+    "letra": "D",
+    "texto": "em razão das dificuldades enfrentadas para a reconstrução do processo argumentativo, não é utilizada na interpretação constitucional."
+   },
+   {
+    "letra": "E",
+    "texto": "se ajusta à concepção originalista de interpretação constitucional, prosélita da segurança jurídica e da previsibilidade da argumentação jurídica."
+   }
+  ],
+  "correta": "B",
+  "comentario": "<b>✅ Gabarito: LETRA B</b><br><br><b>⚖️ Por quê:</b> A ideia de que o intérprete participa da criação da norma, que sofre as vicissitudes da realidade, e de que há conflitualidades intrínsecas a serem resolvidas, é compatível com o pensamento problemático e com a declaração de nulidade sem redução de texto (técnica que escolhe, entre interpretações possíveis, a constitucional).<br><br><b>⚠️ Pegadinha:</b> A letra E é o oposto: o originalismo prega sentido fixo e cognoscível, segurança e previsibilidade — incompatível com 'intérprete cria a norma'. A letra C erra ao dizer que seria refratária ao estruturante, quando na verdade dialoga com ele.<br><br><b>📌 Fundamento:</b> Originalismo = sentido fixo/cognoscitivo; aqui o intérprete co-cria a norma diante da realidade (linha realista/problemática).<br><br><b>🔁 Revisar:</b> 'Intérprete cria/atribui significado conforme a realidade' = afasta originalismo; aproxima pensamento problemático."
+ },
+ {
+  "id": "q6",
+  "materia": "Teorias da interpretação",
+  "banca": "FGV · TJ-SC · 2024",
+  "tipo": "multipla",
+  "enunciado": "Em uma relação processual que versava sobre direitos disponíveis, o demandante alicerçou sua pretensão em determinada norma constitucional de eficácia limitada e de princípio programático que ainda carecia de integração pela legislação infraconstitucional. O juiz de direito, ao delinear o sentido dessa norma constitucional, individualizou as grandezas argumentativamente relevantes, a exemplo do potencial expansivo da linguagem e dos valores incidentes no caso, os quais poderiam influir no seu delineamento, e, após a resolução das conflitualidades intrínsecas identificadas no curso do processo de interpretação, atribuiu o sentido que lhe parecia adequado.<br>À luz dessa narrativa, é correto afirmar que:",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "a norma constitucional invocada pelo demandante não pode embasar uma pretensão em juízo;"
+   },
+   {
+    "letra": "B",
+    "texto": "a atividade interpretativa promovida pelo juízo se harmoniza com os dogmas da Escola do Direito Livre;"
+   },
+   {
+    "letra": "C",
+    "texto": "a atividade interpretativa promovida pelo juízo é refratária à denominada declaração de nulidade sem redução de texto;"
+   },
+   {
+    "letra": "D",
+    "texto": "a atividade interpretativa promovida pelo juízo é incompatível com a natureza da norma constitucional invocada pelo demandante;"
+   },
+   {
+    "letra": "E",
+    "texto": "a norma constitucional invocada pelo demandante não tem um sentido imanente, e a atividade interpretativa promovida pelo juízo tangencia o pensamento problemático."
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> A norma não traz um sentido imanente (pronto e único): ele é construído pelo intérprete ao individualizar as grandezas relevantes, o potencial expansivo da linguagem e ao resolver as conflitualidades intrínsecas — postura que tangencia o pensamento problemático.<br><br><b>⚠️ Pegadinha:</b> Norma de eficácia limitada e programática SIM pode embasar pretensão em juízo (afasta A e D). A atividade descrita é compatível, e não refratária, à declaração de nulidade sem redução de texto (afasta C).<br><br><b>📌 Fundamento:</b> Sentido não imanente + construção argumentativa = aproximação ao pensamento problemático.<br><br><b>🔁 Revisar:</b> 'Sentido imanente' negado = o intérprete constrói o significado; eficácia limitada também gera direitos invocáveis."
+ },
+ {
+  "id": "q7",
+  "materia": "Teorias da interpretação",
+  "banca": "FGV · TCE-PA · 2024",
+  "tipo": "multipla",
+  "enunciado": "Um tribunal com competência para realizar o controle concreto de constitucionalidade recebeu uma causa dessa natureza para fins de processo e julgamento. O autor da ação, ao analisar o perfil jurídico e filosófico de dois magistrados do tribunal, que exerciam grande influência sobre os seus pares, constatou que o primeiro deles entendia que os momentos de interpretação e de aplicação do direito apresentavam estreita conexão entre si, daí a relevância do problema concreto. O segundo magistrado, por sua vez, sustentava que o problema concreto deveria direcionar o delineamento da solução mais adequada, considerando a diversidade de referenciais de análise que poderiam influir para a realização desse objetivo, ainda que se distanciasse dos balizamentos oferecidos pelo texto constitucional para o caso.<br>Considerando os entendimentos do primeiro e do segundo magistrados, é correto afirmar, na perspectiva das teorias da interpretação, que",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "ambos são refratários ao realismo jurídico."
+   },
+   {
+    "letra": "B",
+    "texto": "ambos se harmonizam com a metódica estruturante."
+   },
+   {
+    "letra": "C",
+    "texto": "o primeiro se harmoniza com o originalismo e o segundo com o realismo jurídico."
+   },
+   {
+    "letra": "D",
+    "texto": "o primeiro se harmoniza com o formalismo e o segundo com a teoria do contrato."
+   },
+   {
+    "letra": "E",
+    "texto": "o primeiro se harmoniza com a metódica concretista e o segundo com a tópica pura."
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: LETRA E</b><br><br><b>⚖️ Por quê:</b> O primeiro magistrado, que vê estreita conexão entre interpretar e aplicar e valoriza o problema sem abandonar o texto, alinha-se à metódica concretista. O segundo, que faz o problema concreto direcionar a solução ainda que se distancie do texto, alinha-se à tópica pura (descarte do balizamento textual).<br><br><b>⚠️ Pegadinha:</b> A diferença sutil está no segundo: 'distanciar-se dos balizamentos do texto' é a digital da tópica PURA, não do concretizador, que mantém a primazia do texto.<br><br><b>📌 Fundamento:</b> Concretista = problema relevante, mas texto preservado; tópica pura = problema acima do texto, que pode ser descartado.<br><br><b>🔁 Revisar:</b> Quem mantém o texto = concretista; quem abandona o texto pelo problema = tópica pura."
+ },
+ {
+  "id": "q8",
+  "materia": "Métodos de interpretação",
+  "banca": "FGV · CGM de Belo Horizonte-MG · 2024",
+  "tipo": "multipla",
+  "enunciado": "Em determinada ação de anulação do crédito tributário, em que se discutia a ocorrência, ou não, do fato gerador do imposto sobre a propriedade predial e territorial urbana, o Juiz de Direito, no limiar da linha argumentativa de sua sentença, afirmou que levaria em consideração os aspectos estruturais da metódica concretista de Friedrich Müller.<br>O posicionamento do magistrado permite concluir que, em seus argumentos,",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "os valores subjacentes ao ambiente sociopolítico devem direcionar a compreensão do texto normativo, elastecendo ou comprimindo o seu conteúdo."
+   },
+   {
+    "letra": "B",
+    "texto": "é prestigiada a certeza inerente ao texto normativo, com a separação entre os momentos de criação, afeto ao legislador, e de aplicação do Direito."
+   },
+   {
+    "letra": "C",
+    "texto": "o ambiente sociopolítico deve ser considerado pelo intérprete no processo intelectivo que toma por base o texto normativo e deve culminar com a norma."
+   },
+   {
+    "letra": "D",
+    "texto": "o caso concreto deve ser considerado na perspectiva da tópica pura, de modo que o texto normativo irá configurar apenas um dos pontos de vista a serem considerados."
+   }
+  ],
+  "correta": "C",
+  "comentario": "<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> Na metódica concretista (normativo-estruturante de Müller), o intérprete parte do texto normativo (programa da norma) e o conjuga com os dados da realidade/ambiente sociopolítico (âmbito da norma), processo que CULMINA na norma. É exatamente o que a letra C descreve.<br><br><b>⚠️ Pegadinha:</b> A letra B descreve o formalismo (certeza do texto + separação rígida criação/aplicação), incompatível com Müller. A letra D joga para a tópica pura, que abandona a primazia do texto.<br><br><b>📌 Fundamento:</b> Müller: norma = programa normativo (texto) + âmbito normativo (realidade); o texto é o ponto de partida, a norma o resultado.<br><br><b>🔁 Revisar:</b> Estruturante/concretista parte do texto e termina na norma — nunca despreza o texto."
+ },
+ {
+  "id": "q9",
+  "materia": "Teorias da interpretação",
+  "banca": "FGV · DPE-RS · 2023",
+  "tipo": "multipla",
+  "enunciado": "Em determinado feito, patrocinado pela Defensoria Pública, no qual se discutia matéria constitucional, foi proferida sentença julgando improcedente o pedido formulado. Na ocasião, o juiz de direito argumentou que compete ao intérprete identificar o sentido imanente ao texto constitucional, não se arvorar em Constituinte. Ao insurgir-se contra essa assertiva em sede de recurso de apelação, sustentou o defensor público inexistir uma sobreposição entre texto e norma. Afinal, isto é perceptível ao se constatar que o intérprete, a partir do texto constitucional, deve decidir uma série de incidentes argumentativos, condensados na concepção de conflitualidades intrínsecas da norma constitucional, com sensibilidade à realidade.",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "o juiz de direito somente se afeiçoa ao formalismo clássico, que tem sido hegemônico no âmbito do Supremo Tribunal Federal, sendo refratário ao pensamento por problemas;"
+   },
+   {
+    "letra": "B",
+    "texto": "o juiz de direito espelha a separação dos poderes, estando em perfeita harmonia com a forma como tem sido compreendido na Constituição da República de 1988;"
+   },
+   {
+    "letra": "C",
+    "texto": "o defensor público se ajusta ao método concretizador, encampada a dicotomia entre programa da norma e âmbito da norma;"
+   },
+   {
+    "letra": "D",
+    "texto": "o defensor público se ajusta à absoluta separação entre os momentos de criação e de aplicação da norma constitucional;"
+   },
+   {
+    "letra": "E",
+    "texto": "o defensor público se ajusta à tópica pura e à forma como se desenvolve a denominada \"mutação constitucional\""
+   }
+  ],
+  "correta": "C",
+  "comentario": "<b>✅ Gabarito: LETRA C</b><br><br><b>⚖️ Por quê:</b> O defensor sustenta que não há sobreposição entre texto e norma e que o intérprete decide conflitualidades intrínsecas com sensibilidade à realidade — exatamente o método concretista/estruturante, que opera a dicotomia entre programa da norma (texto) e âmbito da norma (realidade).<br><br><b>⚠️ Pegadinha:</b> O juiz é que fala em 'sentido imanente' (visão mais formalista). A letra D inverte o defensor: ele NÃO defende separação absoluta entre criar e aplicar — ele aproxima os dois momentos.<br><br><b>📌 Fundamento:</b> Programa da norma (texto) + âmbito da norma (realidade) = dicotomia de Müller; texto ≠ norma.<br><br><b>🔁 Revisar:</b> 'Inexistir sobreposição entre texto e norma' = bandeira do concretista/estruturante."
+ },
+ {
+  "id": "q10",
+  "materia": "Princípios de interpretação",
+  "banca": "FUNDATEC · DPE-SC · 2025",
+  "tipo": "multipla",
+  "enunciado": "Acerca do pamprincipiologismo, assinale a alternativa INCORRETA.",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "O pamprincipiologismo consiste na utilização excessiva e inadequada de princípios, de modo a fragilizar a autonomia do Direito e justificar decisões discricionárias."
+   },
+   {
+    "letra": "B",
+    "texto": "A utilização do termo \"princípio\" para justificar decisões discricionárias é um dos mecanismos que alimenta o fenômeno do pamprincipiologismo."
+   },
+   {
+    "letra": "C",
+    "texto": "No contexto do pamprincipiologismo, os princípios são transformados em topoi, perdendo sua normatividade e servindo como meros álibis decisórios."
+   },
+   {
+    "letra": "D",
+    "texto": "O pamprincipiologismo permite a aplicação dos princípios para uma adequada intervenção da jurisdição constitucional e do decisionismo judicial."
+   },
+   {
+    "letra": "E",
+    "texto": "O pamprincipiologismo é utilizado para buscar legitimar decisões subjetivas e arbitrárias."
+   }
+  ],
+  "correta": "D",
+  "comentario": "<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> A questão pede a INCORRETA. A letra D inverte o conceito: o pamprincipiologismo é uma crítica ao uso <b>excessivo e inadequado</b> de princípios — ele não “permite uma adequada intervenção da jurisdição constitucional”; ao contrário, alimenta o decisionismo e a discricionariedade. As letras A, B, C e E descrevem o fenômeno corretamente.<br><br><b>⚠️ Pegadinha:</b> a D “soa positiva” (adequada intervenção), mas é o oposto do que significa o pamprincipiologismo — por isso é a errada.<br><br><b>📌 Fundamento:</b> crítica ao pamprincipiologismo (uso inflacionário de princípios fragiliza a autonomia do Direito).<br><br><b>🔁 Revisar:</b> pamprincipiologismo = princípio virando álibi p/ decisão discricionária; é fenômeno negativo, não virtude."
+ },
+ {
+  "id": "q11",
+  "materia": "Princípios de interpretação",
+  "banca": "VUNESP · Prefeitura de Sertãozinho-SP · 2025",
+  "tipo": "multipla",
+  "enunciado": "Na interpretação dos preceitos constitucionais, deve-se ter cuidado para que não haja a distorção do sistema de repartição de funções e competências estabelecido pela Constituição Federal. Tal afirmação reflete o conceito do princípio da interpretação constitucional da",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "unidade da Constituição, devendo o intérprete considerar a Constituição globalmente, evitando-se contradições entre as normas constitucionais."
+   },
+   {
+    "letra": "B",
+    "texto": "máxima efetividade, o qual só tem aplicação no âmbito das normas constitucionais programáticas."
+   },
+   {
+    "letra": "C",
+    "texto": "concordância prática, o qual obriga o intérprete a analisar a vontade do poder constituinte originário."
+   },
+   {
+    "letra": "D",
+    "texto": "correção funcional, sendo considerado como um critério que orienta a atividade do intérprete."
+   },
+   {
+    "letra": "E",
+    "texto": "harmonização, o qual determina que o intérprete deve utilizar como ponto de partida a proporcionalidade e a razoabilidade."
+   }
+  ],
+  "correta": "D",
+  "comentario": "<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> O princípio que veda distorcer o sistema de repartição de funções e competências fixado pela Constituição é o da <b>correção funcional</b> (também chamado de conformidade funcional ou justeza).<br><br><b>⚠️ Pegadinha:</b> não confundir com unidade (evitar contradições entre normas), máxima efetividade (maior eficácia da norma) ou concordância prática (harmonizar bens em conflito).<br><br><b>📌 Fundamento:</b> princípio da correção/conformidade funcional.<br><br><b>🔁 Revisar:</b> mexeu em repartição de funções/competências → correção (conformidade) funcional."
+ },
+ {
+  "id": "q12",
+  "materia": "Princípios de interpretação",
+  "banca": "CESPE/CEBRASPE · FUNPRESP-EXE · 2025",
+  "tipo": "multipla",
+  "enunciado": "Segundo o princípio da justeza, também conhecido como efeito integrador ou exatidão funcional, não pode o intérprete da Constituição alterar a repartição de funções por ela estabelecida.",
+  "alternativas": [
+   {
+    "letra": "C",
+    "texto": "Certo"
+   },
+   {
+    "letra": "E",
+    "texto": "Errado"
+   }
+  ],
+  "correta": "E",
+  "comentario": "<b>✅ Gabarito: ERRADO</b><br><br><b>⚖️ Por quê:</b> O núcleo está certo (a justeza/conformidade funcional impede que o intérprete altere a repartição de funções fixada pela Constituição). O ERRO é equiparar a justeza ao <b>efeito integrador</b>: são princípios distintos. A justeza também é dita conformidade/exatidão/correção funcional — mas não “efeito integrador” (este manda resolver os problemas constitucionais favorecendo a integração política e social).<br><br><b>⚠️ Pegadinha:</b> a banca embaralha as nomenclaturas — justeza (exatidão funcional) ≠ efeito integrador.<br><br><b>📌 Fundamento:</b> princípio da conformidade/justeza funcional × princípio do efeito integrador.<br><br><b>🔁 Revisar:</b> justeza = repartição de funções; efeito integrador = integração política/social."
+ },
+ {
+  "id": "q13",
+  "materia": "Princípios de interpretação",
+  "banca": "VUNESP · TJ-RJ · 2025",
+  "tipo": "multipla",
+  "enunciado": "Conforme J. J. Gomes Canotilho, o Direito Constitucional vale-se de princípios e regras interpretativos das normas constitucionais, a fim de se extrair, pela atividade do intérprete, o sentido da norma jurídica.<br>Com base nesse contexto, assinale a alternativa que explica corretamente o princípio ou a regra citados.",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "Da máxima efetividade ou da eficiência: os órgãos encarregados da interpretação não podem chegar a uma posição que perturbe o esquema organizatório-funcional constitucionalmente estabelecido."
+   },
+   {
+    "letra": "B",
+    "texto": "Do efeito integrador: exigem-se a coordenação e a combinação dos bens jurídicos em conflito de forma a evitar o sacrifício total de uns em relação aos outros."
+   },
+   {
+    "letra": "C",
+    "texto": "Da justeza ou da conformidade funcional: entre as interpretações possíveis, deve ser adotada aquela que garanta maior eficácia, aplicabilidade e permanência das normas constitucionais."
+   },
+   {
+    "letra": "D",
+    "texto": "Da unidade da Constituição: a interpretação constitucional deve ser realizada de maneira a evitar contradições entre suas normas."
+   },
+   {
+    "letra": "E",
+    "texto": "Da concordância prática ou da harmonização: na resolução dos problemas jurídico-constitucionais, deverá ser dada maior primazia aos critérios favorecedores da integração política e social, bem como ao reforço da unidade política."
+   }
+  ],
+  "correta": "D",
+  "comentario": "<b>✅ Gabarito: LETRA D</b><br><br><b>⚖️ Por quê:</b> Só a D casa princípio e definição: <b>unidade da Constituição</b> = interpretar evitando contradições entre as normas. As outras trocam as definições — A descreve a conformidade funcional (não a máxima efetividade); B descreve a concordância prática (não o efeito integrador); C descreve a máxima efetividade (não a justeza); E descreve o efeito integrador (não a concordância prática).<br><br><b>⚠️ Pegadinha:</b> questão de “trocar os rótulos” — cada alternativa põe a definição certa no princípio errado, menos a D.<br><br><b>📌 Fundamento:</b> princípios de interpretação (unidade, máxima efetividade, efeito integrador, justeza, concordância prática).<br><br><b>🔁 Revisar:</b> unidade = sem contradições; concordância prática = harmonizar sem sacrifício total; máxima efetividade = maior eficácia; justeza = repartição de funções; efeito integrador = integração política/social."
+ },
+ {
+  "id": "q14",
+  "materia": "Princípios de interpretação",
+  "banca": "FUNDATEC · Câmara de Venâncio Aires-RS · 2024",
+  "tipo": "multipla",
+  "enunciado": "Na temática da hermenêutica constitucional, qual princípio indica que diante de normas plurissignificativas ou polissêmicas (que têm mais de uma interpretação) deve-se preferir a exegese que mais se aproxime da Constituição?",
+  "alternativas": [
+   {
+    "letra": "A",
+    "texto": "Interpretação conforme a Constituição."
+   },
+   {
+    "letra": "B",
+    "texto": "Proporcionalidade."
+   },
+   {
+    "letra": "C",
+    "texto": "Razoabilidade."
+   },
+   {
+    "letra": "D",
+    "texto": "Máxima efetividade."
+   },
+   {
+    "letra": "E",
+    "texto": "Unidade da Constituição."
+   }
+  ],
+  "correta": "A",
+  "comentario": "<b>✅ Gabarito: LETRA A</b><br><br><b>⚖️ Por quê:</b> Diante de norma plurissignificativa/polissêmica (mais de uma interpretação), prefere-se a exegese que mais se aproxima da Constituição — é a <b>interpretação conforme a Constituição</b>.<br><br><b>⚠️ Pegadinha:</b> não confundir com máxima efetividade (maior eficácia) nem unidade (evitar contradições); o gatilho é “norma com vários sentidos → escolher o compatível com a CF”.<br><br><b>📌 Fundamento:</b> princípio da interpretação conforme a Constituição.<br><br><b>🔁 Revisar:</b> norma polissêmica → interpretação conforme."
+ }
+];
+function defaultState(){return{respostas:{},revisao:{},caderno:{},revisarDepois:{},posicao:0,modo:'todas',materiaFiltro:'',notas:{}};}
+let state=defaultState(),lista=[],paused=false,qSecs=0,sSecs=0,timerInterval=null,commentOpen={};
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}catch(e){}}
+function loadState(){try{var raw=localStorage.getItem(STORE_KEY);if(raw){state=Object.assign(defaultState(),JSON.parse(raw));}}catch(e){state=defaultState();}}
+function today(){return new Date().toISOString().split('T')[0];}
+function addDays(d,n){var dt=new Date(d+'T12:00:00');dt.setDate(dt.getDate()+n);return dt.toISOString().split('T')[0];}
+function fmtDate(iso){if(!iso)return'';var p=iso.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function buildLista(){var t=today(),ids;if(state.modo==='todas'){ids=QUESTOES.map(function(q){return q.id;});}else if(state.modo==='hoje'){ids=QUESTOES.filter(function(q){var r=state.revisao[q.id];return r&&r.nextDate&&r.nextDate<=t;}).map(function(q){return q.id;});}else if(state.modo==='caderno'){ids=QUESTOES.filter(function(q){return state.caderno[q.id]||state.revisarDepois[q.id];}).map(function(q){return q.id;});}else if(state.modo==='materia'){var m=state.materiaFiltro;ids=QUESTOES.filter(function(q){return !m||q.materia===m;}).map(function(q){return q.id;});}else if(state.modo==='aleatorio'){ids=shuffle(QUESTOES.map(function(q){return q.id;}));}else{ids=QUESTOES.map(function(q){return q.id;});}return ids;}
+function computeStats(){var total=QUESTOES.length,acertos=0,erros=0,t=today(),revisadasHoje=0;QUESTOES.forEach(function(q){var r=state.respostas[q.id];if(r){if(r===q.correta)acertos++;else erros++;}var rev=state.revisao[q.id];if(rev&&rev.lastAnswered===t)revisadasHoje++;});var respondidas=acertos+erros,pendentes=total-respondidas,pct=total>0?Math.round(respondidas/total*100):0;return{total:total,acertos:acertos,erros:erros,pendentes:pendentes,revisadasHoje:revisadasHoje,respondidas:respondidas,pct:pct};}
+function renderStats(){var s=computeStats();document.getElementById('statsBar').innerHTML='<div class="stat-chip"><span class="sv green">'+s.acertos+'</span><span class="sl">Acertos</span></div><div class="stat-chip"><span class="sv red">'+s.erros+'</span><span class="sl">Erros</span></div><div class="stat-chip"><span class="sv amber">'+s.pendentes+'</span><span class="sl">Pendentes</span></div><div class="stat-chip"><span class="sv cyan">'+s.revisadasHoje+'</span><span class="sl">Revisadas hoje</span></div>';var fill=document.getElementById('progressFill'),lbl=document.getElementById('progressLabel');if(fill)fill.style.width=s.pct+'%';if(lbl)lbl.textContent=s.respondidas+'/'+s.total+' respondidas ('+s.pct+'%)';}
+function fmtTime(secs){return String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');}
+function startTimers(){if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(function(){if(!paused){qSecs++;sSecs++;}var q=document.getElementById('timerQ'),s=document.getElementById('timerS');if(q)q.textContent=fmtTime(qSecs);if(s)s.textContent=fmtTime(sSecs);},1000);}
+function resetQTimer(){qSecs=0;var q=document.getElementById('timerQ');if(q)q.textContent='00:00';}
+function togglePause(){paused=!paused;var b=document.getElementById('btnPause');if(b)b.textContent=paused?'Retomar':'Pausar';}
+function scheduleNext(id,acertou){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:1,acertos:0,lastAnswered:null};rv.lastAnswered=t;if(acertou){rv.acertos=(rv.acertos||0)+1;rv.interval=rv.acertos===1?1:rv.acertos===2?7:30;}else{rv.acertos=0;rv.interval=1;}rv.nextDate=addDays(t,rv.interval);state.revisao[id]=rv;}
+function scheduleManual(id,days){var t=today(),rv=state.revisao[id]||{nextDate:null,interval:days,acertos:0,lastAnswered:t};rv.nextDate=days===0?null:addDays(t,days);rv.interval=days;state.revisao[id]=rv;saveState();renderCard();}
+function reviewBadgeHTML(id){var rv=state.revisao[id];if(!rv||!rv.nextDate)return'';if(rv.nextDate<=today())return'<span class="review-badge review-today">revisar hoje ⏰</span>';return'<span class="review-badge review-future">📅 '+fmtDate(rv.nextDate)+'</span>';}
+function schedRowHTML(id){return'<div class="sched-row"><span class="sched-label">Agendar:</span><button class="sched-btn" onclick="scheduleManual(\''+id+'\',1)">1 dia</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',7)">7 dias</button><button class="sched-btn" onclick="scheduleManual(\''+id+'\',30)">30 dias</button><button class="sched-btn remove" onclick="scheduleManual(\''+id+'\',0)">remover</button></div>';}
+function starBtnHTML(id){var active=state.revisarDepois[id]?' active':'',label=state.revisarDepois[id]?'⭐ No caderno':'☆ Revisar depois';return'<button class="star-btn'+active+'" onclick="toggleStar(\''+id+'\')">'+label+'</button>';}
+function toggleStar(id){if(state.revisarDepois[id])delete state.revisarDepois[id];else state.revisarDepois[id]=true;saveState();renderCard();renderStats();}
+function selecionarAlternativa(id,letra){if(state.respostas[id])return;document.querySelectorAll('.alt-btn[data-id="'+id+'"]').forEach(function(b){b.classList.remove('selected');});var btn=document.querySelector('.alt-btn[data-id="'+id+'"][data-letra="'+letra+'"]');if(btn)btn.classList.add('selected');var c=document.getElementById('confirm-'+id);if(c)c.disabled=false;}
+function confirmar(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var sel=document.querySelector('.alt-btn[data-id="'+id+'"].selected');if(!sel)return;var letra=sel.dataset.letra;state.respostas[id]=letra;var acertou=letra===q.correta;scheduleNext(id,acertou);if(!acertou)state.caderno[id]=true;saveState();renderCard();renderStats();}
+function toggleComment(id){commentOpen[id]=!commentOpen[id];var body=document.getElementById('comment-body-'+id),tog=document.getElementById('comment-toggle-'+id);if(body)body.classList.toggle('open',!!commentOpen[id]);if(tog)tog.textContent=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';}
+function salvarNota(id,txt){if(!state.notas)state.notas={};state.notas[id]=txt;saveState();}
+function renderCard(){var cont=document.getElementById('mainContent');if(!lista.length){cont.innerHTML='<div class="empty-state"><div class="icon">📭</div><div>Nenhuma questão neste filtro.</div></div>';return;}var pos=Math.min(Math.max(state.posicao,0),lista.length-1);state.posicao=pos;var id=lista[pos],q=QUESTOES.find(function(x){return x.id===id;});if(!q){cont.innerHTML='';return;}var resposta=state.respostas[id],respondida=!!resposta,acertou=respondida&&resposta===q.correta;var resultHTML='';if(respondida){resultHTML=acertou?'<div class="result-banner correct">✅ Correto! Resposta: '+resposta+'</div>':'<div class="result-banner wrong">❌ Incorreto. Sua resposta: '+resposta+' | Gabarito: '+q.correta+'</div>';}var altsHTML='<div class="alts">';q.alternativas.forEach(function(alt){var btnCls='alt-btn',letraCls='alt-letra',disabled=respondida?'disabled':'';if(respondida){if(alt.letra===q.correta&&alt.letra===resposta){btnCls='alt-btn correct';letraCls='alt-letra correct';}else if(alt.letra===q.correta){btnCls='alt-btn reveal-correct';letraCls='alt-letra reveal-correct';}else if(alt.letra===resposta){btnCls='alt-btn wrong';letraCls='alt-letra wrong';}}altsHTML+='<button class="'+btnCls+'" data-id="'+id+'" data-letra="'+alt.letra+'" '+disabled+' onclick="selecionarAlternativa(\''+id+'\',\''+alt.letra+'\')"><span class="'+letraCls+'">'+alt.letra+'</span><span>'+alt.texto+'</span></button>';});altsHTML+='</div>';var confirmHTML=respondida?'':'<button class="btn-confirm" id="confirm-'+id+'" onclick="confirmar(\''+id+'\')" disabled>Confirmar</button>';var cOpen=commentOpen[id]?' open':'',cLabel=commentOpen[id]?'▲ Ocultar comentário':'▼ Ver comentário / gabarito (ICOL)';var commentHTML=respondida?'<div class="comment-wrap"><button class="comment-toggle" id="comment-toggle-'+id+'" onclick="toggleComment(\''+id+'\')">'+cLabel+'</button><div class="comment-body'+cOpen+'" id="comment-body-'+id+'">'+q.comentario+'</div></div>':'';var schedHTML=respondida?schedRowHTML(id):'';var notaVal=(state.notas&&state.notas[id])?state.notas[id]:'';var notasHTML='<div class="notas-wrap"><div class="notas-label">📝 Minhas anotações</div><textarea class="notas-area" placeholder="Escreva aqui suas anotações sobre esta questão…" oninput="salvarNota(\''+id+'\', this.value)">'+notaVal.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</textarea></div>';cont.innerHTML='<div class="nav-counter">Questão '+(pos+1)+' de '+lista.length+'</div><div class="card"><div class="card-meta"><span class="badge badge-banca">'+q.banca+'</span><span class="badge badge-materia">'+q.materia+'</span>'+reviewBadgeHTML(id)+starBtnHTML(id)+claudeBtnHTML(id)+'</div><div class="enunciado">'+q.enunciado+'</div>'+altsHTML+confirmHTML+resultHTML+commentHTML+schedHTML+notasHTML+'</div><div class="nav-row"><button class="nav-btn" onclick="navPrev()" '+(pos===0?'disabled':'')+'>← Anterior</button><button class="nav-btn" onclick="navNext()" '+(pos>=lista.length-1?'disabled':'')+'>Próxima →</button></div>';}
+function navPrev(){if(state.posicao>0){state.posicao--;saveState();resetQTimer();renderCard();}}
+function navNext(){if(state.posicao<lista.length-1){state.posicao++;saveState();resetQTimer();renderCard();}}
+function setModo(modo){state.modo=modo;state.posicao=0;var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=modo==='materia'?'':'none';document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===modo);});lista=buildLista();saveState();resetQTimer();renderCard();renderStats();}
+function setMateriaFiltro(val){state.materiaFiltro=val;state.posicao=0;lista=buildLista();saveState();resetQTimer();renderCard();}
+function populateMateriaSelect(){var materias=[];QUESTOES.forEach(function(q){if(materias.indexOf(q.materia)===-1)materias.push(q.materia);});materias.sort();var sel=document.getElementById('materiaSelect');if(!sel)return;sel.innerHTML='<option value="">— Escolha —</option>';materias.forEach(function(m){var o=document.createElement('option');o.value=m;o.textContent=m;if(m===state.materiaFiltro)o.selected=true;sel.appendChild(o);});}
+function recomecar(){if(confirm('Tem certeza? Todo o progresso será apagado permanentemente.')){localStorage.removeItem(STORE_KEY);location.reload();}}
+function exportarProgresso(){var blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='progresso_'+SLUG+'_'+today()+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function exportarNotas(){var txt='ANOTAÇÕES — '+document.title+'\n'+today()+'\n\n',n=0;QUESTOES.forEach(function(q){var nota=state.notas&&state.notas[q.id];if(nota&&nota.trim()){n++;txt+='【'+q.banca+' · '+q.materia+'】\n'+nota.trim()+'\n\n';}});if(!n){alert('Você ainda não tem anotações registradas.');return;}var blob=new Blob([txt],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='anotacoes_'+SLUG+'_'+today()+'.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function importarProgresso(evt){var file=evt.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{state=Object.assign(defaultState(),JSON.parse(e.target.result));saveState();lista=buildLista();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel)sel.style.display=state.modo==='materia'?'':'none';renderStats();renderCard();alert('Progresso importado com sucesso!');}catch(err){alert('Arquivo inválido ou corrompido.');}};reader.readAsText(file);evt.target.value='';}
+function dismissIframeBanner(){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';try{sessionStorage.setItem('iframe_banner_dismissed','1');}catch(e){}}
+function checkIframeBanner(){try{if(sessionStorage.getItem('iframe_banner_dismissed')==='1'){var b=document.getElementById('bannerIframe');if(b)b.style.display='none';}}catch(e){}}
+function init(){loadState();checkIframeBanner();populateMateriaSelect();document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.modo===state.modo);});var sel=document.getElementById('materiaSelect');if(sel&&state.modo==='materia')sel.style.display='';lista=buildLista();renderStats();renderCard();startTimers();}
+function claudeBtnHTML(id){return '<button class="claude-qbtn" onclick="askClaude(\''+id+'\')">🤖</button>';}
+function askClaude(id){var q=QUESTOES.find(function(x){return x.id===id;});if(!q)return;var ctx=document.title+' · Questão '+id+'\nTema: '+q.materia+'\nBanca: '+(q.banca||'')+'\nConcurso: Cartório TJMT\n\nEnunciado:\n'+q.enunciado.replace(/<[^>]+>/g,'')+'\n\nTenho uma dúvida sobre esta questão:\n';navigator.clipboard.writeText(ctx).catch(function(){});window.open('https://claude.ai','_blank');}
+init();
+</script>
+</body>
+</html>
