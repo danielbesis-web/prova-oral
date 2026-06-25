@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Material de Estudos — 2ª Fase · Cartório TJMT</title>
+<style>
+:root{
+  --bg:#050b18;--card:#0b1828;--border:#16365a;
+  --text:#e9f0f8;--muted:#90a6c0;--soft:#b9c8dc;
+  --cyan:#38bdf8;--cyanb:#155a72;--purple:#b06bf2;--purpleb:#432a6e;
+  --green:#27c06a;--amber:#f5a623;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -120px,#0c1d33 0%,var(--bg) 60%);
+  color:var(--text);min-height:100vh;padding:28px 16px 80px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto}
+.head{text-align:center;margin-bottom:32px}
+.head h1{font-size:22px;font-weight:800;letter-spacing:.3px;margin-bottom:4px}
+.head p{color:var(--muted);font-size:13px}
+
+.section{margin-bottom:28px}
+.section-title{
+  font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--muted);
+  text-transform:uppercase;margin-bottom:10px;padding-left:4px;
+}
+.cards{display:flex;flex-direction:column;gap:8px}
+.ccard{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:14px 16px;text-decoration:none;color:var(--soft);
+  transition:.14s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+.ccard:hover{border-color:var(--cyanb);background:rgba(56,189,248,.07);color:var(--text)}
+.ccard .icon{font-size:20px;flex-shrink:0}
+.ccard .info{flex:1}
+.ccard .info .nome{font-size:13px;font-weight:700;color:var(--text);margin-bottom:1px}
+.ccard .info .sub{font-size:11px;color:var(--muted)}
+.ccard .arrow{color:var(--muted);font-size:15px}
+
+.end{text-align:center;color:var(--muted);font-size:11px;margin-top:28px}
+</style>
+</head>
+<body>
+<script>
+(function(){var s=localStorage.getItem('provaoral_auth2');if(!s){location.replace('login-acesso.html');return;}try{var d=JSON.parse(s);if(!d.exp||Date.now()>d.exp){localStorage.removeItem('provaoral_auth2');location.replace('login-acesso.html');}}catch(e){location.replace('login-acesso.html');}})();
+</script>
+<div style="position:fixed;top:12px;right:14px;z-index:999">
+<button onclick="localStorage.removeItem('provaoral_auth2');location.replace('login-acesso.html')" style="background:#0b1828;border:1px solid #16365a;color:#90a6c0;font-size:11px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit">Sair</button>
+</div>
+
+<div class="wrap">
+  <div class="head">
+    <h1>📚 Material de Estudos</h1>
+    <p>2ª Fase · Concurso Cartório TJMT</p>
+  </div>
+
+  <!-- SIMULADOS -->
+  <div class="section">
+    <div class="section-title">Simulados</div>
+    <div class="cards">
+      <a class="ccard" href="simulado-coletivo-50q-metas.html" target="_blank" rel="noopener">
+        <span class="icon">🏆</span>
+        <div class="info"><div class="nome">Simulado Coletivo — 50 Questões</div><div class="sub">Metas · Questões variadas</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="simulado-constitucional-intertemporal-hermeneutica.html" target="_blank" rel="noopener">
+        <span class="icon">⚖️</span>
+        <div class="info"><div class="nome">Constitucional — Intertemporal + Hermenêutica</div><div class="sub">Não recepção · ADI · ADPF · Hermenêutica</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="simulado-constitucional-hermeneutica-metodos.html" target="_blank" rel="noopener">
+        <span class="icon">⚖️</span>
+        <div class="info"><div class="nome">Constitucional — Hermenêutica (métodos e princípios)</div><div class="sub">Métodos de interpretação · Princípios hermenêuticos</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="simulado-constitucional-fgv-nelma.html" target="_blank" rel="noopener">
+        <span class="icon">⚖️</span>
+        <div class="info"><div class="nome">Constitucional FGV 2026 — Profa. Nelma Fontana</div><div class="sub">Direito Constitucional</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="simulado-constitucional-nelma-5dias.html" target="_blank" rel="noopener">
+        <span class="icon">⚖️</span>
+        <div class="info"><div class="nome">Constitucional · 5 dias · 25 Questões — Nelma Fontana</div><div class="sub">Direito Constitucional</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="simulado-fgv2026-orgadm-bloco-a.html" target="_blank" rel="noopener">
+        <span class="icon">📋</span>
+        <div class="info"><div class="nome">FGV 2026 — Org. Administrativa · Bloco A</div><div class="sub">6 Questões</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="simulado-fgv2026-orgadm-bloco-b.html" target="_blank" rel="noopener">
+        <span class="icon">📋</span>
+        <div class="info"><div class="nome">FGV 2026 — Org. Administrativa · Bloco B</div><div class="sub">7 Questões</div></div>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- META 13 -->
+  <div class="section">
+    <div class="section-title">Meta 13 · Processual Penal</div>
+    <div class="cards">
+      <a class="ccard" href="meta13-q1q15.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Q1 a Q15</div><div class="sub">Processual Penal</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="meta13-q16q30.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Q16 a Q30</div><div class="sub">Processual Penal</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="meta13-q31q44.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Q31 a Q44</div><div class="sub">Processual Penal</div></div>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- META 14 -->
+  <div class="section">
+    <div class="section-title">Meta 14 · Notarial — Protesto</div>
+    <div class="cards">
+      <a class="ccard" href="meta14-q165q179.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Q165 a Q179</div><div class="sub">Protesto de Títulos</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="meta14-q180q194.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Q180 a Q194</div><div class="sub">Cancelamento e Certidões</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="meta14-q195q208.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Q195 a Q208</div><div class="sub">Certidões e Cartórios</div></div>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- SEMANA 3 -->
+  <div class="section">
+    <div class="section-title">Semana 3 — Cadernos e Simulado</div>
+    <div class="cards">
+      <a class="ccard" href="sem3-segunda.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Segunda — Semana 3</div><div class="sub">Caderno oral</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem3-terca.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Terça — Semana 3</div><div class="sub">Caderno oral</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem3-quarta.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Quarta — Semana 3</div><div class="sub">Caderno oral</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem3-quinta.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Quinta — Semana 3</div><div class="sub">Caderno oral</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem3-sexta.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Sexta — Semana 3</div><div class="sub">Caderno oral</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem3-simulado.html" target="_blank" rel="noopener">
+        <span class="icon">🧭</span>
+        <div class="info"><div class="nome">Simulado — Semana 3</div><div class="sub">Civil · Notarial · Registros · Processual Civil</div></div>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- SEMANA 4 -->
+  <div class="section">
+    <div class="section-title">Semana 4 — Questões</div>
+    <div class="cards">
+      <a class="ccard" href="sem4-segunda.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Segunda — Semana 4</div><div class="sub">Questões</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem4-terca.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Terça — Semana 4</div><div class="sub">Questões</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem4-quarta.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Quarta — Semana 4</div><div class="sub">Questões</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem4-quinta.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Quinta — Semana 4</div><div class="sub">Questões</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem4-sexta.html" target="_blank" rel="noopener">
+        <span class="icon">📝</span>
+        <div class="info"><div class="nome">Sexta — Semana 4</div><div class="sub">Questões</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem4-simulado.html" target="_blank" rel="noopener">
+        <span class="icon">🧭</span>
+        <div class="info"><div class="nome">Simulado — Semana 4 · 20 Questões</div><div class="sub">Notarial · Civil · Penal · Const/DH · Tributário</div></div>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- SEMANA 4 ORAL -->
+  <div class="section">
+    <div class="section-title">Semana 4 — Cadernos Oral</div>
+    <div class="cards">
+      <a class="ccard" href="sem4-oral-segunda.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Segunda · Retificação de Registro</div><div class="sub">Bloco A — Notarial e Registral</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem4-oral-terca.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Terça · Extinção dos Contratos</div><div class="sub">Bloco B — Direito Civil</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem4-oral-quarta.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Quarta · Concurso de Crimes e Dosimetria</div><div class="sub">Bloco C — Direito Penal</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem4-oral-quinta.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Quinta · Controle de Constitucionalidade e Lei 14.133</div><div class="sub">Bloco D — Constitucional e Administrativo</div></div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="ccard" href="sem4-oral-sexta.html" target="_blank" rel="noopener">
+        <span class="icon">📖</span>
+        <div class="info"><div class="nome">Sexta · Direito Societário</div><div class="sub">Bloco E — Direito Empresarial</div></div>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- DIÁRIO -->
+  <div class="section">
+    <div class="section-title">Diário</div>
+    <div class="cards">
+      <a class="ccard" href="diario.html" target="_blank" rel="noopener">
+        <span class="icon">📅</span>
+        <div class="info"><div class="nome">Diário de Estudos</div><div class="sub">Registro diário</div></div>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="end">Acesso restrito · Cartório 3º Ofício de Cuiabá</div>
+</div>
+</body>
+</html>
