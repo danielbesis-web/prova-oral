@@ -81,6 +81,11 @@
 </style>
 </head>
 <body>
+<script>
+(function(){var s=localStorage.getItem('provaoral_auth');if(!s){location.replace('login.html');return;}try{var d=JSON.parse(s);if(!d.exp||Date.now()>d.exp){localStorage.removeItem('provaoral_auth');location.replace('login.html');}}catch(e){location.replace('login.html');}})();
+</script>
+<div style="position:fixed;top:12px;right:14px;z-index:999"><button onclick="localStorage.removeItem('provaoral_auth');location.replace('login.html')" style="background:#0b1828;border:1px solid #16365a;color:#90a6c0;font-size:11px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit">Sair</button></div>
+
 <header><div class="wrap">
   <span class="tag">Prova Oral &amp; 1ª Fase · TJ-MT 2026</span>
   <h1>Simulado de Direito Constitucional — FGV 2026</h1>
