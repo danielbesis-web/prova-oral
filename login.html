@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acesso — Prova Oral · Cartório TJMT</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -120px,#0c1d33 0%,#050b18 60%);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:#e9f0f8;padding:24px;
+}
+.box{
+  background:#0b1828;border:1px solid #16365a;border-radius:20px;
+  padding:40px 36px;width:100%;max-width:380px;
+  box-shadow:0 24px 64px -20px rgba(0,0,0,.6);
+}
+.logo{text-align:center;margin-bottom:32px}
+.logo .icon{font-size:36px;display:block;margin-bottom:10px}
+.logo h1{font-size:18px;font-weight:800;margin-bottom:4px}
+.logo p{font-size:12px;color:#90a6c0}
+
+label{display:block;font-size:11px;font-weight:700;letter-spacing:.8px;
+  text-transform:uppercase;color:#90a6c0;margin-bottom:6px}
+input{
+  width:100%;background:#050b18;border:1px solid #16365a;border-radius:10px;
+  padding:12px 14px;font-size:14px;color:#e9f0f8;outline:none;
+  transition:.15s;font-family:inherit;
+}
+input:focus{border-color:#155a72;box-shadow:0 0 0 3px rgba(56,189,248,.08)}
+input::placeholder{color:#3a5570}
+.field{margin-bottom:16px}
+
+.btn{
+  width:100%;margin-top:8px;padding:13px;border:none;border-radius:10px;
+  background:linear-gradient(135deg,#155a72,#0d3d52);
+  color:#e9f0f8;font-size:14px;font-weight:700;cursor:pointer;
+  transition:.15s;font-family:inherit;letter-spacing:.3px;
+}
+.btn:hover{background:linear-gradient(135deg,#1a6e8a,#114d66)}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.err{
+  background:rgba(242,85,85,.1);border:1px solid rgba(242,85,85,.25);
+  border-radius:8px;padding:10px 14px;font-size:13px;color:#f88;
+  margin-top:14px;display:none;text-align:center;
+}
+.foot{text-align:center;font-size:11px;color:#3a5570;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="logo">
+    <span class="icon">🏛️</span>
+    <h1>Prova Oral · 2ª Fase</h1>
+    <p>Concurso Cartório · TJMT</p>
+  </div>
+
+  <div class="field">
+    <label for="usr">Usuário</label>
+    <input type="text" id="usr" placeholder="seu usuário" autocomplete="username" autocapitalize="none">
+  </div>
+  <div class="field">
+    <label for="pwd">Senha</label>
+    <input type="password" id="pwd" placeholder="••••••••••" autocomplete="current-password">
+  </div>
+
+  <button class="btn" id="btnLogin" onclick="doLogin()">Entrar</button>
+  <div class="err" id="err">Usuário ou senha incorretos.</div>
+
+  <div class="foot">Acesso restrito · Cartório 3º Ofício de Cuiabá</div>
+</div>
+
+<script>
+const USER_OK   = 'daniel.besis';
+const PASS_HASH = '3319ab1bb15adf35334bd7da6c0f3c696e8d6658e84df324a2b3f3de56c12b85';
+const SESSION_KEY = 'provaoral_auth';
+const EXPIRY_MS   = 7 * 24 * 60 * 60 * 1000; // 7 dias
+
+async function sha256(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function doLogin(){
+  const usr = document.getElementById('usr').value.trim();
+  const pwd = document.getElementById('pwd').value;
+  const btn = document.getElementById('btnLogin');
+  const err = document.getElementById('err');
+  err.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Verificando…';
+
+  try {
+    const hash = await sha256(pwd);
+    if(usr === USER_OK && hash === PASS_HASH){
+      const token = Array.from(crypto.getRandomValues(new Uint8Array(16)))
+                      .map(b=>b.toString(16).padStart(2,'0')).join('');
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        token, exp: Date.now() + EXPIRY_MS
+      }));
+      location.replace('index.html');
+    } else {
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Entrar';
+      document.getElementById('pwd').value = '';
+    }
+  } catch(e){
+    err.textContent = 'Erro ao verificar. Tente novamente.';
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Entrar';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter') doLogin();
+});
+
+// Se já autenticado, redireciona direto
+(function(){
+  try{
+    const s = localStorage.getItem('provaoral_auth');
+    if(!s) return;
+    const d = JSON.parse(s);
+    if(d.exp && Date.now() < d.exp) location.replace('index.html');
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
