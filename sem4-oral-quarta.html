@@ -76,9 +76,9 @@ footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color
 </style></head>
 <body>
 <script>
-(function(){var s=localStorage.getItem('provaoral_auth');if(!s){location.replace('login.html');return;}try{var d=JSON.parse(s);if(!d.exp||Date.now()>d.exp){localStorage.removeItem('provaoral_auth');location.replace('login.html');}}catch(e){location.replace('login.html');}})();
+(function(){var s=localStorage.getItem('provaoral_auth2');if(!s){location.replace('login-acesso.html');return;}try{var d=JSON.parse(s);if(!d.exp||Date.now()>d.exp){localStorage.removeItem('provaoral_auth2');location.replace('login-acesso.html');}}catch(e){location.replace('login-acesso.html');}})();
 </script>
-<div style="position:fixed;top:12px;right:14px;z-index:999"><button onclick="localStorage.removeItem('provaoral_auth');location.replace('login.html')" style="background:#0b1828;border:1px solid #16365a;color:#90a6c0;font-size:11px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit">Sair</button></div>
+<div style="position:fixed;top:12px;right:14px;z-index:999"><button onclick="localStorage.removeItem('provaoral_auth2');location.replace('login-acesso.html')" style="background:#0b1828;border:1px solid #16365a;color:#90a6c0;font-size:11px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit">Sair</button></div>
 <div class="wrap">
 <header class="top">
 <div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 4 — Quarta</div>
