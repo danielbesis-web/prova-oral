@@ -87,16 +87,6 @@ body{
 </style>
 </head>
 <body>
-<script>
-(function(){
-  var a1=localStorage.getItem('provaoral_auth'),a2=localStorage.getItem('provaoral_auth2');
-  function ok(s){try{var d=JSON.parse(s);return d.exp&&Date.now()<d.exp;}catch(e){return false;}}
-  if(ok(a1)||ok(a2)) return;
-  if(a1) localStorage.removeItem('provaoral_auth');
-  if(a2) localStorage.removeItem('provaoral_auth2');
-  location.replace('login.html');
-})();
-</script>
 <div class="wrap">
 
   <a class="back" href="index.html">← Voltar para os Cadernos</a>
