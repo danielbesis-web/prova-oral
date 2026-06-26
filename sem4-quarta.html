@@ -215,12 +215,6 @@ mark.p{background:rgba(176,107,242,.18);color:var(--purple);border-radius:3px;pa
 </style>
 </head>
 <body>
-<script>
-(function(){var s=localStorage.getItem('provaoral_auth2');if(!s){location.replace('login-acesso.html');return;}try{var d=JSON.parse(s);if(!d.exp||Date.now()>d.exp){localStorage.removeItem('provaoral_auth2');location.replace('login-acesso.html');}}catch(e){location.replace('login-acesso.html');}})();
-</script>
-<div style="position:fixed;top:12px;right:14px;z-index:999"><button onclick="localStorage.removeItem('provaoral_auth2');location.replace('login-acesso.html')" style="background:#0b1828;border:1px solid #16365a;color:#90a6c0;font-size:11px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit">Sair</button></div>
-
-
 <div class="header">
   <div class="header-inner">
     <a class="back-link" href="index.html">← Voltar ao índice</a>
