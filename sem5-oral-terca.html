@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado Oral — Civil: PJ e Aquisição da Propriedade</title>
+<style>
+:root{
+  --bg:#050b18; --card:#0b1828; --border:#16365a; --text:#e9f0f8;
+  --muted:#90a6c0; --soft:#b9c8dc; --accent:var(--blue);
+  --red:#e05555; --green:#27c06a; --amber:#f5a623; --blue:#4e8ef7;
+  --cyan:#38bdf8; --purple:#b06bf2; --teal:#2dd4bf;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.top{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:8px 0 6px;font-size:26px;line-height:1.2}
+.ribbon{display:inline-block;background:var(--accent);color:#04101f;font-weight:800;
+  padding:4px 12px;border-radius:999px;font-size:12.5px;letter-spacing:.04em}
+.sub{color:var(--soft);font-size:14px;margin-top:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.solid{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.pill{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--soft);
+  font-size:13px;cursor:pointer;font-weight:700}
+.pill.active{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pill.done{border-color:var(--green);color:var(--green)}
+.pill.done.active{background:var(--accent);color:#04101f}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:16px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.area{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;color:var(--soft)}
+.timer.warn{color:var(--amber)}
+.timer.over{color:var(--red)}
+.tcontrols{display:flex;gap:6px;align-items:center}
+.tbtn{background:#04101f;border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.tbtn:hover{border-color:var(--accent)}
+.enun{margin:16px 0 6px;font-size:16.5px;line-height:1.6}
+.topico{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;margin-top:10px}
+textarea{width:100%;min-height:120px;margin-top:10px;background:#04101f;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14.5px;
+  font-family:inherit;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.label{font-size:12px;color:var(--muted);margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.padrao{display:none;margin-top:12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 16px;background:#071426}
+.padrao.open{display:block}
+.padrao h4{margin:6px 0 8px;color:var(--accent);font-size:14px}
+.padrao ul{margin:6px 0;padding-left:20px}
+.padrao li{margin:5px 0}
+.lei{color:var(--amber);font-weight:600}
+.aprof{margin-top:16px}
+.aprtools{display:flex;gap:8px;margin-bottom:8px}
+.aprow{border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.apq{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;background:#071426;font-weight:600}
+.apq:hover{background:#0a1a30}
+.apq .tri{color:var(--accent);transition:transform .15s;display:inline-block}
+.apq.open .tri{transform:rotate(90deg)}
+.apa{display:none;padding:0 14px 14px 36px;color:var(--soft);font-size:14.5px;line-height:1.6}
+.apa.open{display:block;padding-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nota{background:#071426;border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+  margin:18px 0 4px;color:var(--soft);font-size:13.5px}
+.nota b{color:var(--accent)}
+.progress{color:var(--muted);font-size:12.5px;margin-top:6px}
+footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+<div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 5 — Terça</div>
+<h1>Simulado Oral — Civil: PJ e Aquisição da Propriedade</h1>
+<span class="ribbon">Bloco B · Civil</span>
+<div class="sub">Banca virtual · 5 questões reais do Banco · resposta livre · padrão revelável</div>
+</header>
+<div class="nota"><b>Postura na banca:</b> no Civil, separe sempre <b>título × modo</b> e <b>teoria maior × menor</b>. Cite o artigo do CC antes de explicar; ligue ao registro de imóveis (o gancho cartório) — é o que diferencia o candidato registrador.</div>
+<div class="controls">
+<button type="button" class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button type="button" class="btn" id="prev">← Anterior</button>
+<button type="button" class="btn" id="next">Próxima →</button>
+<span class="progress" id="progress"></span>
+</div>
+<div class="pills" id="pills"></div>
+<div class="card" id="card"></div>
+<footer>Fontes: CC arts. 44-50, 1.196, 1.225-1.247, 1.238-1.242, 1.240-A · CF arts. 5º XXIII, 183, 191 · LRP art. 216-A · CPC arts. 133-137 · Súmula 308 STJ · Lei 13.874/2019. Banco Prova Oral (alta recorrência). Caderno Semana 5 — Terça.</footer>
+</div>
+<script>
+const PONTOS={"CIV": {"titulo": "Civil — PJ e Aquisição da Propriedade", "questoes": [
+{"area": "Civil", "tempo": 300, "enunciado": "Em que consiste a <b>desconsideração da personalidade jurídica</b>? O que é a <b>desconsideração inversa</b> e qual o <b>procedimento</b> processual?", "topico": "CC art. 50 (Lei 13.874/2019) · CPC arts. 133-137 · teoria maior × menor", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Superação episódica</b> da autonomia patrimonial da PJ para alcançar o patrimônio de sócios/administradores em caso de <b>abuso</b> (disregard doctrine) — <span class='lei'>art. 50 do CC</span> (red. Lei 13.874/2019).</li><li>Pressupostos: <b>desvio de finalidade</b> (§1º) e <b>confusão patrimonial</b> (§2º). No Civil = <b>teoria maior</b> (prova do abuso); no <b>CDC (28)</b>, ambiental e trabalhista = <b>teoria menor</b> (basta o obstáculo ao adimplemento).</li><li><b>Inversa (§3º):</b> alcança o patrimônio da PJ por obrigações pessoais do sócio (comum no direito de família).</li><li><b>Procedimento:</b> incidente de desconsideração (<span class='lei'>CPC, arts. 133-137</span>), a requerimento da parte/MP (<b>nunca de ofício</b>), contraditório prévio; recurso = <b>agravo de instrumento</b> (art. 1.015, IV).</li></ul>", "aprofundamento": [{"pergunta": "Diferencie teoria maior e teoria menor.", "resposta": "<b>Maior</b> (CC, art. 50): exige <b>prova do abuso</b> (desvio de finalidade ou confusão patrimonial). <b>Menor</b> (CDC art. 28; Lei 9.605/98): basta a <b>insolvência/obstáculo</b> ao ressarcimento. STJ, REsp 279.273."}, {"pergunta": "O juiz pode desconsiderar de ofício?", "resposta": "<b>Não.</b> Exige requerimento da <b>parte ou do MP</b> (CPC, art. 133) e <b>contraditório prévio</b> (citação). Decisão interlocutória impugnável por <b>agravo</b>."}, {"pergunta": "O que mudou com a Lei da Liberdade Econômica (13.874/2019)?", "resposta": "Detalhou os conceitos de <b>desvio</b> (§1º) e <b>confusão</b> (§2º), positivou a <b>inversa</b> (§3º) e <b>afastou</b> a desconsideração por <b>mera insolvência</b> ou pela simples existência de grupo econômico."}]},
+{"area": "Civil", "tempo": 300, "enunciado": "Discorra sobre a <b>pessoa jurídica</b>: início da personalidade, <b>teorias</b> da existência e a <b>teoria ultra vires</b>.", "topico": "CC arts. 44, 45, 47 · teorias · ultra vires", "padrao": "<h4>Resposta esperada</h4><ul><li>Ente coletivo com personalidade <b>própria</b>, distinta dos membros. PJ de direito privado (<span class='lei'>art. 44</span>): associações, sociedades, fundações, organizações religiosas e partidos.</li><li><b>Existência legal</b> começa com a <b>inscrição do ato constitutivo no registro</b> (art. 45) — Junta (empresárias) ou RCPJ.</li><li><b>Teorias:</b> da <b>ficção</b>, da <b>realidade objetiva/orgânica</b> e da <b>realidade técnica</b> (eclética — adotada pelo CC).</li><li><b>Ultra vires:</b> limita a responsabilidade aos atos <b>dentro do objeto social</b>; mitigada pela <b>teoria da aparência</b> (Enunciado 145 JDC) em favor do terceiro de boa-fé.</li></ul>", "aprofundamento": [{"pergunta": "Qual teoria o CC adotou quanto à existência da PJ?", "resposta": "A da <b>realidade técnica</b> (eclética): a vontade humana é reconhecida e estruturada pela técnica jurídica — não é mera ficção nem organismo biológico."}, {"pergunta": "A teoria ultra vires é absoluta?", "resposta": "Não — é <b>mitigada pela teoria da aparência</b> (Enunciado 145 JDC; art. 47): atos de quem aparenta poderes <b>vinculam</b> a PJ perante o terceiro de boa-fé."}, {"pergunta": "Quando nasce a personalidade da PJ?", "resposta": "Com a <b>inscrição do ato constitutivo</b> no registro competente (art. 45). Antes disso há sociedade em comum/irregular, com responsabilidade pessoal dos sócios."}]},
+{"area": "Civil", "tempo": 300, "enunciado": "No sistema brasileiro, como se <b>adquire a propriedade imóvel</b> entre vivos? Distinga <b>título</b> e <b>modo</b>.", "topico": "CC arts. 1.227 e 1.245 · título × modo", "padrao": "<h4>Resposta esperada</h4><ul><li>Direitos reais sobre imóveis por ato entre vivos só se adquirem com o <b>registro do título</b> no CRI (<span class='lei'>arts. 1.227 e 1.245</span>).</li><li>O <b>título</b> (escritura/contrato) gera apenas <b>obrigação</b>; o <b>modo</b> (o registro) é que <b>transfere a propriedade</b>.</li><li>Direitos reais = <b>rol taxativo</b> (art. 1.225, numerus clausus).</li><li>Modos de aquisição: <b>registro</b> (entre vivos), <b>usucapião</b>, <b>acessão</b> e <b>sucessão hereditária</b>.</li></ul>", "aprofundamento": [{"pergunta": "Quem comprou e não registrou é dono?", "resposta": "<b>Não.</b> É titular de direito <b>obrigacional</b> (e, imitido na posse, possuidor). A propriedade só se transfere com o <b>registro</b> (art. 1.245, §1º). 'Quem não registra não é dono.'"}, {"pergunta": "A presunção do registro é absoluta?", "resposta": "<b>Relativa</b> (juris tantum) no sistema brasileiro (arts. 1.245, §2º, e 1.247) — admite prova em contrário e retificação. Diferente do sistema Torrens."}, {"pergunta": "Qual o papel da prenotação na aquisição?", "resposta": "Fixa a <b>prioridade</b> (prior in tempore) e, registrado, o efeito <b>retroage à prenotação</b> (art. 1.246) — a aquisição se considera desde a prenotação."}]},
+{"area": "Civil", "tempo": 300, "enunciado": "A propriedade imóvel só se adquire com o registro? Quais as <b>exceções</b> — os <b>modos originários</b> — e a consequência prática?", "topico": "CC art. 1.227 · originário × derivado · Súmula 308 STJ", "padrao": "<h4>Resposta esperada</h4><ul><li>A regra é o <b>registro</b> (modo derivado). As exceções são os <b>modos originários</b>, em que a titularidade <b>nasce sem os vícios/ônus</b> do antecessor (sem cadeia dominial): <b>usucapião</b>, <b>acessão</b> (natural e artificial), <b>desapropriação</b> e <b>arrematação</b> em hasta pública.</li><li><b>Consequência:</b> no <b>originário</b> a propriedade nasce <b>livre de ônus</b>; no <b>derivado</b> vige <i>nemo plus iuris</i> (recebe-se a coisa com seus defeitos).</li><li><span class='lei'>Súmula 308 do STJ:</span> a hipoteca entre construtora e agente financeiro <b>não atinge</b> o promitente comprador de boa-fé.</li></ul>", "aprofundamento": [{"pergunta": "Desapropriação é modo originário?", "resposta": "<b>Sim</b> — a propriedade nasce no expropriante <b>livre de ônus</b>; eventuais direitos sub-rogam-se no preço/indenização. Pegadinha clássica."}, {"pergunta": "A herança é originária ou derivada?", "resposta": "Majoritariamente <b>derivada</b> (sub-rogação na posição do de cujus, com a <b>saisine</b> — art. 1.784); há corrente minoritária que a vê como originária."}, {"pergunta": "Por que a Súmula 308 importa ao registrador?", "resposta": "Assegura a regularização ao <b>promitente comprador de boa-fé</b> apesar da hipoteca da construtora; o registrador dá curso ao registro/cancelamento conforme o entendimento consolidado."}]},
+{"area": "Civil", "tempo": 300, "enunciado": "Disserte sobre as <b>modalidades de usucapião</b> e seus requisitos. Cabe usucapião <b>extrajudicial</b>?", "topico": "CC arts. 1.238-1.242, 1.240-A · CF 183/191 · LRP 216-A", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Extraordinária</b> (15 anos, ou 10 com posse-trabalho — art. 1.238); <b>ordinária</b> (10, ou 5 com justo título e boa-fé — art. 1.242); <b>especial urbana</b> (250m², 5 anos — art. 183 CF/1.240); <b>especial rural</b> (50 ha, 5 anos — art. 191 CF); <b>familiar</b> (2 anos — art. 1.240-A).</li><li>Requisitos comuns: posse <b>mansa, pacífica, contínua</b> e com <i>animus domini</i>.</li><li><b>Bem público não se usucape.</b></li><li>Cabe <b>usucapião extrajudicial</b> no CRI (<span class='lei'>art. 216-A da LRP</span>): ata notarial + planta/memorial + anuências.</li></ul>", "aprofundamento": [{"pergunta": "Bem público pode ser usucapido?", "resposta": "<b>Não</b> — bens públicos são imprescritíveis (art. 102 CC; CF arts. 183, §3º e 191, §ún.; <b>Súmula 340 STF</b>). Nem o dominical."}, {"pergunta": "Como funciona a usucapião extrajudicial (216-A)?", "resposta": "No CRI, com <b>ata notarial</b> (atestando o tempo de posse), <b>planta/memorial</b> por profissional habilitado e <b>anuência</b> dos titulares/confrontantes; após a Lei 13.465/2017, o <b>silêncio</b> do notificado presume concordância."}, {"pergunta": "A usucapião é modo originário ou derivado?", "resposta": "<b>Originário</b> — a propriedade nasce livre dos ônus do antecessor; a sentença/ata é <b>declaratória</b> e serve de título para registro."}]}
+]}};
+const STORE='oral_terca_sem5_';
+
+const QS=[]; Object.keys(PONTOS).forEach(k=>{(PONTOS[k].questoes||[]).forEach(q=>{q._k=k;QS.push(q);});});
+let cur=0, t=0, running=false, timerId=null;
+const $=s=>document.querySelector(s);
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function renderPills(){
+  const p=$('#pills');p.innerHTML='';
+  QS.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='pill'+(i===cur?' active':'')+(localStorage.getItem(STORE+'done_'+i)?' done':'');
+    d.textContent=(i+1);d.onclick=()=>{cur=i;render();};p.appendChild(d);
+  });
+}
+function tick(){
+  t++;const el=$('#timer');if(!el)return;el.textContent=fmt(t);
+  const lim=QS[cur].tempo||0;
+  el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
+}
+function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
+function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
+function resetTimer(){pauseTimer();t=0;const _rt=$('#timer');if(_rt){
+_rt.textContent='00:00';_rt.className='timer';}}
+function toggleAp(j){
+  const q=$('#apq'+j),a=$('#apa'+j);
+  q.classList.toggle('open');a.classList.toggle('open');
+}
+function expandAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.add('open');$('#apa'+j).classList.add('open');});}
+function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.remove('open');$('#apa'+j).classList.remove('open');});}
+function togglePadrao(){$('#padrao').classList.toggle('open');
+  const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
+function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();requestAnimationFrame(()=>window.scrollTo(0,0));}
+function render(){
+  resetTimer();
+  const q=QS[cur];
+  const ap=q.aprofundamento.map((a,j)=>
+    '<div class="aprow"><div class="apq" id="apq'+j+'" onclick="toggleAp('+j+')"><span class="tri">▶</span><span>'+a.pergunta+'</span></div><div class="apa" id="apa'+j+'">'+a.resposta+'</div></div>'
+  ).join('');
+  $('#card').innerHTML=
+    '<div class="qhead"><span class="area">'+q.area+'</span>'+
+    '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
+    '<button type="button" class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button type="button" class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button type="button" class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<div class="enun">'+q.enunciado+'</div>'+
+    '<div class="topico">'+q.topico+'</div>'+
+    '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
+    '<textarea id="resp" placeholder="Esboce os tópicos da sua resposta..."></textarea>'+
+    '<button class="btn solid" id="bpad" onclick="togglePadrao()" style="margin-top:14px">Revelar padrão de resposta da banca</button>'+
+    '<div class="padrao" id="padrao">'+q.padrao+'</div>'+
+    '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
+    '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
+    '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
+    '<div class="nav"><button type="button" class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button type="button" class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button type="button" class="btn" onclick="go(1)">Próxima →</button></div>';
+  const ta=$('#resp');
+  ta.value=localStorage.getItem(STORE+cur)||'';
+  ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
+  $('#progress').textContent='Questão '+(cur+1)+' de '+QS.length;
+  renderPills();
+}
+$('#sortear').onclick=()=>{cur=Math.floor(Math.random()*QS.length);render();};
+$('#prev').onclick=()=>go(-1);
+$('#next').onclick=()=>go(1);
+render();
+
+</script></body></html>
