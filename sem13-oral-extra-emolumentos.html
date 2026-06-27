@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado Oral — EXTRA: Emolumentos</title>
+<style>
+:root{
+  --bg:#050b18; --card:#0b1828; --border:#16365a; --text:#e9f0f8;
+  --muted:#90a6c0; --soft:#b9c8dc; --accent:var(--amber);
+  --red:#e05555; --green:#27c06a; --amber:#f5a623; --blue:#4e8ef7;
+  --cyan:#38bdf8; --purple:#b06bf2; --teal:#2dd4bf;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.top{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:8px 0 6px;font-size:26px;line-height:1.2}
+.ribbon{display:inline-block;background:var(--accent);color:#04101f;font-weight:800;
+  padding:4px 12px;border-radius:999px;font-size:12.5px;letter-spacing:.04em}
+.sub{color:var(--soft);font-size:14px;margin-top:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.solid{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.pill{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--soft);
+  font-size:13px;cursor:pointer;font-weight:700}
+.pill.active{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pill.done{border-color:var(--green);color:var(--green)}
+.pill.done.active{background:var(--accent);color:#04101f}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:16px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.area{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;color:var(--soft)}
+.timer.warn{color:var(--amber)}
+.timer.over{color:var(--red)}
+.tcontrols{display:flex;gap:6px;align-items:center}
+.tbtn{background:#04101f;border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.tbtn:hover{border-color:var(--accent)}
+.enun{margin:16px 0 6px;font-size:16.5px;line-height:1.6}
+.topico{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;margin-top:10px}
+textarea{width:100%;min-height:120px;margin-top:10px;background:#04101f;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14.5px;
+  font-family:inherit;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.label{font-size:12px;color:var(--muted);margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.padrao{display:none;margin-top:12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 16px;background:#071426}
+.padrao.open{display:block}
+.padrao h4{margin:6px 0 8px;color:var(--accent);font-size:14px}
+.padrao ul{margin:6px 0;padding-left:20px}
+.padrao li{margin:5px 0}
+.lei{color:var(--amber);font-weight:600}
+.aprof{margin-top:16px}
+.aprtools{display:flex;gap:8px;margin-bottom:8px}
+.aprow{border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.apq{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;background:#071426;font-weight:600}
+.apq:hover{background:#0a1a30}
+.apq .tri{color:var(--accent);transition:transform .15s;display:inline-block}
+.apq.open .tri{transform:rotate(90deg)}
+.apa{display:none;padding:0 14px 14px 36px;color:var(--soft);font-size:14.5px;line-height:1.6}
+.apa.open{display:block;padding-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nota{background:#071426;border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+  margin:18px 0 4px;color:var(--soft);font-size:13.5px}
+.nota b{color:var(--accent)}
+.progress{color:var(--muted);font-size:12.5px;margin-top:6px}
+footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+<div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 13 — EXTRA (domingo)</div>
+<h1>Simulado Oral — Emolumentos <span style="color:var(--amber)">(caderno EXTRA)</span></h1>
+<span class="ribbon">Bloco Extra · Notarial e Registral</span>
+<div class="sub">Banca virtual · 5 questões · resposta livre · padrão de resposta revelável · o "buraco" da semana 13</div>
+</header>
+<div class="nota"><b>Postura na banca:</b> abra cravando a <b>natureza tributária</b> (taxa) e desfie as consequências (legalidade, anterioridade). É um tema em que o examinador adora ligar <b>Constitucional + Tributário + registral</b> — mostre que você transita nos três.</div>
+<div class="controls">
+<button type="button" class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button type="button" class="btn" id="prev">← Anterior</button>
+<button type="button" class="btn" id="next">Próxima →</button>
+<span class="progress" id="progress"></span>
+</div>
+<div class="pills" id="pills"></div>
+<div class="card" id="card"></div>
+<footer>Fontes: CF, arts. 145, II e 236, §2º · Lei 10.169/2000 · Lei 9.534/97 · STF (ADI 1378, ADI 1800, ADI 3089) · Lei 1.060/50 / CPC. ⚠️ Tabela e fundos: conferir a lei estadual de emolumentos do TJMT. Caderno EXTRA — Semana 13 (domingo).</footer>
+</div>
+<script>
+const PONTOS={"EMO": {"titulo": "Emolumentos", "questoes": [
+{"area": "Notarial-Registral", "tempo": 300, "enunciado": "Candidato, qual a <b>natureza jurídica</b> dos emolumentos notariais e registrais? Quais as <b>consequências práticas</b> dessa classificação?", "topico": "Natureza tributária (taxa) · art. 145, II CF · STF ADI 1378", "padrao": "<h4>Resposta esperada</h4><ul><li>Os emolumentos têm <b>natureza tributária</b>, sendo espécie de <b>TAXA</b> — remuneram serviço público <b>específico e divisível</b>, prestado por delegação (<span class='lei'>art. 145, II, da CF</span>). Posição <b>consolidada pelo STF</b> (ADI 1378/ES; ADI 3694).</li><li><b>NÃO</b> são preço público nem tarifa: o regime é de <b>direito público</b>.</li><li><b>Consequências (regime tributário):</b> <span class='lei'>legalidade estrita</span> (só lei fixa/majora), <span class='lei'>anterioridade</span> (anual + nonagesimal), <b>irretroatividade</b> e <b>vedação ao confisco</b>.</li></ul>", "aprofundamento": [{"pergunta": "Por que taxa e não preço público/tarifa?", "resposta": "Porque o serviço notarial/registral é <b>compulsório, delegado e exercido em regime de direito público</b> (art. 236 CF) — o STF afastou a tese de preço público justamente por não haver autonomia de vontade plena nem regime contratual."}, {"pergunta": "Aplica-se a anterioridade aos emolumentos?", "resposta": "<b>Sim.</b> Lei que institui ou majora emolumentos só produz efeitos no <b>exercício seguinte</b> e após <b>90 dias</b> (anterioridade anual + nonagesimal) — entendimento do STF, por serem taxas."}, {"pergunta": "Quem é o sujeito ativo do tributo?", "resposta": "O <b>Estado</b> (competência estadual). O notário/registrador é o <b>responsável pela arrecadação e repasse</b> das parcelas devidas a fundos; a parcela que lhe cabe é <b>remuneração</b> da delegação."}]},
+{"area": "Notarial-Registral", "tempo": 300, "enunciado": "A quem compete <b>fixar o valor</b> dos emolumentos e quais os <b>parâmetros</b> da Lei 10.169/2000?", "topico": "art. 236, §2º CF · Lei 10.169/2000 · competência estadual", "padrao": "<h4>Resposta esperada</h4><ul><li>A <span class='lei'>CF, art. 236, §2º</span>, exige <b>lei federal</b> com <b>normas gerais</b> para fixação de emolumentos — é a <span class='lei'>Lei 10.169/2000</span>.</li><li>Os <b>Estados e o DF</b> fixam os <b>valores (tabelas)</b>, observadas essas normas gerais.</li><li>O valor deve corresponder ao <b>efetivo custo</b> e à <b>adequada e suficiente remuneração</b> dos serviços (art. 1º, §ún.) — deve haver <b>correlação</b> entre o ato e o valor; vedado o que destoa do custo.</li></ul>", "aprofundamento": [{"pergunta": "O Estado pode fixar emolumentos como percentual do valor do negócio?", "resposta": "A Lei 10.169 exige correlação com o <b>custo do serviço</b>; o STF admite <b>faixas/valores escalonados</b> por valor do ato desde que <b>razoáveis</b> e não confiscatórios — mas <b>não</b> um percentual livre desvinculado do custo."}, {"pergunta": "Município pode legislar sobre emolumentos?", "resposta": "<b>Não.</b> A competência para fixar é <b>estadual</b>, sob normas gerais <b>federais</b>. Lei municipal sobre emolumentos é inconstitucional."}, {"pergunta": "E lei estadual que ignora a Lei 10.169?", "resposta": "É <b>inconstitucional</b> — o STF já declarou a inconstitucionalidade de leis estaduais que fixaram emolumentos em descompasso com as normas gerais federais e com a natureza de taxa."}]},
+{"area": "Notarial-Registral", "tempo": 300, "enunciado": "Disserte sobre as <b>gratuidades</b> em matéria de emolumentos. O <b>registro de nascimento</b> e o <b>assento de óbito</b> são gratuitos para todos?", "topico": "Gratuidades · Lei 9.534/97 · registro civil · STF ADI 1800", "padrao": "<h4>Resposta esperada</h4><ul><li>A <span class='lei'>Lei 9.534/97</span> tornou <b>gratuitos</b> o <b>registro civil de nascimento</b> e o <b>assento de óbito</b>, e a <b>primeira certidão</b> respectiva, <b>para TODOS</b> (gratuidade universal, não apenas ao pobre).</li><li>O <b>STF (ADI 1800)</b> declarou <b>constitucional</b> essa gratuidade universal.</li><li>Demais atos: gratuidade ao <b>reconhecidamente pobre</b> (Lei 1.060/50 / CPC). O delegatário é <b>ressarcido</b> pelo <b>fundo de compensação</b> dos atos gratuitos.</li></ul>", "aprofundamento": [{"pergunta": "A gratuidade do nascimento/óbito não fere a remuneração do delegatário?", "resposta": "Não (STF): é <b>compensada por fundo de ressarcimento</b> custeado pelos próprios emolumentos, e atende à <b>função social</b> do registro (acesso à cidadania). O delegatário não pode recusar o ato gratuito."}, {"pergunta": "Cite outras gratuidades/isenções.", "resposta": "<b>REURB-Social</b> (regularização fundiária de interesse social); <b>usucapião</b> de imóvel de pequeno valor/programas habitacionais; primeiro registro de imóvel em programas como o MCMV; atos da <b>assistência judiciária gratuita</b>."}, {"pergunta": "A gratuidade alcança 2ª via e certidões posteriores?", "resposta": "A <b>1ª certidão</b> de nascimento/óbito é gratuita; <b>segundas vias e demais certidões</b> seguem a regra geral, salvo a gratuidade do reconhecidamente pobre."}]},
+{"area": "Notarial-Registral", "tempo": 300, "enunciado": "Qual o <b>fato gerador</b> dos emolumentos e quando são devidos? O delegatário pode <b>condicionar a prática do ato ao pagamento</b>? Cabe <b>desconto</b>?", "topico": "Fato gerador · vinculação da tabela · Lei 10.169 art. 6º", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Fato gerador:</b> a <b>prática do ato</b> notarial/registral, devido pelo <b>usuário</b> do serviço.</li><li>O delegatário <b>pode exigir o pagamento como condição</b> para a prática do ato (salvo gratuidades e adiantamentos legais), mas <b>não pode cobrar valor diverso da tabela</b> nem reter o ato por exigência indevida.</li><li><b>Desconto é VEDADO:</b> a <span class='lei'>tabela é vinculante</span> (legalidade tributária + isonomia). Conceder desconto/abatimento é <b>infração disciplinar</b>.</li></ul>", "aprofundamento": [{"pergunta": "Por que não pode dar desconto?", "resposta": "Porque o emolumento é <b>tributo</b> com valor fixado em <b>lei</b>: o delegatário não dispõe dele. Descontar quebra a <b>legalidade estrita</b> e a <b>isonomia</b> entre usuários, além de prejudicar os fundos que recebem parcela."}, {"pergunta": "Emolumentos se confundem com despesas?", "resposta": "Não. <b>Despesas</b> (diligências, ITBI/ITCMD, taxas de terceiros) são <b>distintas</b> dos emolumentos e podem ser <b>adiantadas</b> pelo interessado; os emolumentos remuneram o ato."}, {"pergunta": "Quem fiscaliza a cobrança?", "resposta": "A <b>Corregedoria-Geral da Justiça</b> (TJ), no exercício da fiscalização dos serviços extrajudiciais; cobrança a maior/menor gera responsabilidade <b>disciplinar</b> e dever de restituir."}]},
+{"area": "Notarial-Registral", "tempo": 300, "enunciado": "Os emolumentos ficam <b>integralmente com o delegatário</b>? Disserte sobre a <b>destinação/fundos</b> e a incidência de <b>ISS</b>.", "topico": "Destinação · fundos · ISS (STF ADI 3089)", "padrao": "<h4>Resposta esperada</h4><ul><li><b>NÃO.</b> Parte dos emolumentos é destinada, por <b>lei estadual</b>, a <b>fundos</b> (Estado, <b>TJ</b>/reaparelhamento, <b>MP</b>, <b>fundo de compensação de atos gratuitos</b>, entre outros). Só a <b>parcela de remuneração</b> cabe ao delegatário, que é <b>responsável pelo repasse</b> das demais.</li><li>Sobre a atividade incide <b>ISS</b> — o <span class='lei'>STF (ADI 3089)</span> reconheceu a <b>constitucionalidade da incidência do ISS</b> sobre os serviços de registros públicos, cartorários e notariais.</li></ul>", "aprofundamento": [{"pergunta": "Incide ISS sobre os serviços notariais e registrais?", "resposta": "<b>Sim.</b> STF, <b>ADI 3089</b>: é <b>constitucional</b> a incidência de ISS sobre os serviços de registros públicos, cartorários e notariais (item da lista da LC 116/03). Incide também <b>IR</b> sobre a renda do delegatário."}, {"pergunta": "O delegatário responde se não repassar as parcelas aos fundos?", "resposta": "<b>Sim</b> — é <b>responsável</b> pelo recolhimento/repasse; a falta gera responsabilidade <b>tributária e funcional</b> (inclusive disciplinar)."}, {"pergunta": "Caso: usuário hipossuficiente pede ato gratuito — o delegatário fica sem remuneração?", "resposta": "<b>Não pode recusar.</b> Pratica o ato <b>gratuito</b> e é <b>ressarcido pelo fundo de compensação</b> — a gratuidade não pode ser suportada exclusivamente pelo delegatário."}]}
+]}};
+const STORE='oral_extra_emolumentos_sem13_';
+
+const QS=[]; Object.keys(PONTOS).forEach(k=>{(PONTOS[k].questoes||[]).forEach(q=>{q._k=k;QS.push(q);});});
+let cur=0, t=0, running=false, timerId=null;
+const $=s=>document.querySelector(s);
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function renderPills(){
+  const p=$('#pills');p.innerHTML='';
+  QS.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='pill'+(i===cur?' active':'')+(localStorage.getItem(STORE+'done_'+i)?' done':'');
+    d.textContent=(i+1);d.onclick=()=>{cur=i;render();};p.appendChild(d);
+  });
+}
+function tick(){
+  t++;const el=$('#timer');if(!el)return;el.textContent=fmt(t);
+  const lim=QS[cur].tempo||0;
+  el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
+}
+function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
+function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
+function resetTimer(){pauseTimer();t=0;const _rt=$('#timer');if(_rt){
+_rt.textContent='00:00';_rt.className='timer';}}
+function toggleAp(j){
+  const q=$('#apq'+j),a=$('#apa'+j);
+  q.classList.toggle('open');a.classList.toggle('open');
+}
+function expandAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.add('open');$('#apa'+j).classList.add('open');});}
+function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.remove('open');$('#apa'+j).classList.remove('open');});}
+function togglePadrao(){$('#padrao').classList.toggle('open');
+  const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
+function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();requestAnimationFrame(()=>window.scrollTo(0,0));}
+function render(){
+  resetTimer();
+  const q=QS[cur];
+  const ap=q.aprofundamento.map((a,j)=>
+    '<div class="aprow"><div class="apq" id="apq'+j+'" onclick="toggleAp('+j+')"><span class="tri">▶</span><span>'+a.pergunta+'</span></div><div class="apa" id="apa'+j+'">'+a.resposta+'</div></div>'
+  ).join('');
+  $('#card').innerHTML=
+    '<div class="qhead"><span class="area">'+q.area+'</span>'+
+    '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
+    '<button type="button" class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button type="button" class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button type="button" class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<div class="enun">'+q.enunciado+'</div>'+
+    '<div class="topico">'+q.topico+'</div>'+
+    '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
+    '<textarea id="resp" placeholder="Esboce os tópicos da sua resposta..."></textarea>'+
+    '<button class="btn solid" id="bpad" onclick="togglePadrao()" style="margin-top:14px">Revelar padrão de resposta da banca</button>'+
+    '<div class="padrao" id="padrao">'+q.padrao+'</div>'+
+    '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
+    '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
+    '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
+    '<div class="nav"><button type="button" class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button type="button" class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button type="button" class="btn" onclick="go(1)">Próxima →</button></div>';
+  const ta=$('#resp');
+  ta.value=localStorage.getItem(STORE+cur)||'';
+  ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
+  $('#progress').textContent='Questão '+(cur+1)+' de '+QS.length;
+  renderPills();
+}
+$('#sortear').onclick=()=>{cur=Math.floor(Math.random()*QS.length);render();};
+$('#prev').onclick=()=>go(-1);
+$('#next').onclick=()=>go(1);
+render();
+
+</script></body></html>
