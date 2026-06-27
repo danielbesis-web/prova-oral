@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado Oral — EXTRA: Estremação</title>
+<style>
+:root{
+  --bg:#050b18; --card:#0b1828; --border:#16365a; --text:#e9f0f8;
+  --muted:#90a6c0; --soft:#b9c8dc; --accent:var(--teal);
+  --red:#e05555; --green:#27c06a; --amber:#f5a623; --blue:#4e8ef7;
+  --cyan:#38bdf8; --purple:#b06bf2; --teal:#2dd4bf;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.top{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:8px 0 6px;font-size:26px;line-height:1.2}
+.ribbon{display:inline-block;background:var(--accent);color:#04101f;font-weight:800;
+  padding:4px 12px;border-radius:999px;font-size:12.5px;letter-spacing:.04em}
+.sub{color:var(--soft);font-size:14px;margin-top:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.solid{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.pill{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--soft);
+  font-size:13px;cursor:pointer;font-weight:700}
+.pill.active{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pill.done{border-color:var(--green);color:var(--green)}
+.pill.done.active{background:var(--accent);color:#04101f}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:16px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.area{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;color:var(--soft)}
+.timer.warn{color:var(--amber)}
+.timer.over{color:var(--red)}
+.tcontrols{display:flex;gap:6px;align-items:center}
+.tbtn{background:#04101f;border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.tbtn:hover{border-color:var(--accent)}
+.enun{margin:16px 0 6px;font-size:16.5px;line-height:1.6}
+.topico{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;margin-top:10px}
+textarea{width:100%;min-height:120px;margin-top:10px;background:#04101f;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14.5px;
+  font-family:inherit;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.label{font-size:12px;color:var(--muted);margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.padrao{display:none;margin-top:12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 16px;background:#071426}
+.padrao.open{display:block}
+.padrao h4{margin:6px 0 8px;color:var(--accent);font-size:14px}
+.padrao ul{margin:6px 0;padding-left:20px}
+.padrao li{margin:5px 0}
+.lei{color:var(--amber);font-weight:600}
+.aprof{margin-top:16px}
+.aprtools{display:flex;gap:8px;margin-bottom:8px}
+.aprow{border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.apq{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;background:#071426;font-weight:600}
+.apq:hover{background:#0a1a30}
+.apq .tri{color:var(--accent);transition:transform .15s;display:inline-block}
+.apq.open .tri{transform:rotate(90deg)}
+.apa{display:none;padding:0 14px 14px 36px;color:var(--soft);font-size:14.5px;line-height:1.6}
+.apa.open{display:block;padding-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nota{background:#071426;border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+  margin:18px 0 4px;color:var(--soft);font-size:13.5px}
+.nota b{color:var(--accent)}
+.progress{color:var(--muted);font-size:12.5px;margin-top:6px}
+footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+<div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 4 — EXTRA (domingo)</div>
+<h1>Simulado Oral — Estremação <span style="color:var(--teal)">(caderno EXTRA)</span></h1>
+<span class="ribbon">Bloco Extra · Notarial e Registral</span>
+<div class="sub">Banca virtual · 5 questões · resposta livre · padrão de resposta revelável · o "buraco" da semana 4</div>
+</header>
+<div class="nota"><b>Postura na banca:</b> abra pelo conceito, desça aos requisitos e, no tratamento dos <b>ônus</b>, vá <b>item por item</b> (hipoteca, penhora, indisponibilidade…) — é onde o examinador puxa o fio.</div>
+<div class="controls">
+<button type="button" class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button type="button" class="btn" id="prev">← Anterior</button>
+<button type="button" class="btn" id="next">Próxima →</button>
+<span class="progress" id="progress"></span>
+</div>
+<div class="pills" id="pills"></div>
+<div class="card" id="card"></div>
+<footer>Fontes: Código de Normas TJSC — Cap. IX-A (arts. 712-A a 712-H) · art. 571 do CPC · provimentos RS/MG/TO/PR/BA/PE. ⚠️ Para a prova real do TJMT, conferir o Código de Normas da CGJ-MT. Caderno EXTRA — Semana 4 (domingo).</footer>
+</div>
+<script>
+const PONTOS={"EST": {"titulo": "Estremação (condomínio de fato)", "questoes": [
+{"area": "Registro de Imóveis", "tempo": 300, "enunciado": "Candidato, conceitue a <b>estremação</b> de imóvel em condomínio de fato e distinga-a da <b>divisão</b>, do <b>desmembramento</b> e da <b>extinção de condomínio</b>.", "topico": "Estremação · condomínio de fato · CN-TJSC arts. 712-A a 712-H · art. 571 CPC", "padrao": "<h4>Resposta esperada</h4><ul><li>Estremação é o ato que <b>individualiza, com limites e confrontações, a parcela que o condômino já possui de fato</b> dentro de imóvel em condomínio (fração ideal não localizada), <b>extinguindo o condomínio de fato</b> e abrindo <b>matrícula autônoma</b> da parte (pro diviso).</li><li>Faz o registro <b>espelhar a realidade</b>: dá limites a uma fração ideal cuja posse já está localizada.</li><li><b>Divisão</b> (judicial ou por escritura — <span class='lei'>art. 571 CPC</span>): reparte a coisa comum entre <b>todos</b> os condôminos. <b>Desmembramento</b>: fracionamento de imóvel <b>já individualizado</b> (parcelamento do solo). <b>Extinção de condomínio</b>: é o <b>gênero</b> (venda da coisa comum, divisão e estremação são meios).</li><li>Base normativa: <span class='lei'>art. 571 do CPC</span> + Códigos de Normas estaduais (TJSC, arts. 712-A a 712-H; provimentos de RS/MG/TO/PR/BA/PE).</li></ul>", "aprofundamento": [{"pergunta": "A estremação cria ou altera a fração ideal de cada condômino?", "resposta": "Não. Não é ato <b>translativo</b>: apenas <b>localiza</b> a parte já possuída de fato, convertendo o <b>pro indiviso em pro diviso</b> conforme a posse consolidada. Não transfere domínio."}, {"pergunta": "Cabe sobre imóvel urbano e rural?", "resposta": "Sim (art. 712-A), em qualquer gleba. Respeitada a <b>fração mínima de parcelamento rural</b> ou a <b>área urbana mínima</b>; no urbano exige <b>anuência municipal</b> e comprovação de infraestrutura."}, {"pergunta": "Qual o instrumento adequado?", "resposta": "<b>Escritura pública de estremação</b> (ou declaratória concomitante ao título aquisitivo), com assinatura de <b>todos os confrontantes</b> da gleba a localizar (art. 712-C/D)."}]},
+{"area": "Registro de Imóveis", "tempo": 300, "enunciado": "Quais os <b>requisitos</b> que o oficial verifica para admitir a estremação? Em especial, qual o <b>tempo de posse</b> exigido e a quem cabe a <b>anuência</b>?", "topico": "CN-TJSC arts. 712-B/C/E · posse · anuência · fração mínima", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Posse consolidada</b> sobre a parcela a estremar de <b>no mínimo 5 anos</b> (admite-se a <b>soma da posse</b> de condôminos anteriores — accessio possessionis).</li><li><b>Anuência de todos os confrontantes</b> das parcelas a estremar (sejam ou não condôminos da área maior).</li><li>Respeito à <b>fração mínima de parcelamento rural</b> ou à <b>área urbana mínima</b>, e atendimento aos requisitos legais de identificação do imóvel.</li><li>Instrumento por <span class='lei'>escritura pública</span>; em caso de falecimento de parte, comparece o <b>inventariante</b> (art. 712-C/D).</li></ul>", "aprofundamento": [{"pergunta": "Como se prova a posse de 5 anos?", "resposta": "Por <b>declaração do condômino corroborada pelos confrontantes</b>, na própria escritura — prova suficiente —, admitida a <b>soma das posses anteriores</b>."}, {"pergunta": "E se um confrontante se recusar a anuir?", "resposta": "Sem a anuência de <b>todos</b>, não cabe a via extrajudicial da estremação; resta a <b>divisão</b> (consensual por escritura ou <b>judicial</b>)."}, {"pergunta": "Que documentos o oficial exige (art. 712-E)?", "resposta": "<b>Planta e memorial descritivo</b>; no rural: <b>CCIR, ITR quitado e CAR</b>; no urbano: <b>anuência municipal</b> e comprovação de infraestrutura (<b>vedada mera declaração</b>)."}]},
+{"area": "Registro de Imóveis", "tempo": 300, "enunciado": "Sobre a fração ideal recaem <b>ônus reais</b>. Como o oficial procede diante de <b>hipoteca</b>, <b>penhora</b>, <b>indisponibilidade</b>, <b>propriedade fiduciária</b> e <b>usufruto</b>?", "topico": "CN-TJSC art. 712-G · tratamento dos gravames (o coração do ponto)", "padrao": "<h4>Resposta esperada — cada gravame tem regra própria (art. 712-G)</h4><ul><li><b>Hipoteca</b>: <b>dispensa anuência</b> do credor; apenas se <b>comunica</b> (a garantia segue a parcela).</li><li><b>Penhora comum</b>: procede-se <b>independentemente</b>, comunicando o <b>juízo</b>. <b>Penhora do INSS</b>: exige <b>anuência expressa</b> do ente público.</li><li><b>Anticrese</b>: solicita-se <b>anuência do credor</b> (envolve posse/frutos).</li><li><b>Propriedade fiduciária</b>: localização <b>conjunta de credor e devedor</b>. <b>Usufruto</b>: declaração <b>conjunta de nu-proprietário e usufrutuário</b>.</li><li><b>Indisponibilidade</b> (judicial/administrativa): <b>nega-se curso</b>, salvo <b>autorização expressa</b>. <b>Arrolamento fiscal</b>: procede e <b>comunica de imediato</b> o agente.</li></ul>", "aprofundamento": [{"pergunta": "Por que a hipoteca dispensa anuência, mas a anticrese não?", "resposta": "Na hipoteca o gravame <b>acompanha a parcela</b> sem prejuízo ao credor (sequela preservada), bastando ciência; a <b>anticrese</b> envolve <b>posse e frutos</b>, e a localização afeta o exercício do direito — daí a anuência."}, {"pergunta": "O gravame 'segue' a parte estremada?", "resposta": "Sim — o ônus <b>se transporta para a matrícula autônoma</b> da parcela localizada, preservando-se a garantia. <b>Não há liberação automática</b> do gravame pela estremação."}, {"pergunta": "Indisponibilidade da CNIB impede a estremação?", "resposta": "Em regra <b>sim</b>: o oficial <b>nega curso</b>, salvo <b>autorização expressa</b> do juízo ou autoridade que decretou a indisponibilidade."}]},
+{"area": "Registro de Imóveis", "tempo": 300, "enunciado": "Admitida a estremação, <b>como o oficial procede no registro</b> e como fica a <b>matrícula</b> ao final?", "topico": "CN-TJSC art. 712-F · retificação · matrícula autônoma", "padrao": "<h4>Resposta esperada</h4><ul><li>O oficial <b>averba as medidas da gleba mediante retificação</b> (ajuste de descrição).</li><li><b>Registra a localização como em divisão</b> — a parte deixa de ser ideal e passa a ser <b>localizada</b>.</li><li><b>Abre matrícula autônoma</b> para a parcela localizada (art. 712-F).</li><li>Os ônus existentes <b>migram</b> para a nova matrícula conforme o art. 712-G, mantido o <b>encadeamento</b> com a matrícula de origem.</li></ul>", "aprofundamento": [{"pergunta": "A estremação dispensa a referência à gleba originária?", "resposta": "Em regra a referência é <b>dispensável</b> para os documentos, <b>exceto CAR e anuência municipal</b> (art. 712-E), preservando-se a rastreabilidade."}, {"pergunta": "Cabe estremação parcial (só de um condômino)?", "resposta": "Sim — localiza-se <b>a parcela daquele condômino</b>, abrindo matrícula própria; permanece o <b>condomínio sobre o remanescente</b> até nova estremação/divisão."}, {"pergunta": "Cabe suscitação de dúvida?", "resposta": "Sim. Havendo óbice à qualificação (documentação, fração mínima, ônus), o oficial pode <b>suscitar dúvida</b> (<span class='lei'>art. 198 LRP</span>) ou negar, conforme o caso."}]},
+{"area": "Registro de Imóveis", "tempo": 300, "enunciado": "<b>Caso:</b> um condômino possui há <b>6 anos</b> uma parcela localizada; sobre a fração ideal há <b>hipoteca</b> e <b>indisponibilidade</b> decretada pela CNIB. O senhor, registrador, <b>admite a estremação? Como age?</b>", "topico": "Aplicação · posse + hipoteca + indisponibilidade", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Posse</b>: 6 anos atende o mínimo de 5 (art. 712-B) — requisito temporal OK.</li><li><b>Hipoteca</b>: <b>não impede</b>; dispensa anuência do credor, basta <b>comunicar</b>, e o gravame <b>migra</b> para a matrícula nova.</li><li><b>Indisponibilidade (CNIB)</b>: é o <b>óbice</b> — o oficial <b>nega curso</b>, <b>salvo autorização expressa</b> do juízo que a decretou.</li><li><b>Conclusão</b>: <b>não realiza</b> enquanto pender a indisponibilidade sem autorização; orienta o interessado a obtê-la. Verificar ainda anuência dos confrontantes e a documentação do art. 712-E.</li></ul>", "aprofundamento": [{"pergunta": "Levantada a indisponibilidade, o que ainda faltaria?", "resposta": "Anuência de <b>todos os confrontantes</b>, <b>planta/memorial</b> e (urbano) <b>anuência municipal</b> + infraestrutura; então abre-se a <b>matrícula autônoma</b> com a hipoteca transportada."}, {"pergunta": "Daria para estremar só a parte 'livre'?", "resposta": "A indisponibilidade recai sobre a <b>fração daquele condômino</b> — não se contorna estremando a parte gravada. A estremação de <b>outro</b> condômino não atingido seria possível, atendidos os requisitos."}, {"pergunta": "Qual a diferença prática para a divisão judicial aqui?", "resposta": "A <b>divisão judicial</b> permitiria ao juiz <b>deliberar sobre os ônus</b> e resolver litígio; a estremação é <b>via administrativa consensual</b> e <b>esbarra</b> na indisponibilidade sem autorização."}]}
+]}};
+const STORE='oral_extra_estremacao_sem4_';
+
+const QS=[]; Object.keys(PONTOS).forEach(k=>{(PONTOS[k].questoes||[]).forEach(q=>{q._k=k;QS.push(q);});});
+let cur=0, t=0, running=false, timerId=null;
+const $=s=>document.querySelector(s);
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function renderPills(){
+  const p=$('#pills');p.innerHTML='';
+  QS.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='pill'+(i===cur?' active':'')+(localStorage.getItem(STORE+'done_'+i)?' done':'');
+    d.textContent=(i+1);d.onclick=()=>{cur=i;render();};p.appendChild(d);
+  });
+}
+function tick(){
+  t++;const el=$('#timer');if(!el)return;el.textContent=fmt(t);
+  const lim=QS[cur].tempo||0;
+  el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
+}
+function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
+function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
+function resetTimer(){pauseTimer();t=0;const _rt=$('#timer');if(_rt){
+_rt.textContent='00:00';_rt.className='timer';}}
+function toggleAp(j){
+  const q=$('#apq'+j),a=$('#apa'+j);
+  q.classList.toggle('open');a.classList.toggle('open');
+}
+function expandAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.add('open');$('#apa'+j).classList.add('open');});}
+function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.remove('open');$('#apa'+j).classList.remove('open');});}
+function togglePadrao(){$('#padrao').classList.toggle('open');
+  const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
+function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();requestAnimationFrame(()=>window.scrollTo(0,0));}
+function render(){
+  resetTimer();
+  const q=QS[cur];
+  const ap=q.aprofundamento.map((a,j)=>
+    '<div class="aprow"><div class="apq" id="apq'+j+'" onclick="toggleAp('+j+')"><span class="tri">▶</span><span>'+a.pergunta+'</span></div><div class="apa" id="apa'+j+'">'+a.resposta+'</div></div>'
+  ).join('');
+  $('#card').innerHTML=
+    '<div class="qhead"><span class="area">'+q.area+'</span>'+
+    '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
+    '<button type="button" class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button type="button" class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button type="button" class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<div class="enun">'+q.enunciado+'</div>'+
+    '<div class="topico">'+q.topico+'</div>'+
+    '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
+    '<textarea id="resp" placeholder="Esboce os tópicos da sua resposta..."></textarea>'+
+    '<button class="btn solid" id="bpad" onclick="togglePadrao()" style="margin-top:14px">Revelar padrão de resposta da banca</button>'+
+    '<div class="padrao" id="padrao">'+q.padrao+'</div>'+
+    '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
+    '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
+    '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
+    '<div class="nav"><button type="button" class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button type="button" class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button type="button" class="btn" onclick="go(1)">Próxima →</button></div>';
+  const ta=$('#resp');
+  ta.value=localStorage.getItem(STORE+cur)||'';
+  ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
+  $('#progress').textContent='Questão '+(cur+1)+' de '+QS.length;
+  renderPills();
+}
+$('#sortear').onclick=()=>{cur=Math.floor(Math.random()*QS.length);render();};
+$('#prev').onclick=()=>go(-1);
+$('#next').onclick=()=>go(1);
+render();
+
+</script></body></html>
