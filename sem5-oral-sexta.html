@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado Oral — Empresarial: Cédulas de Crédito</title>
+<style>
+:root{
+  --bg:#050b18; --card:#0b1828; --border:#16365a; --text:#e9f0f8;
+  --muted:#90a6c0; --soft:#b9c8dc; --accent:var(--green);
+  --red:#e05555; --green:#27c06a; --amber:#f5a623; --blue:#4e8ef7;
+  --cyan:#38bdf8; --purple:#b06bf2; --teal:#2dd4bf;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.top{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:8px 0 6px;font-size:26px;line-height:1.2}
+.ribbon{display:inline-block;background:var(--accent);color:#04101f;font-weight:800;
+  padding:4px 12px;border-radius:999px;font-size:12.5px;letter-spacing:.04em}
+.sub{color:var(--soft);font-size:14px;margin-top:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.solid{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.pill{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--soft);
+  font-size:13px;cursor:pointer;font-weight:700}
+.pill.active{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pill.done{border-color:var(--green);color:var(--green)}
+.pill.done.active{background:var(--accent);color:#04101f}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:16px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.area{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;color:var(--soft)}
+.timer.warn{color:var(--amber)}
+.timer.over{color:var(--red)}
+.tcontrols{display:flex;gap:6px;align-items:center}
+.tbtn{background:#04101f;border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.tbtn:hover{border-color:var(--accent)}
+.enun{margin:16px 0 6px;font-size:16.5px;line-height:1.6}
+.topico{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;margin-top:10px}
+textarea{width:100%;min-height:120px;margin-top:10px;background:#04101f;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14.5px;
+  font-family:inherit;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.label{font-size:12px;color:var(--muted);margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.padrao{display:none;margin-top:12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 16px;background:#071426}
+.padrao.open{display:block}
+.padrao h4{margin:6px 0 8px;color:var(--accent);font-size:14px}
+.padrao ul{margin:6px 0;padding-left:20px}
+.padrao li{margin:5px 0}
+.lei{color:var(--amber);font-weight:600}
+.aprof{margin-top:16px}
+.aprtools{display:flex;gap:8px;margin-bottom:8px}
+.aprow{border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.apq{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;background:#071426;font-weight:600}
+.apq:hover{background:#0a1a30}
+.apq .tri{color:var(--accent);transition:transform .15s;display:inline-block}
+.apq.open .tri{transform:rotate(90deg)}
+.apa{display:none;padding:0 14px 14px 36px;color:var(--soft);font-size:14.5px;line-height:1.6}
+.apa.open{display:block;padding-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nota{background:#071426;border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+  margin:18px 0 4px;color:var(--soft);font-size:13.5px}
+.nota b{color:var(--accent)}
+.progress{color:var(--muted);font-size:12.5px;margin-top:6px}
+footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+<div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 5 — Sexta</div>
+<h1>Simulado Oral — Empresarial: Cédulas de Crédito</h1>
+<span class="ribbon">Bloco E · Empresarial</span>
+<div class="sub">Banca virtual · 5 questões reais do Banco · resposta livre · padrão revelável</div>
+</header>
+<div class="nota"><b>Postura na banca:</b> casa com o Protesto da semana — cédulas são <b>protestáveis</b> e levam <b>garantia registrável</b>. Domine a CCB (Lei 10.931/04) e as cédulas rurais (DL 167/67); cite o STJ Tema 576 e a LUG como subsidiária.</div>
+<div class="controls">
+<button type="button" class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button type="button" class="btn" id="prev">← Anterior</button>
+<button type="button" class="btn" id="next">Próxima →</button>
+<span class="progress" id="progress"></span>
+</div>
+<div class="pills" id="pills"></div>
+<div class="card" id="card"></div>
+<footer>Fontes: Lei 10.931/2004 (arts. 26-45, esp. 29, 41, 44) · DL 167/1967 (cédulas rurais) · Lei 8.929/94 (CPR) · Lei 13.986/2020 (Agro) · LUG (Dec. 57.663/66) · STJ Tema 576. Banco Prova Oral. Caderno Semana 5 — Sexta.</footer>
+</div>
+<script>
+const PONTOS={"EMP": {"titulo": "Empresarial — Cédulas de Crédito", "questoes": [
+{"area": "Empresarial", "tempo": 300, "enunciado": "O que é a <b>Cédula de Crédito Bancário (CCB)</b> e qual a sua amplitude? É <b>título executivo</b>?", "topico": "Lei 10.931/2004 arts. 26-45 · STJ Tema 576", "padrao": "<h4>Resposta esperada</h4><ul><li>Título emitido por pessoa física/jurídica em favor de <b>instituição financeira</b> (ou equiparada), representando <b>promessa de pagamento em dinheiro</b> de dívida de <b>operação de crédito de qualquer natureza</b>, com ou sem garantia.</li><li>Aproxima-se de <b>nota promissória com requisitos especiais</b>.</li><li><b>Amplitude:</b> representa qualquer operação bancária ativa (mútuo, rotativo, cheque especial, abertura de crédito) — supera a rigidez das cédulas setoriais.</li><li><span class='lei'>STJ Tema 576:</span> a CCB é <b>título executivo extrajudicial</b>.</li></ul>", "aprofundamento": [{"pergunta": "Como se afere a liquidez no crédito rotativo/cheque especial?", "resposta": "A CCB é executiva, mas a liquidez exige o <b>demonstrativo/planilha</b> dos valores efetivamente utilizados (STJ Tema 576). Sem a planilha, a dívida pode ser <b>exigível mas SEM liquidez</b>."}, {"pergunta": "A CCB pode ser protestada?", "resposta": "<b>Sim</b> — inclusive <b>por indicação</b> (art. 41 da Lei 10.931), dispensando o título físico; o credor declara possuir a única via negociável."}, {"pergunta": "A garantia real da CCB registra-se onde?", "resposta": "A garantia (hipoteca/alienação fiduciária/penhor) constituída na CCB registra-se no <b>registro competente</b> (RI, para imóvel); a própria cédula pode conter a garantia (arts. 31-33)."}]},
+{"area": "Empresarial", "tempo": 300, "enunciado": "Quais os <b>requisitos formais</b> da CCB (art. 29)? Ela leva a <b>assinatura do credor</b>?", "topico": "Lei 10.931/2004 art. 29 · qualificação no protesto", "padrao": "<h4>Resposta esperada</h4><ul><li>Deve conter: a <b>denominação 'Cédula de Crédito Bancário'</b>; a promessa de pagar dívida em dinheiro; <b>data e lugar do pagamento</b>; identificação da <b>instituição credora</b>; data e lugar de emissão; <b>assinatura do emitente</b> e, havendo garantia de terceiro, a do <b>garantidor</b>.</li><li><b>NÃO há assinatura do credor.</b></li><li>Faltando requisito essencial, o documento <b>não é CCB</b> — o tabelião <b>qualifica negativamente</b> (recusa o protesto).</li></ul>", "aprofundamento": [{"pergunta": "Quem assina a CCB?", "resposta": "Só o <b>emitente</b> (devedor) e, se houver, o <b>garantidor</b> de terceiro. O <b>credor (instituição) NÃO assina</b> — pegadinha clássica."}, {"pergunta": "Falta um requisito — o que faz o tabelião?", "resposta": "<b>Qualifica negativamente</b> (recusa), pois o documento não é CCB válida; devolve com a <b>nota de devolução fundamentada</b>."}, {"pergunta": "A CCB pode ser escritural/eletrônica?", "resposta": "Sim — é comum a CCB <b>escritural</b>; os requisitos aplicam-se ao registro eletrônico, e a circulação se dá por alteração no <b>sistema/registro</b>."}]},
+{"area": "Empresarial", "tempo": 300, "enunciado": "Como <b>circula</b> a CCB e qual a <b>legislação subsidiária</b> aplicável às lacunas?", "topico": "Lei 10.931/2004 art. 44 · LUG · circulação", "padrao": "<h4>Resposta esperada</h4><ul><li>Se <b>cartular e à ordem</b>: por <b>endosso em preto + tradição</b>; se <b>não à ordem</b>: por <b>cessão civil</b>. Escritural/eletrônica: por <b>alteração no sistema/registro</b>.</li><li>A circulação <b>transmite a garantia</b> ao adquirente (<b>sub-rogação</b> — art. 44).</li><li><b>Lacuna na CCB → aplica-se a legislação CAMBIAL</b> (Lei Uniforme de Genebra — LUG, letra/nota promissória), <b>e NÃO o Código Civil</b>.</li></ul>", "aprofundamento": [{"pergunta": "Por que a LUG e não o CC?", "resposta": "A Lei 10.931 manda aplicar <b>supletivamente a legislação cambial</b> (LUG) por afinidade com os títulos de crédito; o CC seria apenas residual."}, {"pergunta": "A garantia segue o endosso?", "resposta": "<b>Sim</b> — sub-rogação (art. 44): transferida a cédula, transfere-se a <b>garantia</b> ao endossatário/cessionário."}, {"pergunta": "Endosso-mandato × endosso-translativo?", "resposta": "<b>Translativo</b> transfere a titularidade; <b>mandato</b> confere só poderes de cobrança (o endossante segue titular). Importa para a <b>legitimidade</b> no protesto."}]},
+{"area": "Empresarial", "tempo": 300, "enunciado": "Diferencie a <b>cédula de crédito rural</b> da <b>cédula de produto rural (CPR)</b>. O que é a <b>extraconcursalidade</b> da CPR?", "topico": "DL 167/67 · Lei 8.929/94 (CPR) · Lei 13.986/2020", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Cédula de crédito rural:</b> objeto é <b>promessa de pagamento em DINHEIRO</b> para financiar atividade rural (DL 167/67).</li><li><b>CPR (Lei 8.929/94):</b> objeto é a <b>entrega de PRODUTO rural</b> — pode ser <b>física</b> (entrega) ou <b>financeira</b> (liquidação em dinheiro). Por pagar em produto, não ostenta todos os efeitos cambiais.</li><li><b>Extraconcursalidade:</b> o STJ reconhece, em hipóteses, que o crédito da CPR <b>não se submete</b> aos efeitos da recuperação judicial.</li></ul>", "aprofundamento": [{"pergunta": "CPR física × financeira?", "resposta": "<b>Física:</b> entrega do produto. <b>Financeira:</b> liquidação por equivalência em dinheiro (preço/índice). A Lei 13.986/2020 (Lei do Agro) reforçou a CPR financeira."}, {"pergunta": "Por que a CPR pode ser extraconcursal?", "resposta": "Por analogia ao <span class='lei'>art. 49, §3º da Lei 11.101/05</span> (credor com garantia fiduciária não se sujeita à RJ); o STJ aplica a hipóteses de CPR."}, {"pergunta": "A cédula rural precisa de protesto para o regresso?", "resposta": "<b>Não</b> — as cédulas rurais <b>dispensam o protesto necessário</b> para o regresso; o protesto facultativo segue possível (prova, interrupção da prescrição)."}]},
+{"area": "Empresarial", "tempo": 300, "enunciado": "A cédula de crédito rural precisa de <b>protesto</b> para o direito de regresso? A <b>impenhorabilidade</b> do bem vinculado é absoluta?", "topico": "DL 167/67 · protesto facultativo · impenhorabilidade", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Regresso:</b> as cédulas rurais <b>DISPENSAM o protesto necessário</b> para o regresso contra coobrigados/endossantes/avalistas. O <b>protesto facultativo</b> permanece útil (prova pública, cobrança e <b>interrupção da prescrição</b>).</li><li><b>Impenhorabilidade</b> do bem vinculado é a <b>regra</b> (blindagem funcional), mas <b>não é absoluta</b>. Exceções: <b>execução fiscal</b>; <b>fim da vigência</b> da cédula; <b>anuência do credor</b>; <b>ausência de risco de esvaziamento</b> da garantia.</li></ul>", "aprofundamento": [{"pergunta": "O protesto facultativo interrompe a prescrição?", "resposta": "<b>Sim</b> — o protesto interrompe a prescrição (<span class='lei'>art. 202, III, CC</span>), além de prova pública e marco de publicidade — útil mesmo dispensado para o regresso."}, {"pergunta": "Quais as 4 exceções à impenhorabilidade?", "resposta": "<b>Execução fiscal</b>; <b>fim da vigência</b> da cédula; <b>anuência do credor</b>; e <b>ausência de risco de esvaziamento</b> (garantia tornada excessiva diante do saldo)."}, {"pergunta": "A garantia rural responde por dívidas estranhas à cédula?", "resposta": "<b>Não</b> — é incomunicável a débitos estranhos (cautela funcional, não regime de bens): serve ao fim do financiamento vinculado."}]}
+]}};
+const STORE='oral_sexta_sem5_';
+
+const QS=[]; Object.keys(PONTOS).forEach(k=>{(PONTOS[k].questoes||[]).forEach(q=>{q._k=k;QS.push(q);});});
+let cur=0, t=0, running=false, timerId=null;
+const $=s=>document.querySelector(s);
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function renderPills(){
+  const p=$('#pills');p.innerHTML='';
+  QS.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='pill'+(i===cur?' active':'')+(localStorage.getItem(STORE+'done_'+i)?' done':'');
+    d.textContent=(i+1);d.onclick=()=>{cur=i;render();};p.appendChild(d);
+  });
+}
+function tick(){
+  t++;const el=$('#timer');if(!el)return;el.textContent=fmt(t);
+  const lim=QS[cur].tempo||0;
+  el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
+}
+function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
+function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
+function resetTimer(){pauseTimer();t=0;const _rt=$('#timer');if(_rt){
+_rt.textContent='00:00';_rt.className='timer';}}
+function toggleAp(j){
+  const q=$('#apq'+j),a=$('#apa'+j);
+  q.classList.toggle('open');a.classList.toggle('open');
+}
+function expandAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.add('open');$('#apa'+j).classList.add('open');});}
+function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.remove('open');$('#apa'+j).classList.remove('open');});}
+function togglePadrao(){$('#padrao').classList.toggle('open');
+  const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
+function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();requestAnimationFrame(()=>window.scrollTo(0,0));}
+function render(){
+  resetTimer();
+  const q=QS[cur];
+  const ap=q.aprofundamento.map((a,j)=>
+    '<div class="aprow"><div class="apq" id="apq'+j+'" onclick="toggleAp('+j+')"><span class="tri">▶</span><span>'+a.pergunta+'</span></div><div class="apa" id="apa'+j+'">'+a.resposta+'</div></div>'
+  ).join('');
+  $('#card').innerHTML=
+    '<div class="qhead"><span class="area">'+q.area+'</span>'+
+    '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
+    '<button type="button" class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button type="button" class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button type="button" class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<div class="enun">'+q.enunciado+'</div>'+
+    '<div class="topico">'+q.topico+'</div>'+
+    '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
+    '<textarea id="resp" placeholder="Esboce os tópicos da sua resposta..."></textarea>'+
+    '<button class="btn solid" id="bpad" onclick="togglePadrao()" style="margin-top:14px">Revelar padrão de resposta da banca</button>'+
+    '<div class="padrao" id="padrao">'+q.padrao+'</div>'+
+    '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
+    '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
+    '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
+    '<div class="nav"><button type="button" class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button type="button" class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button type="button" class="btn" onclick="go(1)">Próxima →</button></div>';
+  const ta=$('#resp');
+  ta.value=localStorage.getItem(STORE+cur)||'';
+  ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
+  $('#progress').textContent='Questão '+(cur+1)+' de '+QS.length;
+  renderPills();
+}
+$('#sortear').onclick=()=>{cur=Math.floor(Math.random()*QS.length);render();};
+$('#prev').onclick=()=>go(-1);
+$('#next').onclick=()=>go(1);
+render();
+
+</script></body></html>
