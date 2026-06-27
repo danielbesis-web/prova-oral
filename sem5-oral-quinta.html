@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado Oral — Constitucional e Administrativo</title>
+<style>
+:root{
+  --bg:#050b18; --card:#0b1828; --border:#16365a; --text:#e9f0f8;
+  --muted:#90a6c0; --soft:#b9c8dc; --accent:var(--cyan);
+  --red:#e05555; --green:#27c06a; --amber:#f5a623; --blue:#4e8ef7;
+  --cyan:#38bdf8; --purple:#b06bf2; --teal:#2dd4bf;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);background:radial-gradient(1200px 700px at 50% -80px,#0c1d33 0%,var(--bg) 60%);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.top{border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:8px 0 6px;font-size:26px;line-height:1.2}
+.ribbon{display:inline-block;background:var(--accent);color:#04101f;font-weight:800;
+  padding:4px 12px;border-radius:999px;font-size:12.5px;letter-spacing:.04em}
+.sub{color:var(--soft);font-size:14px;margin-top:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:10px;font-size:13.5px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.solid{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.pill{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--soft);
+  font-size:13px;cursor:pointer;font-weight:700}
+.pill.active{background:var(--accent);color:#04101f;border-color:var(--accent)}
+.pill.done{border-color:var(--green);color:var(--green)}
+.pill.done.active{background:var(--accent);color:#04101f}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:16px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.area{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;color:var(--soft)}
+.timer.warn{color:var(--amber)}
+.timer.over{color:var(--red)}
+.tcontrols{display:flex;gap:6px;align-items:center}
+.tbtn{background:#04101f;border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.tbtn:hover{border-color:var(--accent)}
+.enun{margin:16px 0 6px;font-size:16.5px;line-height:1.6}
+.topico{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;margin-top:10px}
+textarea{width:100%;min-height:120px;margin-top:10px;background:#04101f;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14.5px;
+  font-family:inherit;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.label{font-size:12px;color:var(--muted);margin-top:14px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.padrao{display:none;margin-top:12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:14px 16px;background:#071426}
+.padrao.open{display:block}
+.padrao h4{margin:6px 0 8px;color:var(--accent);font-size:14px}
+.padrao ul{margin:6px 0;padding-left:20px}
+.padrao li{margin:5px 0}
+.lei{color:var(--amber);font-weight:600}
+.aprof{margin-top:16px}
+.aprtools{display:flex;gap:8px;margin-bottom:8px}
+.aprow{border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.apq{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;background:#071426;font-weight:600}
+.apq:hover{background:#0a1a30}
+.apq .tri{color:var(--accent);transition:transform .15s;display:inline-block}
+.apq.open .tri{transform:rotate(90deg)}
+.apa{display:none;padding:0 14px 14px 36px;color:var(--soft);font-size:14.5px;line-height:1.6}
+.apa.open{display:block;padding-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nota{background:#071426;border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+  margin:18px 0 4px;color:var(--soft);font-size:13.5px}
+.nota b{color:var(--accent)}
+.progress{color:var(--muted);font-size:12.5px;margin-top:6px}
+footer{margin-top:30px;border-top:1px solid var(--border);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+<div class="eyebrow">Concurso de Cartório (CEBRASPE) + Magistratura · TJMT · Semana 5 — Quinta</div>
+<h1>Simulado Oral — Constitucional e Administrativo</h1>
+<span class="ribbon">Bloco D · Const/Adm</span>
+<div class="sub">Banca virtual · 5 questões reais do Banco · resposta livre · padrão revelável</div>
+</header>
+<div class="nota"><b>Postura na banca:</b> sempre que possível, ligue ao cartório — <b>art. 236</b> (delegação), <b>registros públicos = competência da União</b> (art. 22, XXV), <b>Tema 777</b> (responsabilidade). É o que mostra que você pensa como registrador, não só como candidato genérico.</div>
+<div class="controls">
+<button type="button" class="btn solid" id="sortear">🎲 Sortear questão</button>
+<button type="button" class="btn" id="prev">← Anterior</button>
+<button type="button" class="btn" id="next">Próxima →</button>
+<span class="progress" id="progress"></span>
+</div>
+<div class="pills" id="pills"></div>
+<div class="card" id="card"></div>
+<footer>Fontes: CF arts. 21-24, 97, 102, 103, 236 · SV 10 · Leis 9.868/99 e 9.882/99 · Lei 8.935/94 · Lei 8.429/92 (red. 14.230/21) · STF Tema 777. Banco Prova Oral (alta recorrência). Caderno Semana 5 — Quinta.</footer>
+</div>
+<script>
+const PONTOS={"CAD": {"titulo": "Constitucional e Administrativo", "questoes": [
+{"area": "Constitucional", "tempo": 300, "enunciado": "Disserte sobre o <b>art. 236 da CF</b>: a natureza dos serviços notariais e de registro, o <b>ingresso</b> e a <b>fiscalização</b>.", "topico": "CF art. 236, §§1º-3º · Lei 8.935/94 · Tema 777", "padrao": "<h4>Resposta esperada</h4><ul><li>Os serviços notariais e de registro são exercidos em <b>caráter PRIVADO, por DELEGAÇÃO</b> do Poder Público (<span class='lei'>art. 236</span>).</li><li><b>Ingresso:</b> concurso público <b>de provas e títulos</b> (§3º) — vedada serventia vaga sem concurso por mais de 6 meses.</li><li><b>Fiscalização</b> pelo <b>Poder Judiciário</b> (§1º).</li><li><b>Lei federal</b> regula a responsabilidade civil/criminal e a fixação de emolumentos (§§1º e 2º) — Lei 8.935/94.</li></ul>", "aprofundamento": [{"pergunta": "O delegatário é servidor público?", "resposta": "<b>Não</b> — exerce função pública <b>por delegação</b>, em caráter privado; não tem cargo nem se aposenta pelo RPPS, e é fiscalizado pelo Judiciário. (Para fins <b>penais</b>, equipara-se a funcionário público.)"}, {"pergunta": "Cabe serventia hereditária após a CF/88?", "resposta": "<b>Não</b> — vedada a transmissão hereditária e a vitaliciedade; o ingresso é <b>só por concurso</b>. Serventias antes oficializadas seguem regra de transição."}, {"pergunta": "De quem é a responsabilidade pelos danos do delegatário? (Tema 777)", "resposta": "O <b>STF (Tema 777)</b>: responsabilidade civil <b>direta e objetiva do ESTADO</b>, com <b>direito de regresso</b> contra o delegatário. Após a Lei 13.286/2016, a responsabilidade do delegatário é <b>subjetiva</b> (dolo ou culpa)."}]},
+{"area": "Constitucional", "tempo": 300, "enunciado": "Diferencie o <b>controle difuso</b> do <b>concentrado</b> de constitucionalidade. O que é a <b>cláusula de reserva de plenário</b>?", "topico": "CF art. 97 · SV 10 · difuso × concentrado", "padrao": "<h4>Resposta esperada</h4><ul><li><b>Difuso:</b> qualquer juízo, no <b>caso concreto</b> (incidental), efeitos em regra <b>inter partes</b>.</li><li><b>Concentrado:</b> STF (ou TJ ante a CE), em <b>ação própria</b>, efeitos <b>erga omnes</b> e <b>vinculantes</b>.</li><li><b>Reserva de plenário</b> (<span class='lei'>art. 97</span>): tribunais só declaram inconstitucionalidade por <b>maioria absoluta</b> do pleno/órgão especial. <b>SV 10</b>: órgão fracionário não pode <b>afastar</b> a aplicação da lei por inconstitucionalidade sem observar o art. 97.</li></ul>", "aprofundamento": [{"pergunta": "A SV 10 alcança a interpretação conforme?", "resposta": "Alcança a <b>declaração de inconstitucionalidade</b> (inclusive parcial/sem redução de texto). A mera interpretação que <b>não</b> declara a norma inconstitucional não viola a reserva."}, {"pergunta": "O Senado ainda suspende a lei no controle difuso (art. 52, X)?", "resposta": "Há a tese da <b>abstrativização</b> do controle difuso — o STF tem dado eficácia ampliada às suas decisões; o art. 52, X cumpre função de <b>publicidade</b>."}, {"pergunta": "Cabe controle concentrado de lei municipal?", "resposta": "Perante o STF, via <b>ADPF</b> (não ADI em face da CF). No TJ, cabe <b>ADI</b> de lei municipal/estadual em face da <b>Constituição Estadual</b>."}]},
+{"area": "Constitucional", "tempo": 300, "enunciado": "Diferencie as ações do controle concentrado: <b>ADI, ADC, ADPF e ADO</b>.", "topico": "CF arts. 102, 103 · Leis 9.868/99 e 9.882/99", "padrao": "<h4>Resposta esperada</h4><ul><li><b>ADI:</b> declarar a <b>inconstitucionalidade</b> de lei/ato normativo.</li><li><b>ADC:</b> <b>confirmar a constitucionalidade</b> (afastar controvérsia relevante).</li><li><b>ADPF:</b> evitar/reparar lesão a <b>preceito fundamental</b> — caráter <b>subsidiário</b>.</li><li><b>ADO:</b> <b>omissão</b> inconstitucional (falta de norma regulamentadora).</li><li>Efeitos: <b>erga omnes</b>, <b>vinculantes</b> e, em regra, <b>ex tunc</b>; legitimados do <b>art. 103</b>.</li></ul>", "aprofundamento": [{"pergunta": "Por que a ADPF é subsidiária?", "resposta": "Art. 4º, §1º da Lei 9.882/99: só cabe quando <b>não houver outro meio eficaz</b> (ADI/ADC). Ex.: lei <b>municipal</b> ou <b>anterior à CF</b> → ADPF."}, {"pergunta": "Quem são os legitimados (art. 103)?", "resposta": "Presidente, Mesas (Câmara/Senado/Assembleias), Governadores, PGR, Conselho Federal da OAB, partido com representação no Congresso, confederação sindical/entidade de classe nacional. Alguns exigem <b>pertinência temática</b>."}, {"pergunta": "Cabe modulação de efeitos?", "resposta": "Sim — <span class='lei'>art. 27 da Lei 9.868/99</span>: por <b>2/3</b>, o STF restringe efeitos ou fixa o momento (ex nunc/pro futuro), por segurança jurídica ou interesse social."}]},
+{"area": "Constitucional", "tempo": 300, "enunciado": "Disserte sobre a <b>repartição de competências</b> (arts. 21-24 CF). De quem é a competência para legislar sobre <b>registros públicos</b>?", "topico": "CF arts. 21, 22 (XXV), 23 e 24", "padrao": "<h4>Resposta esperada</h4><ul><li><b>União:</b> material <b>exclusiva</b> (art. 21) e legislativa <b>privativa</b> (art. 22) — inclui <b>REGISTROS PÚBLICOS</b> (<span class='lei'>art. 22, XXV</span>), delegável aos Estados por <b>LC</b>.</li><li><b>Comum/material</b> entre todos os entes (art. 23).</li><li><b>Concorrente</b> (art. 24): a União fixa <b>normas gerais</b>; os Estados <b>suplementam</b>.</li><li>Logo, <b>lei estadual NÃO legisla sobre registros públicos</b> (privativa da União).</li></ul>", "aprofundamento": [{"pergunta": "Lei estadual pode fixar prazo de registro?", "resposta": "<b>Não</b> — registros públicos são privativos da União (art. 22, XXV); lei estadual que fixa prazo de registro é <b>inconstitucional</b>. Mas a <b>isenção de emolumentos</b> é válida (matéria tributária, concorrente)."}, {"pergunta": "Como a União delega competência privativa?", "resposta": "Por <b>lei complementar</b>, autorizando os Estados a legislar sobre questões específicas (art. 22, §ún.)."}, {"pergunta": "Na concorrente, e se não houver norma geral federal?", "resposta": "Os Estados exercem competência legislativa <b>plena</b> (art. 24, §3º); sobrevindo a federal, <b>suspende-se</b> a eficácia da estadual no que lhe for contrário (§4º)."}]},
+{"area": "Administrativo", "tempo": 300, "enunciado": "Disserte sobre a <b>improbidade administrativa</b> após a Lei 14.230/21. Ainda existe improbidade <b>culposa</b>?", "topico": "Lei 8.429/92 (red. 14.230/21) · arts. 9, 10, 11", "padrao": "<h4>Resposta esperada</h4><ul><li>Três modalidades: <b>enriquecimento ilícito</b> (art. 9º), <b>prejuízo ao erário</b> (art. 10) e <b>atentado a princípios</b> (art. 11).</li><li>A <b>Lei 14.230/21</b> passou a exigir <b>DOLO</b> (específico) em todas — <b>aboliu a modalidade culposa</b> do dano ao erário.</li><li>O rol do <b>art. 11</b> tornou-se <b>taxativo</b>; exige-se a comprovação do dolo e da lesividade.</li></ul>", "aprofundamento": [{"pergunta": "A abolição da improbidade culposa retroage?", "resposta": "O <b>STF (Tema 1199)</b>: a exigência de dolo <b>não retroage automaticamente</b>; aplica-se aos atos culposos <b>sem trânsito em julgado</b>, analisando-se caso a caso."}, {"pergunta": "O delegatário responde por improbidade?", "resposta": "<b>Sim</b> — é agente público em sentido amplo (função pública por delegação); sujeita-se à Lei 8.429/92."}, {"pergunta": "Quais as sanções da improbidade?", "resposta": "Perda da função, <b>suspensão dos direitos políticos</b>, ressarcimento ao erário, multa, proibição de contratar/receber benefícios — graduadas por modalidade (art. 12), <b>sem caráter penal</b>."}]}
+]}};
+const STORE='oral_quinta_sem5_';
+
+const QS=[]; Object.keys(PONTOS).forEach(k=>{(PONTOS[k].questoes||[]).forEach(q=>{q._k=k;QS.push(q);});});
+let cur=0, t=0, running=false, timerId=null;
+const $=s=>document.querySelector(s);
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function renderPills(){
+  const p=$('#pills');p.innerHTML='';
+  QS.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='pill'+(i===cur?' active':'')+(localStorage.getItem(STORE+'done_'+i)?' done':'');
+    d.textContent=(i+1);d.onclick=()=>{cur=i;render();};p.appendChild(d);
+  });
+}
+function tick(){
+  t++;const el=$('#timer');if(!el)return;el.textContent=fmt(t);
+  const lim=QS[cur].tempo||0;
+  el.className='timer'+(lim&&t>=lim?' over':(lim&&t>=lim*0.8?' warn':''));
+}
+function startTimer(){if(running)return;running=true;timerId=setInterval(tick,1000);}
+function pauseTimer(){running=false;if(timerId)clearInterval(timerId);}
+function resetTimer(){pauseTimer();t=0;const _rt=$('#timer');if(_rt){
+_rt.textContent='00:00';_rt.className='timer';}}
+function toggleAp(j){
+  const q=$('#apq'+j),a=$('#apa'+j);
+  q.classList.toggle('open');a.classList.toggle('open');
+}
+function expandAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.add('open');$('#apa'+j).classList.add('open');});}
+function collapseAll(){QS[cur].aprofundamento.forEach((_,j)=>{$('#apq'+j).classList.remove('open');$('#apa'+j).classList.remove('open');});}
+function togglePadrao(){$('#padrao').classList.toggle('open');
+  const b=$('#bpad');b.textContent=$('#padrao').classList.contains('open')?'Ocultar padrão de resposta':'Revelar padrão de resposta da banca';}
+function markDone(){localStorage.setItem(STORE+'done_'+cur,'1');renderPills();}
+function go(d){cur=Math.max(0,Math.min(QS.length-1,cur+d));render();requestAnimationFrame(()=>window.scrollTo(0,0));}
+function render(){
+  resetTimer();
+  const q=QS[cur];
+  const ap=q.aprofundamento.map((a,j)=>
+    '<div class="aprow"><div class="apq" id="apq'+j+'" onclick="toggleAp('+j+')"><span class="tri">▶</span><span>'+a.pergunta+'</span></div><div class="apa" id="apa'+j+'">'+a.resposta+'</div></div>'
+  ).join('');
+  $('#card').innerHTML=
+    '<div class="qhead"><span class="area">'+q.area+'</span>'+
+    '<div class="tcontrols"><span class="timer" id="timer">00:00</span>'+
+    '<button type="button" class="tbtn" onclick="startTimer()" title="Iniciar">▶</button>'+
+    '<button type="button" class="tbtn" onclick="pauseTimer()" title="Pausar">❚❚</button>'+
+    '<button type="button" class="tbtn" onclick="resetTimer()" title="Zerar">↺</button></div></div>'+
+    '<div class="enun">'+q.enunciado+'</div>'+
+    '<div class="topico">'+q.topico+'</div>'+
+    '<div class="label">Sua resposta (treine em voz alta — o texto é só apoio)</div>'+
+    '<textarea id="resp" placeholder="Esboce os tópicos da sua resposta..."></textarea>'+
+    '<button class="btn solid" id="bpad" onclick="togglePadrao()" style="margin-top:14px">Revelar padrão de resposta da banca</button>'+
+    '<div class="padrao" id="padrao">'+q.padrao+'</div>'+
+    '<div class="aprof"><div class="label">Aprofundamentos da banca</div>'+
+    '<div class="aprtools"><button class="btn" onclick="expandAll()">Expandir todos</button>'+
+    '<button class="btn" onclick="collapseAll()">Recolher todos</button></div>'+ap+'</div>'+
+    '<div class="nav"><button type="button" class="btn" onclick="go(-1)">← Anterior</button>'+
+    '<button type="button" class="btn" onclick="markDone()">✓ Marcar como treinada</button>'+
+    '<button type="button" class="btn" onclick="go(1)">Próxima →</button></div>';
+  const ta=$('#resp');
+  ta.value=localStorage.getItem(STORE+cur)||'';
+  ta.addEventListener('input',()=>localStorage.setItem(STORE+cur,ta.value));
+  $('#progress').textContent='Questão '+(cur+1)+' de '+QS.length;
+  renderPills();
+}
+$('#sortear').onclick=()=>{cur=Math.floor(Math.random()*QS.length);render();};
+$('#prev').onclick=()=>go(-1);
+$('#next').onclick=()=>go(1);
+render();
+
+</script></body></html>
